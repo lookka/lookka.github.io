@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Personal study notes and projects by Luca Melani." />
+    <title>Luca Melani — Notes & projects</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="wordmark" href="#top">Luca Melani</a>
+      <nav aria-label="Navigazione principale">
+        <a href="#about">About</a>
+        <a href="#notes">Lecture notes</a>
+        <a href="#projects">Projects</a>
+        <a href="about.html">Disclaimer</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <p class="eyebrow">THEORETICAL PHYSICS · NOTES · CURIOSITY</p>
+        <h1>A personal space<br />to study, understand,<br />and share.</h1>
+        <p class="intro">Hi, I’m <strong>Luca Melani</strong>, a Master's student in Theoretical Physics at the University of Turin. I collect study notes, ideas, and projects here.</p>
+        <a class="button" href="#notes">Explore the notes <span aria-hidden="true">↓</span></a>
+      </section>
+
+      <section class="about section" id="about">
+        <div class="section-label">01 / ABOUT</div>
+        <div class="about-copy">
+          <h2>Master’s student in <em>Theoretical Physics</em>, based in Turin.</h2>
+          <p>I am currently studying at the <strong>University of Turin</strong>. This website is my personal archive: a place to gather the material I produce primarily for my own studies, and hopefully something that can also help other students.</p>
+          <p class="note">Nothing published here is official University of Turin material or has been reviewed by a lecturer. Please use it critically and always compare it with lectures, recommended texts, and your own notes.</p>
+        </div>
+      </section>
+
+      <section class="notes section" id="notes">
+        <div class="section-label">02 / LECTURE NOTES</div>
+        <div class="section-heading">
+          <h2>Notes, one course at a time.</h2>
+          <p>An evolving collection of personal notes. PDFs will appear here as each set is ready.</p>
+        </div>
+        <div class="notes-grid">
+          <!-- To add a set of notes: copy an article block and update its text and link. -->
+          <article class="note-card">
+            <div><span class="tag">COMING SOON</span><span class="tag">PDF</span></div>
+            <h3>First course notes</h3>
+            <p>The first complete set of notes will be added here soon.</p>
+          </article>
+          <article class="note-card">
+            <div><span class="tag">COMING SOON</span><span class="tag">PDF</span></div>
+            <h3>Second course notes</h3>
+            <p>Another course will be added once the material has been checked and organised.</p>
+          </article>
+          <article class="note-card coming-soon">
+            <div><span class="tag">IN PROGRESS</span></div>
+            <h3>More to come</h3>
+            <p>I am currently working through new material. Check back later.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="projects section" id="projects">
+        <div class="section-label">03 / PROJECTS & IDEAS</div>
+        <div class="section-heading">
+          <h2>Things I am exploring.</h2>
+          <p>A place for personal projects, reading suggestions, experiments, and ideas around the areas of physics that interest me most.</p>
+        </div>
+        <a class="project-card" href="#projects">
+          <span class="project-number">01</span>
+          <span><strong>Coming soon</strong><small>Projects and reading notes will appear here as they take shape.</small></span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+      </section>
+    </main>
+
+    <footer>
+      <p>© <span id="year"></span> Luca Melani</p>
+      <p><a href="about.html">Disclaimer & licensing</a> · <a href="mailto:luca.melani@edu.unito.it">Email</a></p>
+    </footer>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </body>
+</html>
