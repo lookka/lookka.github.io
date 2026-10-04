@@ -22,3 +22,8 @@ h1 { font-size:clamp(3.2rem, 7.2vw, 6.3rem); margin-bottom:29px; } h2 { font-siz
 .about-page { width:min(900px, calc(100% - 48px)); margin:75px auto 110px; }.about-page h1 { margin-bottom:70px; }.long-copy { max-width:720px; }.long-copy h2 { font-size:2rem; margin:55px 0 17px; }.long-copy p { color:var(--muted); font-size:1.05rem; }.long-copy strong { color:var(--ink); }
 footer { width:min(1180px, calc(100% - 48px)); margin:auto; padding:27px 0 40px; display:flex; justify-content:space-between; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; } footer p { margin:0; } footer a { text-decoration:none; }
 @media (max-width:720px) { .site-header,main,footer { width:min(100% - 32px,1180px); } .site-header { padding:20px 0; } nav { gap:14px; } nav a { font-size:.8rem; }.hero { padding:75px 0 90px; }.section { grid-template-columns:1fr; gap:10px; padding-bottom:75px; }.section-heading { grid-template-columns:1fr; gap:15px; margin-bottom:30px; }.notes-grid { grid-template-columns:1fr; }.note-card { min-height:220px; } footer { gap:10px; flex-direction:column; } }
+
+/* Keep every Projects card in the same content column. */
+.projects > .project-card { grid-column: 2; }
+.projects > .project-card small { display:block; max-width:65ch; }
+@media(max-width:720px) { .projects > .project-card { grid-column:1; } }
