@@ -1,0 +1,51 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Verifiche della release 1.0 — documentazione Pyxis 1.0, Luca Melani"><title>Verifiche della release 1.0 · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Verifiche della release 1.0</h1><div class="docs-tools"><a href="VERIFICHE.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#controlli-riproducibili">Controlli riproducibili</a><a href="#tempi-misurati">Tempi misurati</a><a href="#controllo-visuale">Controllo visuale</a></nav></details></aside><article><section class="manual-section">
+<p>Le verifiche usano il compilatore C++17 Release, Asymptote/MiKTeX/Ghostscript
+del PC e VS Code. I risultati riguardano questa configurazione Windows x64.</p>
+</section><section class="manual-section"><h2 id="controlli-riproducibili">Controlli riproducibili</h2>
+<pre><code class="language-powershell">./scripts/build.ps1 -Release
+node tests/source.js
+node tests/cache-latex.js
+node tests/backend.js
+node tests/clipping.js
+node tests/labels.js
+node tests/native-latex.js
+node tests/performance.js
+./scripts/package.ps1 -SkipBuild
+./scripts/test-package.ps1
+</code></pre>
+<p>Eseguire backend.js da solo: verifica che non compaiano intermedi nuovi
+nel temporaneo di sistema, quindi non deve sovrapporsi ad altri rendering.
+Gli altri test puliscono le directory univoche che creano.</p>
+<ul>
+<li>C++: errori sintattici, nomi/ancoraggi, layout, vincoli, regioni, pacchetti,
+spin 3D, oracoli, geodetiche, eventi e convergenza numerica.</li>
+<li>Sorgente/editor: ritocchi, cambio di metodo e proprieta&#39; dei pacchetti.</li>
+<li>Cache/LaTeX: corruzione, scritture atomiche, richieste concorrenti,
+contesti verbatim, macro e originali intatti.</li>
+<li>Backend: SVG/PDF reali, 2D/3D e SVG senza immagini raster.</li>
+<li>Clipping: intersezioni di segmenti/curve/onde e scatole TeX nel frame finale.</li>
+<li>Etichette: misure reali TeX, scala, collisioni e punte native delle frecce.</li>
+<li>Documento: capitoli annidati, includeonly, TeX root, macro del principale,
+arresto su cicli e PDF precedente conservato in caso di errore.</li>
+<li>VSIX: installazione in profilo isolato, compilatore incluso, anteprima,
+salvataggi/inserimento e build del documento dall&#39;editor del capitolo.</li>
+</ul>
+</section><section class="manual-section"><h2 id="tempi-misurati">Tempi misurati</h2>
+<p>Nel benchmark qft.pyxis del 12 ottobre 2026: nuovo rendering PDF 4341 ms;
+cinque richieste con cache gia&#39; preparata hanno media 59 ms e massimo 64 ms.
+Questi tempi escludono l&#39;avvio di un nuovo processo Node, misurano il servizio
+di rendering e dipendono da carico e configurazione. Non garantiscono un
+rendering nuovo sotto 150 ms. L&#39;editor accorpa le richieste e mantiene reattiva
+la scrittura durante una compilazione piu&#39; lunga.</p>
+<p>La lettura/verifica indipendente degli eseguibili e dei moduli e&#39; parallela,
+senza cambiare ordine o ingredienti della chiave SHA-256. I risultati della
+cache rimangono validati mediante hash, non soltanto dalla presenza del file.</p>
+</section><section class="manual-section"><h2 id="controllo-visuale">Controllo visuale</h2>
+<p>Figure ispezionate: etichette automatiche, propagatore gluonico e loop,
+oracolo controllato, regioni P-T, spin 3D, coni di luce, scattering/cattura,
+raggio riportato sul Flamm e schema conforme sull&#39;asse di Kerr.
+I PNG in output sono anteprime utili; PDF/SVG sono le esportazioni vettoriali.</p>
+<p>Una figura plausibile non sostituisce i test fisici: usiamo soluzioni
+analitiche, invarianti e casi limite quando sono disponibili. I limiti
+dei modelli sono descritti in PACCHETTI.md.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

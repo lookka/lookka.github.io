@@ -1,0 +1,113 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Pyxis: direzione semantica per tutti i pacchetti — documentazione Pyxis 1.0, Luca Melani"><title>Pyxis: direzione semantica per tutti i pacchetti · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Pyxis: direzione semantica per tutti i pacchetti</h1><div class="docs-tools"><a href="PYXIS-SEMANTICO.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#principio-comune">Principio comune</a><a href="#linguaggio-e-pacchetti">Linguaggio e pacchetti</a><a href="#pipeline-comune">Pipeline comune</a><a href="#struttura-proposta">Struttura proposta</a><a href="#latex-cache-e-tempi">LaTeX, cache e tempi</a><a href="#incrementi">Incrementi</a></nav></details></aside><article><section class="manual-section">
+<p>Proposta di architettura, 12 ottobre 2026. Gli esempi seguenti descrivono il
+linguaggio futuro: non sono ancora eseguibili nel prototipo.</p>
+</section><section class="manual-section"><h2 id="principio-comune">Principio comune</h2>
+<p>L&#39;utente descrive oggetti fisici, connessioni e relazioni; Pyxis calcola la
+geometria. Questo vale per tutti i pacchetti, non soltanto per Feynman.
+Coordinate e controlli geometrici rimangono un livello facoltativo di rifinitura.
+Un diagramma deve essere utile con i valori predefiniti e modificabile per nome.</p>
+<p>I pacchetti si scelgono in base al corso e si possono combinare liberamente
+negli appunti e nella tesi. Un profilo di corso seleziona pacchetti, temi e
+abbreviazioni; non limita i pacchetti che il documento può usare.</p>
+</section><section class="manual-section"><h2 id="linguaggio-e-pacchetti">Linguaggio e pacchetti</h2>
+<p>Un solo linguaggio comune: nomi, stringhe LaTeX, liste, proprietà, blocchi,
+unità, espressioni e riferimenti. Ogni pacchetto introduce oggetti del proprio
+dominio, senza introdurre un parser o convenzioni di base differenti.</p>
+<pre><code class="language-text">use qft, quantum, relativity
+theme: overleaf-classic
+
+qft.feynman scattering {
+    channel: s
+    incoming: [electron, positron]
+    outgoing: [muon, antimuon]
+    mediator: photon
+}
+
+quantum.circuit bell {
+    q0: H, control(pair)
+    q1: _, target(pair), M
+}
+
+relativity.penrose spacetime {
+    metric: minkowski
+}
+
+place bell below scattering
+place spacetime right-of scattering
+</code></pre>
+<p>Il prefisso identifica il pacchetto e risolve le collisioni. La forma breve
+senza prefisso è ammessa quando il nome importato è univoco. Gli identificatori
+come <code>pair</code> associano i componenti di un gate nella stessa colonna.
+Gli oggetti interni generati dalle macro hanno nomi stabili e documentati,
+così etichette, linee e vertici restano modificabili individualmente.</p>
+<p>Esempi degli altri domini: <code>statmech.ising</code> descrive reticolo e configurazione;
+<code>quantum.tensor-network</code> descrive tensori e contrazioni; <code>relativity.embedding</code>
+descrive metrica, superficie e intervallo. Posizioni, allineamenti, annotazioni,
+stili e unità seguono sempre le medesime regole.</p>
+</section><section class="manual-section"><h2 id="pipeline-comune">Pipeline comune</h2>
+<p>Sorgente standalone <code>.pyxis</code> oppure ambiente LaTeX → AST con posizioni nel
+sorgente → risoluzione dei pacchetti → oggetti semantici → grafo di vincoli
+e layout → scena geometrica → Asymptote → PDF/SVG.</p>
+<p>I pacchetti trasformano il modello del dominio in primitive e vincoli comuni.
+Il nucleo gestisce dipendenze, trasformazioni, ancoraggi, temi, clipping e
+posizionamento delle etichette. Per circuiti e reticoli usa layout a griglia;
+per processi e reti usa layout di grafi; per diagrammi conformi usa modelli
+specifici. Non serve un unico algoritmo di layout per tutti i domini.</p>
+<p>Un incrocio non crea una connessione; i vincoli espliciti hanno precedenza
+sui suggerimenti di layout. Vincoli incompatibili producono diagnostica con
+riferimenti agli oggetti e alle istruzioni coinvolte.</p>
+<p>La composizione comprende inizialmente pannelli 2D, anche contenenti un export
+di una scena 3D. Una scena geometrica mista 2D/3D richiede sviluppo separato.
+La notazione fisica non implica che Pyxis verifichi un processo o derivi una
+metrica: modelli, approssimazioni e convenzioni devono essere documentati.</p>
+</section><section class="manual-section"><h2 id="struttura-proposta">Struttura proposta</h2>
+<pre><code class="language-text">src/
+  language/           lexer, parser, AST, diagnostica
+  semantic/           import, registri dei pacchetti, espansione delle macro
+  geometry/           scena, unità, ancoraggi, vincoli, clipping
+  layout/             grafi, griglie, composizione, etichette
+  backends/asymptote/ generazione del codice
+  packages/
+    qft/
+    quantum/
+    relativity/
+    statmech/
+asy/pyxis/            primitive grafiche riutilizzabili del backend
+tools/pyxis/          orchestrazione Python, estrazione LaTeX, cache, CLI
+latex/pyxis.sty       interfaccia dell&#39;ambiente LaTeX
+vscode/              editor e preview sullo stesso servizio di compilazione
+examples/            casi per corso e documenti con più pacchetti
+tests/               linguaggio, layout, cache, integrazione e rendering
+docs/                specifiche comuni e manuali dei pacchetti
+</code></pre>
+<p>Conservare il nucleo C++ già funzionante; Python può gestire il documento e i
+processi senza sostituirlo. Rust è una possibile scelta futura, non un requisito
+per ottenere questa architettura. Separare gradualmente i file attuali invece
+di riscrivere subito il sistema. Le librerie <code>.asy</code> gestiscono il disegno;
+la semantica dei pacchetti rimane nel compilatore.</p>
+</section><section class="manual-section"><h2 id="latex-cache-e-tempi">LaTeX, cache e tempi</h2>
+<p>Il preprocessore legge gli ambienti <code>pyxis</code>, conserva il sorgente originale e
+genera un documento derivato con <code>includegraphics</code>. Deve rispettare commenti,
+contesti verbatim e diagnostica con righe del documento originale.
+Il pacchetto LaTeX da solo non avvia magicamente il preprocessore: il comando
+di build e l&#39;estensione devono integrare esplicitamente questa fase.</p>
+<p>La chiave SHA-256 comprende sorgente del blocco, opzioni, profilo, tema,
+versioni del compilatore e dei pacchetti, backend, formato e dipendenze effettive.
+Includere anche il contesto LaTeX che influenza le etichette. Scritture atomiche,
+gestione delle compilazioni concorrenti e riuso solo di risultati riusciti.
+Modificare un blocco invalida quel blocco e le sue dipendenze, non tutte le figure.</p>
+<p>Cache calda, compilazione nuova e latenza dell&#39;editor sono misure distinte.
+150 ms è un obiettivo da verificare, non una garanzia di Asymptote e LaTeX.
+Debounce, annullamento dei risultati obsoleti e worker in background mantengono
+reattiva la scrittura anche quando un rendering richiede più tempo.</p>
+</section><section class="manual-section"><h2 id="incrementi">Incrementi</h2>
+<ol>
+<li>Linguaggio comune, nomi dei pacchetti, modello semantico e relazioni di layout.</li>
+<li>Primo pacchetto verticale completo per verificare l&#39;approccio end-to-end.</li>
+<li>Secondo pacchetto di natura diversa, per verificare che il nucleo sia condiviso.</li>
+<li>Composizione di pacchetti, temi, cache e ambienti LaTeX.</li>
+<li>Estensione ai moduli dei corsi e modelli numerici con ipotesi e tolleranze esplicite.</li>
+</ol>
+<p>Feynman può essere il primo banco di prova; non definisce da solo il linguaggio.
+La direzione è un framework di figure semantiche per tutta la fisica teorica.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

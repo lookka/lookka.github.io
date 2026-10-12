@@ -1,0 +1,390 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Pacchetti semantici — versione 1.0 — documentazione Pyxis 1.0, Luca Melani"><title>Pacchetti semantici — versione 1.0 · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Pacchetti semantici — versione 1.0</h1><div class="docs-tools"><a href="PACCHETTI.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#regole-condivise">Regole condivise</a><a href="#oggetti-disponibili">Oggetti disponibili</a><a href="#temi-scene-e-editor">Temi, scene e editor</a><a href="#latex-e-cache">LaTeX e cache</a><a href="#estensioni-del-catalogo-e-del-nucleo">Estensioni del catalogo e del nucleo</a></nav></details></aside><article><section class="manual-section">
+<p>Questo manuale descrive funzionalita&#39; implementate e verificate, non la lista
+completa degli obiettivi. La proposta integrale rimane in PYXIS-SEMANTICO.md.</p>
+</section><section class="manual-section"><h2 id="regole-condivise">Regole condivise</h2>
+<p><code>use qft, quantum, relativity, statmech</code> importa i pacchetti necessari.
+Gli import possono essere ripetuti e combinati. Un nome qualificato come
+<code>quantum.circuit</code> e&#39; sempre esplicito; <code>circuit</code> e&#39; ammesso dopo l&#39;import
+quando il nome non e&#39; ambiguo. I nomi dei gruppi sono unici.
+Una proprieta&#39; per riga, commenti con <code>#</code>, stringhe LaTeX tra virgolette.
+I blocchi non richiedono coordinate. Per i circuiti l&#39;ordine delle righe
+nel sorgente determina l&#39;ordine dei qubit; le colonne sono separate da virgole.</p>
+<p><code>place B below A</code>, <code>above</code>, <code>right-of</code>, <code>left-of</code> dispongono gruppi 2D.
+<code>gap=2</code> specifica la distanza in unita&#39; geometriche. La dipendenza puo&#39; essere
+scritta prima o dopo i blocchi. Cicli e disposizioni duplicate vengono rifiutati.
+Senza <code>place</code>, i gruppi nascono alla stessa origine: dichiarare le relazioni
+se si vogliono affiancare piu&#39; figure.
+Il layout usa ingombri conservativi dei modelli; etichette personalizzate molto
+lunghe possono richiedere piu&#39; gap. Non e&#39; ancora un risolutore globale di collisioni.</p>
+<p>I componenti hanno nomi gerarchici, per esempio <code>bell.q0_step1</code>;
+gli ancoraggi si risolvono sull&#39;ultimo punto: <code>bell.q0_step1.north</code>.
+Una macro non rende inaccessibili le primitive generate.</p>
+<p><code>profile qft</code>, quantum, relativity, statmech importa il pacchetto del corso;
+<code>profile research</code> importa tutti e quattro. Il profilo e&#39; additivo: use rimane
+disponibile, gli import duplicati sono ignorati. Non imposta o sovrascrive il tema.</p>
+</section><section class="manual-section"><h2 id="oggetti-disponibili">Oggetti disponibili</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Pacchetto</th>
+<th>Oggetto</th>
+<th>Capacita&#39; attuali</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>qft</td>
+<td>feynman</td>
+<td>Alberi 2→2, canali s/t/u, propagatori e inserzione di bolla</td>
+</tr>
+<tr>
+<td>quantum</td>
+<td>circuit</td>
+<td>H/X/Y/Z/S/T, controllo singolo/multiplo, target, misura, gate personalizzato</td>
+</tr>
+<tr>
+<td>quantum</td>
+<td>tensor-network</td>
+<td>MPS e reticoli PEPS aperti, legami e gambe fisiche agganciati ai nodi</td>
+</tr>
+<tr>
+<td>quantum</td>
+<td>bloch</td>
+<td>Sfera 3D in filo, vettore puro da theta/phi, stati di base</td>
+</tr>
+<tr>
+<td>relativity</td>
+<td>penrose</td>
+<td>Minkowski 1+1 e schema conforme dell&#39;estensione massimale di Schwarzschild</td>
+</tr>
+<tr>
+<td>relativity</td>
+<td>embedding</td>
+<td>Paraboloide di Flamm della sezione equatoriale spaziale di Schwarzschild</td>
+</tr>
+<tr>
+<td>statmech</td>
+<td>ising</td>
+<td>Reticolo 2D e configurazioni discrete esplicite o predefinite</td>
+</tr>
+<tr>
+<td>statmech</td>
+<td>phase-flow</td>
+<td>Orbita di un sistema 2D esplicito, RK4 fisso o adattivo</td>
+</tr>
+<tr>
+<td>statmech</td>
+<td>lorenz</td>
+<td>Traiettoria 3D del sistema di Lorenz, parametri configurabili</td>
+</tr>
+<tr>
+<td>statmech</td>
+<td>phase-diagram</td>
+<td>Schema P-T, regioni colorate, punto triplo e critico</td>
+</tr>
+<tr>
+<td>relativity</td>
+<td>light-cones</td>
+<td>Coni nulli radiali locali in carta Painleve-Gullstrand ingoing</td>
+</tr>
+<tr>
+<td>relativity</td>
+<td>geodesic</td>
+<td>Raggi nulli equatoriali Schwarzschild, scattering/cattura e vista Flamm</td>
+</tr>
+</tbody></table></div>
+<h3 id="qft">QFT</h3>
+<pre><code class="language-text">use qft
+feynman F {
+    channel: s
+    incoming: [electron, positron]
+    outgoing: [muon, antimuon]
+    mediator: photon
+    loop: fermion
+    loop-position: 0.5
+    loop-radius: 0.25
+}
+</code></pre>
+<p>Le particelle disponibili sono electron, positron, muon, antimuon, fermion,
+antifermion, photon, gluon, scalar e ghost. <code>labels</code> accetta quattro stringhe.
+Fermioni con freccia centrale, antifermioni con flusso invertito, fotoni ondulati,
+gluoni cicloidali, scalari e ghost tratteggiati.
+<code>loop</code> opzionale accetta fermion, scalar, ghost o photon; radius deve stare nel tratto.
+Il loop photon usa onde radiali campionate, senza frecce fermioniche.
+Nomi: F.in1, F.in2, F.out1, F.out2, F.mediator. Con loop il mediatore diventa
+F.mediator_in, F.mediator_out, F.loop_upper, F.loop_lower.
+Pyxis rappresenta la topologia scelta: non verifica la validita&#39; delle interazioni,
+ne&#39; calcola ampiezze o deduce automaticamente il mediatore.
+Le etichette esterne usano per default il posizionamento automatico comune.
+<code>label-placement: fixed</code> conserva le posizioni del modello 0.3.
+Per un singolo componente: <code>placement F.in1_label auto nw 4</code>.</p>
+<h3 id="quantum">Quantum</h3>
+<pre><code class="language-text">use quantum
+circuit toffoli {
+    a: H, control(g)
+    b: _, control(g)
+    c: _, target(g), M
+}
+tensor-network mps {
+    sites: 5
+}
+place mps below toffoli
+</code></pre>
+<p>Un collegamento richiede un target e almeno un controllo nella medesima colonna.
+Le righe corte vengono completate con fili. <code>gate(&quot;U&quot;)</code> disegna un gate
+personalizzato, con testo fino a 12 caratteri. <code>M</code> e&#39; un simbolo di misura;
+non simula il collasso e non trasforma ancora il filo successivo in filo classico.
+<code>oracle(id,&quot;$U_f$&quot;)</code>, ripetuto su almeno due righe contigue nella stessa
+colonna, disegna un unico box su quei qubit con una formula LaTeX. Un
+<code>control(id)</code> esterno al blocco lo rende controllato; piu&#39; controlli sono ammessi.
+Le formule devono coincidere e il nome non puo&#39; avere anche un target XOR.
+Il box ha larghezza geometrica 1.05 e altezza dalla prima all&#39;ultima riga:
+formule lunghe possono richiedere una rifinitura. Esempio: examples/oracles.pyxis.
+Per catene MPS: <code>sites</code> e, facoltativamente, <code>labels</code> con una stringa per tensore.
+<code>layout: peps</code> usa invece rows/columns (da 1 a 16, massimo 128 siti totali),
+con legami orizzontali/verticali e una gamba fisica diagonale per sito.
+I nomi sono r1c1, r1c2, ...; labels si legge per righe. Anche etichette e gambe
+seguono un singolo nodo spostato con move. I tratti usano clipping sui bordi.
+Il reticolo e&#39; una rappresentazione dei tensori e delle contrazioni, non un
+algoritmo per eseguire numericamente quelle contrazioni.
+I tensori sono site1, site2, ...; i gate sono qubit_step1, qubit_step2, ...
+Gli indici di colonna dei nomi iniziano da 1, anche per colonne <code>_</code> senza gate.</p>
+<p><code>bloch</code> usa theta tra 0 e 180deg e phi qualsiasi; le unita&#39; deg/rad sono obbligatorie.
+La mappa e&#39; (sin(theta)cos(phi), sin(theta)sin(phi), cos(theta)); non accetta
+ancora matrici densita&#39; o vettori misti. Fonte per la convenzione:
+<a href="https://www.maths.dur.ac.uk/users/kasper.peeters/qcomp/2024/qubit.html">University of Durham</a>.</p>
+<h3 id="relativita-39">Relativita&#39;</h3>
+<p><code>penrose</code> accetta metric minkowski, schwarzschild oppure kerr.
+Il secondo schema mostra quattro regioni, due orizzonti e due bordi singolari.
+Non e&#39; un calcolo di una trasformazione conforme per metriche arbitrarie.</p>
+<p>Kerr usa la sezione sull&#39;asse theta=0 e il regime subestremale: spin e&#39; a/M
+tra 1e-6 e 0.999999, bands e&#39; una finestra di 3/5/7 bande (default 3).
+Gli orizzonti esterni sono continui; quelli interni di Cauchy sono tratteggiati.
+I puntini indicano la continuazione periodica oltre la finestra. I simboli i^0_+
+e i^0_- si riferiscono rispettivamente alle regioni asintotiche r verso +infinito
+e -infinito. Sull&#39;asse r=0 e&#39; regolare: la singolarita&#39; ad anello non appartiene
+a questa sezione. Non e&#39; un diagramma globale di ogni angolo o del Kerr estremale.
+Riferimento primario: <a href="https://journals.aps.org/pr/abstract/10.1103/PhysRev.141.1242">Carter, extension of the Kerr symmetry axis</a>.</p>
+<p><code>embedding</code> usa <code>metric: schwarzschild</code>, <code>radius</code> per r_s, <code>extent</code> per r_max/r_s,
+<code>mesh</code> da 4 a 30 e <code>branch: upper</code> oppure lower. La superficie e&#39;
+z = ±2 sqrt(r_s (r-r_s)), r&gt;=r_s, a tempo Schwarzschild costante e theta=pi/2.
+Non rappresenta un potenziale gravitazionale o una superficie percorsa dal tempo.
+Riferimento: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11329697/">embedding diagrams in stationary spacetimes</a>.</p>
+<p><code>light-cones</code>: metrica Schwarzschild, carta painleve-gullstrand ingoing,
+radii crescenti in unita&#39; r_s, rows da 1 a 8, height da 0.01 a 0.5.
+In unita&#39; c=1, il diagramma usa r/r_s e t_PG/r_s. I lati hanno pendenze
+<code>dr/dt=-sqrt(r_s/r) ± 1</code>, ricavate imponendo ds²=0 nella metrica
+<code>ds²=-dt²+(dr+sqrt(r_s/r)dt)²+r²dOmega²</code>.
+Sono coni tangenti locali, non geodesiche finite rettilinee. La loro altezza
+si riduce vicino alla singolarita&#39; per non attraversare r=0. Fonte primaria:
+<a href="https://www.mdpi.com/2218-1997/4/6/68">coordinate velocity near horizons</a>.</p>
+<p><code>geodesic</code>: metrica Schwarzschild, kind null equatoriale. impact e&#39; b/r_s
+(default 3), extent e&#39; r_iniziale/r_s (default 12). Integra rispetto a phi
+<code>u&#39;&#39;=1.5u²-u</code> con <code>u=r_s/r</code>, inizializzato mediante
+<code>u&#39;²=1/impact²-u²+u³</code> sul ramo entrante. L&#39;evento termina all&#39;orizzonte
+u=1 o al ritorno al raggio iniziale sul ramo uscente. I punti di arresto
+sono localizzati con bisezione all&#39;interno del passo accettato.
+Il cerchio tratteggiato e&#39; r=1.5r_s, la sfera dei fotoni; photon-sphere off
+lo nasconde. max-angle limita phi: se il raggio non termina viene segnalato
+un errore, senza una traiettoria troncata presentata come completa.
+max-step (default 0.01, massimo 0.05 rad), abs-tol/rel-tol e max-steps
+controllano il calcolo. Il caso esattamente critico e le orbite asintotiche
+richiedono attenzione al limite angolare; non sono eventi finiti.
+Fonte per le equazioni: <a href="https://arxiv.org/abs/1110.6508">null geodesics in Schwarzschild</a>.</p>
+<p><code>view: plane</code> mostra la proiezione polare (r cos(phi),r sin(phi));
+<code>view: embedding</code> riporta quella proiezione sulla superficie spaziale di Flamm,
+con mesh da 4 a 30 e un offset visivo di 0.015r_s per evitare z-fighting.
+Questa vista e&#39; 3D e non puo&#39; usare place con un pannello 2D nella stessa scena.
+Non e&#39; una geodetica intrinseca della sola superficie di Flamm: e&#39; la
+proiezione spaziale di una geodetica nulla dello spaziotempo.</p>
+<h3 id="meccanica-statistica-e-numerica">Meccanica statistica e numerica</h3>
+<p><code>ising</code>: rows/columns da 1 a 32; state up/down/checkerboard/domains.
+<code>spins: [+1, -1, ...]</code> specifica un valore per sito in ordine di riga.
+I bordi sono aperti; non c&#39;e&#39; ancora una simulazione Monte Carlo.</p>
+<p><code>dimension: 3</code> abilita un reticolo cubico, con <code>layers</code> da 1 a 16 (default 3)
+e massimo 512 siti. L&#39;ordine di spins e&#39; strato, riga, colonna; checkerboard
+alterna anche tra gli strati. Le frecce +/-z sono spin Ising discreti, non
+un modello di Heisenberg. Esempio: examples/ising3d.pyxis. La scena e&#39; 3D.</p>
+<p><code>phase-diagram</code>: model schematic (unico modello), melting positive/negative,
+opacity da 0 a 1, labels con quattro stringhe (solido/liquido/gas/supercritico),
+point-labels con due stringhe (triplo/critico; default TP/CP). Tre curve di
+coesistenza si incontrano al triplo; quella liquido-vapore termina al critico.
+Le tinte oltre il critico sono zone indicative, senza una nuova linea di
+transizione. Le coordinate sono convenzionali: non sono dati quantitativi o
+un&#39;equazione di stato di una sostanza. Il modello segue la topologia descritta
+da <a href="https://openstax.org/books/chemistry-2e/pages/10-4-phase-diagrams">OpenStax</a>.
+Le regioni e le curve hanno nomi stabili per poter essere modificate.</p>
+<p><code>phase-flow</code>: dx/dy come espressioni tra virgolette in x,y,t; start [x0,y0];
+duration positiva; steps da 4 a 9999. Esempio: dx &quot;y&quot;, dy &quot;-x&quot;.
+<code>lorenz</code>: sigma, rho, beta, start [x0,y0,z0], duration e steps; passo &lt;=0.02.
+Il default e&#39; <code>integrator: rk4</code> a passo fisso. Entrambi supportano anche:</p>
+<pre><code class="language-text">integrator: adaptive
+abs-tol: 1e-8
+rel-tol: 1e-6
+max-step: 0.01
+max-steps: 9999
+</code></pre>
+<p>RK4 adattivo confronta un passo completo e due mezzi passi, stima l&#39;errore
+locale della soluzione piu&#39; fine dividendo la differenza per 15 e accetta
+i due mezzi passi se ogni componente rispetta la scala
+<code>abs-tol + rel-tol * max(abs(prima), abs(dopo))</code>. I tentativi respinti
+non diventano punti del percorso. L&#39;ultimo passo termina alla duration esatta.
+Il metodo di step doubling e&#39; descritto anche nel
+<a href="https://www.gnu.org/software/gsl/doc/html/ode-initval.html">manuale GSL</a>;
+Pyxis ha una propria implementazione C++ senza dipendenza da GSL.</p>
+<p>abs-tol va da 1e-14 a 1; rel-tol da 0 a 1. max-step positivo da 1e-12
+a 1e4; default duration/steps. Per Lorenz non puo&#39; superare 0.02.
+max-steps da 1 a 9999 limita i passi accettati: se non bastano, errore,
+senza esportare silenziosamente una traiettoria incompleta. I tentativi totali
+sono limitati a 20 volte max-steps. Queste quattro proprieta&#39; richiedono adaptive.
+Con adaptive, steps imposta soltanto il max-step predefinito; non e&#39; il numero
+esatto di punti. Con rk4 i sorgenti precedenti mantengono il campionamento fisso.
+Nell&#39;editor <code>set nome integrator rk4</code> rimuove le proprieta&#39; riservate al
+controllo adattivo, cosi&#39; il blocco resta valido dopo il cambio di metodo.</p>
+<p>Espressioni fuori dominio e stati non finiti o oltre 1e6 interrompono il calcolo.
+Le tolleranze controllano una stima locale, non un limite rigoroso dell&#39;errore
+globale. Il metodo e&#39; esplicito, per sistemi non stiff; non localizza eventi.
+max-step controlla anche la densita&#39; del percorso disegnato: una stima locale
+piccola non garantisce da sola un buon campionamento grafico.
+Il punto invisibile <code>nome.caption.center</code> fornisce un attacco sotto un phase-flow
+e segue place. Sono verificati convergenza su soluzioni analitiche, dipendenza
+esplicita dal tempo, rifiuto di passi, punti fissi e confronto Lorenz a breve termine.
+La sensibilita&#39; caotica impedisce di interpretare l&#39;accordo a lungo termine
+fra singole traiettorie Lorenz come prova di accuratezza globale.</p>
+</section><section class="manual-section"><h2 id="temi-scene-e-editor">Temi, scene e editor</h2>
+<h3 id="etichette-automatiche">Etichette automatiche</h3>
+<pre><code class="language-text">label name {
+    at: A.center
+    text: &quot;$p_1+p_2$&quot;
+    placement: auto
+    prefer: n
+    gap: 3
+}
+</code></pre>
+<p>Disponibile per label/text 2D. <code>placement T auto [prefer] [gap]</code> e&#39; la forma
+rapida; <code>placement T fixed</code> torna al punto di attacco. prefer accetta
+n/ne/e/se/s/sw/w/nw; gap e&#39; numerico in bp (da 0 a 100, default 3),
+diversamente dal gap geometrico usato da place per i gruppi.</p>
+<p>Il backend misura tramite LaTeX gli ingombri delle formule/testi. Nel frame
+finale valuta otto rettangoli candidati, aggiunge un margine di sicurezza e
+calcola penalita&#39; per sovrapposizioni con etichette, nodi, linee e punte delle
+frecce effettive. La preferenza ordina le alternative a parita&#39; di collisioni.
+Le etichette automatiche sono disposte nell&#39;ordine del sorgente; quelle fisse
+sono gia&#39; considerate come ostacoli. Il testo mantiene dimensioni fisiche
+costanti quando cambia width. Non viene stimato dalla lunghezza della stringa.</p>
+<p>Con at riferito a un cerchio/ellisse/gatebox, il backend conosce l&#39;ingombro
+del nodo e propone posizioni esterne. Con coordinate numeriche o altri
+ancoraggi propone posizioni vicine al punto, senza dedurre un nodo proprietario.
+Il fitting riserva conservativamente spazio per tutte le alternative.</p>
+<p>E&#39; una scelta greedy fra otto candidati, non un&#39;ottimizzazione globale:
+quando sono tutti occupati usa il costo minore, senza garantire l&#39;assenza
+di collisioni. Si puo&#39; aumentare gap, cambiare prefer o usare placement fixed.
+I marcatori poligonali dei percorsi non sono ancora ostacoli dedicati.
+Gli ancoraggi di un&#39;etichetta automatica non possono definire altra geometria:
+la posizione del testo si decide dopo il fitting, quindi usare il nodo o un point.
+Le etichette fisse non vuote possono invece essere estremi di clip nodes:
+il backend misura la scatola TeX e taglia il percorso nel frame finale.</p>
+<h3 id="costruzioni-geometriche-condivise">Costruzioni geometriche condivise</h3>
+<pre><code class="language-text">circle A {
+    radius: 0.5
+}
+circle B {
+    tangent-to: A
+    direction: east
+    radius: 0.3
+}
+line baseline {
+    from: A.center
+    to: B.center
+}
+line normal {
+    through: A.center
+    perpendicular-to: baseline
+    length: 2
+}
+arrow connection {
+    from: A.center
+    to: B.center
+    path: arc(0.5)
+    clip: nodes
+}
+</code></pre>
+<p>parallel-to/perpendicular-to richiedono un segmento rettilineo di riferimento
+e through; length e&#39; la lunghezza del segmento, centrato su through.
+Sono incompatibili con from/to e con percorsi curvi. I riferimenti possono
+essere definiti piu&#39; avanti nel sorgente. Vengono risolti dopo spostamenti e layout.
+Tangenza esterna fra cerchi: direction north/south/east/west/ne/nw/se/sw.
+Un offset sul cerchio vincolato viene rifiutato perche&#39; romperebbe la tangenza;
+spostare il cerchio di riferimento aggiorna invece quello dipendente.
+Non e&#39; ancora un solver generale per vincoli simultanei non lineari.</p>
+<p><code>point P A.center</code> oppure un blocco point con at/offset definisce un punto
+nominato invisibile, con ancoraggio P.center. Si usa per punti di costruzione
+e terminazioni di gambe; non genera una label vuota o un nodo visibile.</p>
+<p><code>clip: nodes</code>/<code>clip L nodes</code> taglia line/arrow/path ai bordi di cerchi, ellissi
+e gatebox associati agli estremi mediante ancoraggi. Funziona anche su Bezier
+e onde usando le intersezioni del percorso effettivo. Punti invisibili non
+hanno un bordo. <code>clip: off</code> disattiva il taglio. Il clipping conserva i centri
+come connessioni topologiche: modifica solo il tratto disegnato. Non copre
+clipping contro oggetti arbitrari nel mezzo del percorso. Per label/text fissi
+usa la scatola reale TeX, con margine 1.5bp piu&#39; meta&#39; spessore del tratto.
+Le punte native sono applicate al percorso fisico gia&#39; tagliato. Le etichette
+automatiche continuano a non essere ancoraggi geometrici.
+I marcatori degli estremi agganciati a nodi tagliati vengono omessi.</p>
+<p><code>theme: overleaf-classic</code> equivale a paper. Disponibili anche modern-vector
+e blackboard (inchiostro chiaro e sfondo scuro), oltre ai precedenti wire/color.
+Le figure 3D restano separate dalle scene 2D; si combinano nello stesso documento
+tramite ambienti distinti. La composizione di pannelli 2D/3D nella stessa scena
+e&#39; ancora da implementare.</p>
+<p>L&#39;editor usa gli stessi pacchetti e la stessa cache degli script. Nei ritocchi:
+<code>set F mediator gluon</code>, <code>set bell q0 X, control(pair)</code>,
+<code>linewidth F.in1 0.8</code>, <code>place B below A</code>. Gli oggetti interni possono essere
+modificati con i comandi geometrici gia&#39; esistenti.</p>
+</section><section class="manual-section"><h2 id="latex-e-cache">LaTeX e cache</h2>
+<p>Nell&#39;editor, Pyxis: Compila documento LaTeX produce il PDF con il nome del
+documento originale. Al salvataggio dei file .tex con ambienti pyxis, la
+stessa build viene eseguita in background; <code>pyxis.buildOnSave</code> la disattiva.
+<code>pyxis.latexEngine</code> seleziona pdflatex/lualatex/xelatex. Due passaggi, nessun
+shell escape, sorgente intatto e ausiliari in una directory temporanea rimossa.
+Una compilazione fallita conserva il PDF precedente. Se il documento cambia
+durante la build, il risultato obsoleto non viene pubblicato. Il pannello Output
+Pyxis riporta la diagnostica. Non c&#39;e&#39; ancora orchestrazione BibTeX/Biber.
+Da terminale: <code>node scripts/build-latex.js documento.tex [--engine=lualatex]</code>.</p>
+<p>Usare <code>node scripts/latex.js input.tex [output.tex] [--compile]</code>.
+Senza compilazione viene conservato il documento derivato. Con --compile
+ausiliari e log vengono rimossi; si conserva il PDF e, se richiesto con un
+percorso esplicito, anche il documento derivato.
+Gli ambienti pyxis si chiudono con <code>\end{pyxis}</code> su una propria riga.
+Opzioni: width in mm e theme. Commenti LaTeX, verb e ambienti
+verbatim/Verbatim/lstlisting/minted/comment non vengono interpretati come figure.
+Le dichiarazioni usepackage del preambolo vengono condivise con le etichette,
+tranne graphicx/pyxis. Vengono condivisi anche newcommand/renewcommand/providecommand
+e DeclareMathOperator; texPreamble nell&#39;API consente altro contesto esplicito.
+La build nativa segue input/include letterali e includeonly, con copie temporanee
+dei sottofile e diagnostica del loro percorso. Rifiuta cicli e nomi costruiti da macro.
+I percorsi si risolvono dalla directory del principale; i file originali sono immutati.
+Limiti: 128 file, 8 MiB di sorgenti. Il marker <code>% !TeX root = ../main.tex</code>
+indirizza la build del capitolo al principale; dopo una prima build l&#39;editor
+conosce inoltre i sottofile e reagisce ai loro salvataggi.
+Subfiles/import e orchestrazione BibTeX/Biber rimangono fuori dal supporto corrente.</p>
+<p>SHA-256 copre sorgente, formati, preview, preambolo delle etichette, compilatore,
+eseguibili, DLL Ghostscript, moduli Asymptote locali, ambiente rilevante e file
+di dipendenza dichiarati. Hash dei risultati impediscono il riuso di file corrotti.
+La pubblicazione usa staging e manifest finale; richieste identiche nello stesso
+processo condividono il rendering. Processi distinti possono duplicare il lavoro,
+ma i lettori validano gli hash. Una nuova compilazione invalida la cache.
+Aggiornamenti a font/pacchetti TeX esterni non sono tutti rilevati automaticamente:
+usare dependencies/cacheSalt nell&#39;API o rimuovere la cache dopo tali aggiornamenti.
+La cache conserva PDF/SVG utilizzabili e non e&#39; una directory di intermedi.
+Le nuove voci hanno un contrassegno di proprieta&#39; Pyxis. Al rendering successivo,
+le voci invalidate da cambiamenti al compilatore o al renderer vengono rimosse
+automaticamente, se non contengono file estranei. I PDF referenziati da documenti
+derivati conservati vengono protetti per non rompere includegraphics.
+Non viene promesso un rendering a freddo sotto 150 ms.</p>
+</section><section class="manual-section"><h2 id="estensioni-del-catalogo-e-del-nucleo">Estensioni del catalogo e del nucleo</h2>
+<p>Vincoli geometrici simultanei generali, ottimizzazione globale delle etichette e supporto 3D,
+clipping contro oggetti arbitrari, grafi QFT arbitrari e loop su percorsi curvi,
+stati misti, Kerr fuori dall&#39;asse o estremale, coni/geodetiche per metriche generiche,
+diagrammi di fase quantitativi da dati, ODE generiche 3D/eventi complessi, pannelli
+misti e distribuzione binaria per Linux/macOS.
+La 1.0 contiene il catalogo e gli strumenti descritti sopra. Queste estensioni
+richiedono altri modelli e convenzioni, mantenendo lo stesso nucleo condiviso.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

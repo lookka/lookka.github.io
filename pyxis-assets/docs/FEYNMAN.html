@@ -1,0 +1,69 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Feynman: modelli implementati e proposta per grafi generali — documentazione Pyxis 1.0, Luca Melani"><title>Feynman: modelli implementati e proposta per grafi generali · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Feynman: modelli implementati e proposta per grafi generali</h1><div class="docs-tools"><a href="FEYNMAN.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#esempi-di-design-non-ancora-eseguibili">Esempi di design, NON ancora eseguibili</a><a href="#loop-e-piu-39-linee-tra-gli-stessi-vertici">Loop e piu&amp;#39; linee tra gli stessi vertici</a><a href="#disposizione-e-geometria">Disposizione e geometria</a><a href="#prove-prima-di-fissare-la-sintassi">Prove prima di fissare la sintassi</a></nav></details></aside><article><section class="manual-section">
+<p>Aggiornamento 0.2: i modelli 2→2 s/t/u e le bolle sul mediatore sono ora
+implementati con sintassi descritta in PACCHETTI.md ed examples/qft.pyxis.
+Le forme generali proposte nel resto di questo documento restano obiettivi.</p>
+<p>Il pacchetto deve rendere rapide le modifiche a lezione. La struttura di base
+e&#39; un grafo con vertici e collegamenti nominati. Geometria, tipo di particella,
+freccia di flusso, freccia di momento ed etichette sono proprieta&#39; separate.</p>
+</section><section class="manual-section"><h2 id="esempi-di-design-non-ancora-eseguibili">Esempi di design, NON ancora eseguibili</h2>
+<pre><code class="language-text">use feynman
+vertex A @B4
+vertex B @F4
+fermion f A B
+momentum f &quot;$p$&quot; A-&gt;B above
+replace f photon
+</code></pre>
+<p><code>replace</code> conserva nome, estremi, percorso e annotazioni. Il nuovo tipo sceglie
+la sua convenzione visiva: una freccia fermionica non deve restare per errore
+su una linea fotonica. Le etichette fisiche restano modificabili dall&#39;utente.</p>
+<p>Bosone non indica un unico stile: fotone ondulato, scalare tratteggiato e gluone
+arricciato sono predefiniti diversi, con convenzioni modificabili.</p>
+<pre><code class="language-text"># Modifiche indipendenti
+flow f reverse
+bend f 0.5
+move B to=@F2
+replace f fermion
+</code></pre>
+<p>La linea puo&#39; essere orizzontale, verticale od obliqua senza cambiare significato.
+Il verso di flusso non si deduce dal lato destro/sinistro del foglio.</p>
+</section><section class="manual-section"><h2 id="loop-e-piu-39-linee-tra-gli-stessi-vertici">Loop e piu&#39; linee tra gli stessi vertici</h2>
+<p>Un loop e&#39; un ciclo del grafo, non necessariamente un cerchio. Servono almeno:
+auto-collegamenti, bolle con due collegamenti A-B e cicli con piu&#39; vertici.</p>
+<pre><code class="language-text"># Proposta: bolla esplicita e modificabile
+fermion upper A B
+fermion lower B A
+bend upper 0.6
+bend lower 0.6
+
+# Proposta: auto-collegamento
+loop tadpole at=A particle=scalar radius=0.7 side=above
+replace tadpole photon
+</code></pre>
+<p>Un comando abbreviato deve espandersi in componenti ancora accessibili per nome.
+Il bend relativo e&#39; positivo a sinistra del percorso; un&#39;abbreviazione <code>side=above</code>
+deve dichiarare se si riferisce al foglio o al sistema del diagramma.</p>
+</section><section class="manual-section"><h2 id="disposizione-e-geometria">Disposizione e geometria</h2>
+<ul>
+<li>Disporre orizzontalmente/verticalmente, ruotare l&#39;intero diagramma e spostare
+un singolo vertice sono azioni distinte.</li>
+<li>La disposizione automatica deve rispettare i punti fissati dall&#39;utente.</li>
+<li>Le etichette devono restare leggibili dopo la rotazione.</li>
+<li>Onde e arricciature devono seguire la lunghezza del percorso, anche curvo.</li>
+<li>Ampiezza, spaziatura e spessore devono poter avere dimensioni fisiche coerenti.</li>
+<li>Frecce di flusso e momento hanno verso e posizione propri.</li>
+<li>Un incrocio sul foglio non crea un&#39;interazione: serve un vertice esplicito.</li>
+<li>Ogni collegamento, nodo e annotazione rimane modificabile separatamente.</li>
+</ul>
+</section><section class="manual-section"><h2 id="prove-prima-di-fissare-la-sintassi">Prove prima di fissare la sintassi</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Albero con linee orizzontali, verticali e oblique.</li>
+<li><input disabled="" type="checkbox"> Cambio fotone/scalare mantenendo il percorso.</li>
+<li><input disabled="" type="checkbox"> Bolla con flussi e frecce di momento distinti.</li>
+<li><input disabled="" type="checkbox"> Auto-collegamento sopra, sotto e a lato di un vertice.</li>
+<li><input disabled="" type="checkbox"> Triangolo e box con piu&#39; vertici.</li>
+<li><input disabled="" type="checkbox"> Incrocio senza interazione.</li>
+<li><input disabled="" type="checkbox"> Diagramma ruotato e nodo spostato senza perdere annotazioni.</li>
+</ul>
+<p>Il pacchetto disegna le proprieta&#39; indicate dall&#39;utente; non deriva ampiezze,
+regole di Feynman o la validita&#39; fisica del diagramma.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

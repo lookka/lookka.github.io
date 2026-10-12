@@ -1,0 +1,94 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Stato di Pyxis — 12 ottobre 2026 — documentazione Pyxis 1.0, Luca Melani"><title>Stato di Pyxis — 12 ottobre 2026 · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Stato di Pyxis — 12 ottobre 2026</h1><div class="docs-tools"><a href="STATO.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#release-1-0">Release 1.0</a><a href="#incremento-0-5">Incremento 0.5</a><a href="#incremento-0-4">Incremento 0.4</a><a href="#incremento-0-3">Incremento 0.3</a><a href="#incremento-semantico-0-2">Incremento semantico 0.2</a><a href="#verificato">Verificato</a><a href="#avvio">Avvio</a><a href="#dipendenze-necessarie">Dipendenze necessarie</a><a href="#limiti">Limiti</a><a href="#file-conservati">File conservati</a></nav></details></aside><article><section class="manual-section">
+<p>Release 1.0 Windows x64: catalogo semantico, strumenti LaTeX ed estensione installabile.
+I modelli fisici supportati e i loro limiti sono specificati in PACCHETTI.md.</p>
+</section><section class="manual-section"><h2 id="release-1-0">Release 1.0</h2>
+<p>Regioni poligonali semplici con riempimento vettoriale/opacity e verifica dei
+bordi; diagrammi P-T schematici con punto triplo/critico e due segni della
+pendenza di fusione. Ising 3D con configurazioni esplicite e bordi aperti.
+Profili di corso additive rispetto a use, oracoli su qubit contigui con controlli.
+Clipping delle scatole TeX misurate nel frame finale, compresi tratti curvi
+e spessori delle linee. Eventi di arresto localizzati per le traiettorie.
+Coni radiali di Schwarzschild in carta Painleve-Gullstrand e raggi nulli
+equatoriali con scattering/cattura; vista piana o proiezione spaziale riportata
+sull&#39;embedding di Flamm. Il raggio nullo non e&#39; una geodetica intrinseca della
+sola superficie spaziale.
+Compilazione del documento nativo nell&#39;editor al salvataggio: PDF con il nome
+standard, due passaggi LaTeX, originale intatto, pubblicazione soltanto dopo successo.
+Segue capitoli input/include, includeonly e TeX root. Macro del preambolo
+condivise con le figure. Kerr sull&#39;asse subestremale con orizzonti di Cauchy
+e continuazione periodica. Loop photon campionato senza flusso fermionico.
+Pacchetto VSIX con compilatore statico incluso, sorgenti, guide ed esempi;
+installazione su questo PC collegata ai runtime esistenti. Codice Pyxis MIT.</p>
+</section><section class="manual-section"><h2 id="incremento-0-5">Incremento 0.5</h2>
+<p>Integratore C++ condiviso 2D/3D: RK4 fisso compatibile e RK4 adattivo con
+step doubling, tolleranze locali assolute/relative, passi respinti, limite
+del campionamento e arresto con diagnostica. Esempio del pendolo libero e
+smorzato, senza coordinate manuali dei pannelli. Le tolleranze non sono
+garanzie sull&#39;errore globale; sistemi stiff ed eventi restano fuori scope.
+Il propagatore gluonico ha raccordi simmetrici ai due vertici e ampiezza
+limitata sulle linee corte, verificati sulle coordinate generate.</p>
+</section><section class="manual-section"><h2 id="incremento-0-4">Incremento 0.4</h2>
+<p>Etichette automatiche 2D misurate da LaTeX, valutazione di otto direzioni
+nel frame finale e penalita&#39; per etichette, nodi, tratti e punte native delle
+frecce. Inchiostro/testo con dimensioni fisiche costanti al variare di width.
+QFT usa ora il sistema comune per default, con modalita&#39; fixed disponibile.
+Test delle misure reali, cambi di scala, ostacoli fissi, sovrapposizioni fra
+formule, flussi orientati e casi in cui tutte le direzioni sono occupate.
+La procedura e&#39; greedy e non garantisce un layout senza collisioni in ogni scena.</p>
+</section><section class="manual-section"><h2 id="incremento-0-3">Incremento 0.3</h2>
+<p>Vincoli direzionali parallel/perpendicular, tangenza esterna fra cerchi,
+punti nominati invisibili e clipping ai bordi dei nodi su segmenti/Bezier/onde.
+Reti PEPS e MPS con connessioni, etichette e gambe fisiche che seguono i nodi.
+Il layout dei gruppi supporta ora gli ancoraggi interni senza doppia traslazione.
+Test C++ matematici, test delle intersezioni con il vero Asymptote e regressioni
+di rendering. Nuove voci cache obsolete vengono eliminate automaticamente,
+proteggendo gli asset referenziati da documenti LaTeX derivati conservati.
+La guida GUIDA-SVILUPPO.md accompagna il codice con esperimenti e letture guidate.</p>
+</section><section class="manual-section"><h2 id="incremento-semantico-0-2">Incremento semantico 0.2</h2>
+<p>Implementati import combinabili, registry dei pacchetti, blocchi semantici,
+nomi gerarchici, composizione di gruppi 2D e diagnostica di cicli/conflitti.
+I moduli sono in src/packages; il nucleo e il backend precedenti sono riutilizzati.
+Disponibili Feynman 2→2 con loop, circuiti, MPS, Bloch, Penrose Minkowski/Schwarzschild,
+embedding di Flamm, Ising 2D, orbite RK4 2D e Lorenz 3D.
+Preprocessore LaTeX reale, cache SHA-256 con verifica degli artefatti,
+temi paper/modern-vector/blackboard e ritocchi dei pacchetti nell&#39;editor.
+Il manuale PACCHETTI.md distingue le funzionalita&#39; effettive dagli obiettivi integrali.
+Le limitazioni elencate sotto per il prototipo 0.1 sono aggiornate da questo incremento.</p>
+</section><section class="manual-section"><h2 id="verificato">Verificato</h2>
+<ul>
+<li>Nucleo C++17: formule, oggetti, ancoraggi, percorsi, onde, Bezier, griglia di costruzione.</li>
+<li>Sorgenti dichiarativi a blocchi e comandi rapidi per modificare le proprieta&#39;.</li>
+<li>Cerchi, ellissi, frecce, testo/LaTeX, grafici y=f(x).</li>
+<li>Sfere e superfici z=f(x,y), camera ortografica, etichette 3D.</li>
+<li>Stile paper: griglia senza riempimento, sfere senza equatore, sfumatura e spessori configurabili.</li>
+<li>Pipeline reale SVG/PDF, anche 3D, con etichette. Gli SVG testati non contengono immagini raster.</li>
+<li>Extension Host sul VSIX installato: anteprima, salvataggio .pyxis/.svg/.pdf, inserimento LaTeX, build nativa e build al salvataggio. Anteprima a freddo del caso di prova: circa 7.2 secondi in quel test.</li>
+<li>Pulizia automatica degli intermedi della pipeline dopo successo ed errore.</li>
+</ul>
+</section><section class="manual-section"><h2 id="avvio">Avvio</h2>
+<p>Aprire Installa Pyxis.cmd, ricaricare VS Code e aprire il documento LaTeX.
+Ctrl+Alt+F apre la figura; la palette contiene esempi del corso e guida rapida.
+Per ambienti nativi usare usepackage pyxis e la build dell&#39;estensione.
+start.ps1 resta disponibile per lo sviluppo. Le istruzioni sono in INIZIA-QUI.md.</p>
+</section><section class="manual-section"><h2 id="dipendenze-necessarie">Dipendenze necessarie</h2>
+<p>.tools/asymptote: Asymptote 3.15 con moduli e DLL.
+.tools/ghostscript: Ghostscript 10.08.0 console con risorse e licenza.
+LaTeX e dvisvgm sono quelli gia&#39; presenti sul PC. Non eliminare .tools.
+L&#39;installer collega i runtime di questo PC. Su altri PC il VSIX richiede
+installazioni proprie di Asymptote/Ghostscript/TeX; non li redistribuisce.</p>
+</section><section class="manual-section"><h2 id="limiti">Limiti</h2>
+<p>Scene miste 2D/3D, rotazioni e ancoraggi 3D non ancora disponibili.
+Feynman, Penrose, circuiti, reti tensoriali e reticoli hanno un primo insieme
+di oggetti eseguibili; le estensioni integrali sono elencate in PACCHETTI.md.
+Gruppi semantici 2D, ancoraggi interni e clipping agli estremi dei nodi sono
+disponibili. Regioni e clipping delle scatole TeX fisse sono implementati;
+gruppi arbitrari, layer espliciti, import dati e superfici parametriche generali
+restano da implementare.
+Variabili, funzioni e simboli vanno definiti prima dell&#39;uso.
+La sfumatura vettoriale 3D puo&#39; mostrare giunzioni tra patch in alcuni visualizzatori.
+Servono altre prove manuali e una sintassi consolidata insieme al proprietario.</p>
+</section><section class="manual-section"><h2 id="file-conservati">File conservati</h2>
+<p>Codice, test riutilizzabili, documentazione, esempi, SVG/PDF dimostrativi, eseguibili e runtime necessari.
+Installer, estrattori, proxy sperimentale, profilo VS Code di prova e intermedi diagnostici rimossi.
+La sessione didattica e la divisione dei compiti C++ si faranno successivamente.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

@@ -1,0 +1,126 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Iniziare con Pyxis — documentazione Pyxis 1.0, Luca Melani"><title>Iniziare con Pyxis · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Iniziare con Pyxis</h1><div class="docs-tools"><a href="INIZIA-QUI.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#installazione-su-windows-x64">Installazione su Windows x64</a><a href="#collegamento-rapido-sul-pc-di-sviluppo">Collegamento rapido sul PC di sviluppo</a><a href="#una-figura-mentre-prendi-appunti">Una figura mentre prendi appunti</a><a href="#scrivere-la-figura-direttamente-nel-documento">Scrivere la figura direttamente nel documento</a><a href="#capitoli-della-tesi">Capitoli della tesi</a><a href="#combinare-corsi-e-rifinire">Combinare corsi e rifinire</a><a href="#imparare-a-svilupparlo">Imparare a svilupparlo</a></nav></details></aside><article><section class="manual-section">
+<p>Pyxis trasforma descrizioni fisiche in figure vettoriali. Puoi descrivere un
+processo, un circuito o un reticolo, senza calcolare le coordinate sul foglio.
+Il sorgente conserva le scelte; PDF e SVG sono i risultati esportati.</p>
+</section><section class="manual-section"><h2 id="installazione-su-windows-x64">Installazione su Windows x64</h2>
+<p>Ho distribuito Pyxis come estensione VS Code in formato VSIX. Il pacchetto
+include il compilatore C++ già compilato, gli esempi e la documentazione.
+Installa separatamente VS Code 1.90 o successivo, Asymptote, una distribuzione
+TeX (per esempio MiKTeX, con dvisvgm) e Ghostscript. I motori grafici esterni
+non sono inclusi nel download. Node.js serve solo per gli script da terminale;
+non serve installarlo per usare l&#39;estensione in VS Code.</p>
+<ol>
+<li>Scarica pyxis-1.0.0-win32-x64.vsix dalla pagina del progetto.</li>
+<li>In VS Code apri Ctrl+Shift+P, cerca <strong>Extensions: Install from VSIX…</strong>
+e seleziona il file. Ricarica la finestra.</li>
+<li>Se Asymptote e Ghostscript non sono nel PATH, configura pyxis.asymptote
+e pyxis.ghostscript nelle impostazioni. Usa i tuoi percorsi, per esempio:</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;pyxis.asymptote&quot;: &quot;C:\\Program Files\\Asymptote\\asy.exe&quot;,
+  &quot;pyxis.ghostscript&quot;: &quot;C:\\Program Files\\gs\\VERSIONE\\bin\\gswin64c.exe&quot;
+}
+</code></pre>
+<p>Il percorso Ghostscript dipende dalla versione installata: VERSIONE è un
+segnaposto. Verifica che entrambi gli eseguibili esistano realmente. TeX e
+dvisvgm devono essere raggiungibili dal processo di VS Code; dopo aver
+cambiato PATH, riavvia VS Code. Apri un documento .tex e prova
+<strong>Pyxis: Figura da esempio del corso</strong>.</p>
+<p>Se hai solo il VSIX, non eseguire gli script PowerShell del progetto per
+installare altri runtime. Se vuoi studiare il codice o usare il terminale,
+scarica anche l&#39;archivio completo. Sono distribuiti sorgenti portabili,
+ma la sola build binaria verificata di questa release è Windows x64.</p>
+</section><section class="manual-section"><h2 id="collegamento-rapido-sul-pc-di-sviluppo">Collegamento rapido sul PC di sviluppo</h2>
+<p>Apri <code>Installa Pyxis.cmd</code> nella cartella del progetto. Il pacchetto installa
+l&#39;estensione normale di VS Code e collega Asymptote/Ghostscript gia&#39; presenti.
+Ricarica la finestra di VS Code dopo l&#39;installazione. Non serve avviare una
+finestra di sviluppo. Conserva <code>.tools</code>: contiene il motore grafico necessario.</p>
+<p>Da PowerShell puoi usare anche:</p>
+<pre><code class="language-powershell">./scripts/install.ps1 -SkipBuild
+</code></pre>
+<p>Per un altro PC servono VS Code, Asymptote, una distribuzione TeX con dvisvgm
+e Ghostscript. Installa il VSIX da <code>release</code> tramite Extensions: Install from
+VSIX; imposta pyxis.asymptote e pyxis.ghostscript se i programmi non sono nel
+PATH. Il VSIX include il nucleo Windows x64, i sorgenti, gli esempi e la guida;
+non redistribuisce questi programmi esterni.</p>
+</section><section class="manual-section"><h2 id="una-figura-mentre-prendi-appunti">Una figura mentre prendi appunti</h2>
+<p>Apri il tuo documento LaTeX, posiziona il cursore e premi Ctrl+Alt+F.
+Scrivi o modifica il sorgente nella finestra Pyxis. L&#39;anteprima si aggiorna
+dopo una breve pausa. Salva figura ti chiede un nome, crea .pyxis/.svg/.pdf
+nella cartella figures e inserisce includegraphics negli appunti.
+Nel preambolo serve <code>\usepackage{graphicx}</code>.</p>
+<p>Per partire da una figura del corso, cerca <strong>Pyxis: Figura da esempio del corso</strong>
+nella palette dei comandi (Ctrl+Shift+P). Scegli QFT, quantistica, statistica
+o relativita&#39;. L&#39;esempio diventa una nuova bozza: il modello originale rimane intatto.</p>
+<p>Un sorgente breve per il circuito di Bell:</p>
+<pre><code class="language-text">profile quantum
+grid off
+circuit bell {
+    q0: H, control(pair)
+    q1: _, target(pair), M
+}
+</code></pre>
+<p><code>pair</code> collega il controllo e il target nella stessa colonna; <code>_</code> e&#39; un filo.
+Pyxis disegna il circuito, non simula lo stato o la misura.</p>
+</section><section class="manual-section"><h2 id="scrivere-la-figura-direttamente-nel-documento">Scrivere la figura direttamente nel documento</h2>
+<pre><code class="language-latex">\documentclass{article}
+\usepackage{pyxis}
+\begin{document}
+\begin{pyxis}[width=90]
+profile qft
+feynman scattering {
+    channel: s
+    incoming: [electron, positron]
+    outgoing: [muon, antimuon]
+    mediator: photon
+}
+\end{pyxis}
+\end{document}
+</code></pre>
+<p>Salva il documento: l&#39;estensione prepara le figure e compila il PDF con il
+nome degli appunti. Il sorgente originale resta identico. Devi chiudere
+<code>\end{pyxis}</code> su una propria riga. La diagnostica si trova nel pannello Output
+Pyxis. Puoi avviare la stessa procedura con <strong>Pyxis: Compila documento LaTeX</strong>.
+pyxis.buildOnSave disattiva la build automatica; pyxis.latexEngine sceglie il motore.</p>
+<p>Quando l&#39;estensione e&#39; installata, il pacchetto pyxis.sty e&#39; trovato dalla sua
+procedura di build. Un pdflatex lanciato direttamente non esegue Pyxis:
+usa il comando dell&#39;estensione oppure <code>node scripts/build-latex.js appunti.tex</code>.</p>
+</section><section class="manual-section"><h2 id="capitoli-della-tesi">Capitoli della tesi</h2>
+<p>La procedura segue input/include con nomi file letterali e rispetta includeonly.
+I percorsi dei sottofile si risolvono dalla cartella del documento principale,
+come nella compilazione LaTeX abituale. I file originali non vengono riscritti.
+Nei capitoli puoi indicare il documento principale:</p>
+<pre><code class="language-latex">% !TeX root = ../tesi.tex
+</code></pre>
+<p>La build dall&#39;editor del capitolo viene cosi&#39; indirizzata alla tesi. Dopo la
+prima compilazione del principale, l&#39;estensione conosce anche i suoi sottofile
+e li ricompila al salvataggio. Non supportiamo nomi di input costruiti da macro,
+subfiles/import o l&#39;orchestrazione automatica di BibTeX/Biber.
+Per riferimenti a capitoli esclusi da includeonly, una build pulita non dispone
+degli ausiliari delle vecchie compilazioni: compila prima il documento completo.</p>
+</section><section class="manual-section"><h2 id="combinare-corsi-e-rifinire">Combinare corsi e rifinire</h2>
+<pre><code class="language-text">profile quantum
+use qft, relativity, statmech
+theme: overleaf-classic
+</code></pre>
+<p>Il profilo importa un pacchetto, use ne aggiunge altri. Usa place per affiancare
+o sovrapporre verticalmente i gruppi 2D; le figure 3D usano ambienti distinti.
+Nei ritocchi rapidi dell&#39;editor puoi scrivere <code>set F mediator gluon</code>,
+<code>place B below A</code>, <code>move A 1 0</code> oppure <code>theme blackboard</code>.</p>
+<p>Gli esempi non sono tutti modelli quantitativi: phase-diagram e&#39; schematico;
+Kerr e&#39; un diagramma sull&#39;asse subestremale; le geodetiche sono raggi nulli
+equatoriali di Schwarzschild. Le ipotesi e i limiti sono in PACCHETTI.md.
+Pyxis non verifica conservazione di cariche o validita&#39; dei vertici QFT.</p>
+</section><section class="manual-section"><h2 id="imparare-a-svilupparlo">Imparare a svilupparlo</h2>
+<p>Leggi <a href="GUIDA-SVILUPPO.html">GUIDA-SVILUPPO.md</a>: e&#39; pensata per chi conosce il C++
+e ha una formazione di fisica, senza dare per nota la costruzione di un compilatore.
+Contiene comandi, lettura del codice, esempi ed esperimenti numerici.
+Il riferimento della sintassi e&#39; <a href="PACCHETTI.html">PACCHETTI.md</a>.</p>
+<p>Per cercare una sintassi specifica usa <a href="COMANDI.html">il riferimento dei comandi</a>.
+Se l&#39;anteprima fallisce, controlla i percorsi degli eseguibili e il pannello
+Output Pyxis. Nel progetto completo <code>node scripts/doctor.js</code> verifica gli
+strumenti. Il compilatore incluso non richiede GCC; GCC serve per ricompilarlo.</p>
+<p>Le cartelle temporanee, i profili di prova e gli ausiliari vengono eliminati.
+Codice, test sorgente, guida, esempi, figure esportate e dipendenze rimangono:
+sono gli elementi che ti servono per usare e sviluppare il progetto.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

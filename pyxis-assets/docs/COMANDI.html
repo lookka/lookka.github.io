@@ -1,0 +1,709 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Riferimento dei comandi — Pyxis 1.0 — documentazione Pyxis 1.0, Luca Melani"><title>Riferimento dei comandi — Pyxis 1.0 · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Riferimento dei comandi — Pyxis 1.0</h1><div class="docs-tools"><a href="COMANDI.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#come-leggere-la-sintassi">Come leggere la sintassi</a><a href="#scena-profili-e-import">Scena, profili e import</a><a href="#primitive-geometriche-2d">Primitive geometriche 2D</a><a href="#formule-variabili-e-funzioni">Formule, variabili e funzioni</a><a href="#testi-e-posizionamento">Testi e posizionamento</a><a href="#percorsi-stili-e-modifiche">Percorsi, stili e modifiche</a><a href="#vincoli-geometrici">Vincoli geometrici</a><a href="#geometria-3d">Geometria 3D</a><a href="#forma-a-blocchi-delle-primitive">Forma a blocchi delle primitive</a><a href="#tutti-i-comandi-dei-pacchetti-fisici">Tutti i comandi dei pacchetti fisici</a><a href="#comandi-dell-39-editor-vs-code">Comandi dell&amp;#39;editor VS Code</a><a href="#ambiente-latex">Ambiente LaTeX</a><a href="#terminale-e-script">Terminale e script</a></nav></details></aside><article><section class="manual-section">
+<p>Ho raccolto qui la sintassi implementata nella release 1.0. Questo è un riferimento
+da consultare mentre scrivi, non una lista di funzionalità future. Per iniziare
+segui <a href="INIZIA-QUI.html">la guida pratica</a>; per le proprietà dei modelli fisici consulta
+<a href="PACCHETTI.html">il manuale dei pacchetti</a>, che completa questo riferimento.</p>
+</section><section class="manual-section"><h2 id="come-leggere-la-sintassi">Come leggere la sintassi</h2>
+<p><code>N</code> è il nome univoco di un oggetto, <code>P</code> un punto 2D, <code>r</code> una dimensione positiva.
+Le parentesi quadre nella descrizione indicano argomenti facoltativi, non caratteri
+da digitare. Nei blocchi semantici, invece, le liste come <code>[electron, positron]</code>
+richiedono davvero le parentesi quadre. Un comando per riga; proprietà dei blocchi
+una per riga. I commenti iniziano con <code>#</code>, fuori dalle stringhe.</p>
+<p>I numeri usano il punto decimale. Le coordinate sono unità geometriche arbitrarie;
+<code>width</code> è in mm, spessori e distanze delle etichette sono in bp (1/72 di pollice).
+Le stringhe sono fra doppi apici; le barre inverse LaTeX restano letterali.
+Non sono supportati doppi apici escapati dentro una stringa. I nomi cominciano
+con una lettera o <code>_</code>, poi ammettono lettere, cifre, <code>_</code> e punti gerarchici.</p>
+<p>Un punto <code>P</code> può essere <code>x y</code>, un riferimento della griglia (<code>@A1</code> … <code>@G7</code>)
+o un ancoraggio (<code>A.center</code>). <code>@D4</code> è l&#39;origine; lettere verso destra, numeri
+verso il basso. Gli ancoraggi possono riferirsi a oggetti dichiarati più avanti.
+I comandi di modifica richiedono invece che l&#39;oggetto sia già stato dichiarato.</p>
+</section><section class="manual-section"><h2 id="scena-profili-e-import">Scena, profili e import</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Sintassi ed esempio</th>
+<th>Spiegazione</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>width</code></td>
+<td><code>width 120</code></td>
+<td>Larghezza finale in mm, positiva; default 100. Il testo conserva dimensioni fisiche.</td>
+</tr>
+<tr>
+<td><code>grid</code></td>
+<td><code>grid off</code>, <code>grid on</code>, <code>grid 0.5</code></td>
+<td>Nasconde/mostra la griglia o ne cambia il passo. Passo tra 1e-6 e 1e6; default 1 e visibile. Gli ancoraggi esistono anche con griglia nascosta.</td>
+</tr>
+<tr>
+<td><code>theme</code></td>
+<td><code>theme paper</code> oppure <code>theme: paper</code></td>
+<td><code>paper</code>, <code>wire</code>, <code>color</code>, <code>blackboard</code>, <code>modern-vector</code>, <code>overleaf-classic</code> (alias di paper). I temi scelgono convenzioni visive; non cambiano il modello fisico.</td>
+</tr>
+<tr>
+<td><code>use</code></td>
+<td><code>use qft, quantum</code></td>
+<td>Importa uno o più pacchetti fra qft, quantum, relativity, statmech. Import ripetuti ignorati.</td>
+</tr>
+<tr>
+<td><code>profile</code></td>
+<td><code>profile statmech</code></td>
+<td>Importa il pacchetto del corso; <code>research</code> importa tutti e quattro. È additivo, non sostituisce gli import precedenti.</td>
+</tr>
+<tr>
+<td><code>camera</code></td>
+<td><code>camera 5 -7 5</code></td>
+<td>Direzione di vista 3D, diversa dal vettore nullo. Default (5,-7,5).</td>
+</tr>
+<tr>
+<td><code>place</code></td>
+<td><code>place B below A gap=1</code></td>
+<td>Dispone gruppi semantici 2D: above, below, right-of, left-of. gap geometrico 0…1000, default 1. Non è una traslazione di primitive singole; cicli e disposizioni duplicate sono errori.</td>
+</tr>
+</tbody></table></div>
+<pre><code class="language-text">use qft, quantum
+grid off
+feynman F {
+    mediator: photon
+}
+circuit bell {
+    q0: H, control(pair)
+    q1: _, target(pair), M
+}
+place bell below F gap=2
+</code></pre>
+</section><section class="manual-section"><h2 id="primitive-geometriche-2d">Primitive geometriche 2D</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Sintassi</th>
+<th>Spiegazione ed esempio</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>point</code></td>
+<td><code>point N [P]</code></td>
+<td>Punto invisibile di costruzione; default origine. <code>point O 0 0</code>; ancoraggio O.center.</td>
+</tr>
+<tr>
+<td><code>circle</code></td>
+<td><code>circle N [r]</code> oppure <code>circle N x y r</code> oppure <code>circle N P r</code></td>
+<td>Cerchio; default origine e r=1. <code>circle A 0 0 0.5</code>.</td>
+</tr>
+<tr>
+<td><code>ellipse</code></td>
+<td><code>ellipse N [rx ry]</code> oppure <code>ellipse N x y rx ry</code> oppure <code>ellipse N P rx ry</code></td>
+<td>Ellisse, semiassi positivi. Default origine, rx=1, ry=0.5.</td>
+</tr>
+<tr>
+<td><code>line</code></td>
+<td><code>line N [P Q]</code></td>
+<td>Segmento senza punta. Senza punti va da (-0.5,0) a (0.5,0). <code>line L A.center B.center</code>.</td>
+</tr>
+<tr>
+<td><code>arrow</code></td>
+<td><code>arrow N [P Q]</code></td>
+<td>Come line, con punta finale. <code>arrow axis 0 0 3 0</code>.</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td><code>path N &quot;x1 y1;x2 y2;…&quot;</code> oppure <code>path N P Q …</code></td>
+<td>Polilinea, almeno due punti, massimo 10000; ammette ancoraggi. <code>path C &quot;0 0;1 2;3 0&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>region</code></td>
+<td><code>region N &quot;x1 y1;x2 y2;x3 y3;…&quot;</code></td>
+<td>Poligono semplice chiuso automaticamente, 3…512 vertici. Niente auto-intersezioni, area nulla o bordi curvi. Nasce sullo sfondo.</td>
+</tr>
+<tr>
+<td><code>gatebox</code></td>
+<td><code>gatebox N x y larghezza altezza</code></td>
+<td>Rettangolo centrato in (x,y), dimensioni positive; primitiva usata anche dai circuiti.</td>
+</tr>
+<tr>
+<td><code>plot</code></td>
+<td><code>plot N xmin xmax campioni &quot;f(x)&quot;</code></td>
+<td>Campiona una funzione reale; xmin&lt;xmax, 2…10000 punti. <code>plot C 0 6 200 &quot;sin(x)&quot;</code>. Non crea automaticamente gli assi.</td>
+</tr>
+</tbody></table></div>
+<p>Ancoraggi: circle/ellipse/gatebox hanno <code>center</code>, <code>north</code>, <code>south</code>, <code>east</code>, <code>west</code>;
+line/arrow <code>start</code>, <code>end</code>, <code>center</code>; path/plot <code>start</code>, <code>end</code>, <code>node1</code>, <code>node2</code>, …;
+point e testi fissi soltanto <code>center</code>. Per un percorso, <code>node1</code> è il primo punto
+campionato. Gli oggetti 3D non espongono questi ancoraggi 2D.</p>
+</section><section class="manual-section"><h2 id="formule-variabili-e-funzioni">Formule, variabili e funzioni</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Esempio</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>let</code></td>
+<td><code>let a &quot;0.8&quot;</code></td>
+<td>Valuta una costante all&#39;atto della dichiarazione; nomi univoci. Non rende espressioni tutti i parametri geometrici.</td>
+</tr>
+<tr>
+<td><code>function</code></td>
+<td><code>function wave &quot;a*sin(x)*exp(-x/6)&quot;</code></td>
+<td>Definisce una funzione di un argomento, usabile come wave(x). Le variabili necessarie devono esistere quando l&#39;espressione viene valutata.</td>
+</tr>
+</tbody></table></div>
+<p>Operatori: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code>, parentesi e segni unari. Moltiplicazione
+esplicita: scrivi <code>2*x</code>, non <code>2x</code>. La potenza è associativa a destra:
+<code>2^3^2</code> significa <code>2^(3^2)</code>. <code>-x^2</code> significa <code>-(x^2)</code>.
+Costante <code>pi</code>, funzioni <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>exp</code>, <code>log</code> (naturale), <code>sqrt</code>, <code>abs</code>.
+Trigonometria in radianti. I risultati devono essere reali e finiti.
+<code>plot</code> fornisce x; <code>surface</code> fornisce x,y; phase-flow fornisce x,y,t.
+Non sono disponibili confronti, condizioni, cicli, derivate simboliche o lettura CSV.</p>
+</section><section class="manual-section"><h2 id="testi-e-posizionamento">Testi e posizionamento</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Sintassi</th>
+<th>Spiegazione</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>label</code></td>
+<td><code>label N [P] &quot;testo LaTeX&quot;</code></td>
+<td>Etichetta LaTeX; default origine. <code>label E 1 0 &quot;$E=mc^2$&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>text N [P] &quot;testo normale&quot;</code></td>
+<td>Testo letterale: caratteri speciali TeX escapati dal programma. Non interpreta <code>$…$</code> come matematica.</td>
+</tr>
+<tr>
+<td><code>placement</code></td>
+<td><code>placement N auto [preferenza] [gap]</code> oppure <code>placement N fixed</code></td>
+<td>Label/text 2D. Preferenze n,ne,e,se,s,sw,w,nw; default n. Gap in bp, 0…100, default 3. Cerca fra otto posizioni usando misure TeX, senza garantire un layout globalmente privo di collisioni.</td>
+</tr>
+</tbody></table></div>
+<pre><code class="language-text">circle A 0.5
+label name {
+    at: A.center
+    text: &quot;$A$&quot;
+    placement: auto
+    prefer: ne
+    gap: 4
+}
+</code></pre>
+<p>Un&#39;etichetta automatica non può essere un ancoraggio di altra geometria:
+usa il nodo a cui è associata. Un testo fisso non vuoto può essere un nodo
+di clipping: viene misurato realmente con TeX.</p>
+</section><section class="manual-section"><h2 id="percorsi-stili-e-modifiche">Percorsi, stili e modifiche</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Sintassi ed esempio</th>
+<th>Effetto e limiti</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>move</code></td>
+<td><code>move N dx dy</code></td>
+<td>Trasla un oggetto 2D e i suoi controlli; su un oggetto ancorato aggiunge un offset. Per i gruppi usa place.</td>
+</tr>
+<tr>
+<td><code>stroke</code></td>
+<td><code>stroke N dashed</code></td>
+<td>solid, dashed, dotted; geometria 2D, non testo.</td>
+</tr>
+<tr>
+<td><code>linewidth</code></td>
+<td><code>linewidth N 0.7</code></td>
+<td>Spessore in bp, &gt;0 e ≤20, non sui testi. Default geometria 0.5, sfere 0.45, superfici 0.25.</td>
+</tr>
+<tr>
+<td><code>bend</code></td>
+<td><code>bend N 0.4</code></td>
+<td>Arco costruito da un&#39;altezza relativa alla corda, positiva a sinistra del verso start→end. 0 torna rettilineo. Rimuove onde e controlli espliciti.</td>
+</tr>
+<tr>
+<td><code>curve</code></td>
+<td><code>curve N segmento c1x c1y c2x c2y</code></td>
+<td>Bézier cubica per il segmento numerato da 1. Controlli in coordinate assolute; line/arrow hanno un solo segmento. <code>curve C 1 0 1 2 1</code>. Rimuove l&#39;onda.</td>
+</tr>
+<tr>
+<td><code>wave</code></td>
+<td><code>wave N ampiezza oscillazioni</code></td>
+<td>Onda lungo il percorso; oscillazioni intere 1…64. Rimuove bend e controlli.</td>
+</tr>
+<tr>
+<td><code>flow</code></td>
+<td><code>flow N forward</code></td>
+<td>none, forward, reverse: freccia di flusso sul percorso. Distinta dalla punta finale di arrow.</td>
+</tr>
+<tr>
+<td><code>markers</code></td>
+<td><code>markers N triangle hollow 0.12</code></td>
+<td>Marcatori sui nodi: none, circle, square, triangle, diamond o simbolo personalizzato. filled/hollow, dimensione positiva; default filled e 0.08.</td>
+</tr>
+<tr>
+<td><code>symbol</code></td>
+<td><code>symbol kite &quot;0 1;0.6 0;0 -1;-0.6 0&quot;</code></td>
+<td>Poligono personalizzato per markers, 3…1000 vertici; nome diverso dai marcatori predefiniti.</td>
+</tr>
+<tr>
+<td><code>clip</code></td>
+<td><code>clip N nodes</code> oppure <code>clip N off</code></td>
+<td>Taglia line/arrow/path ai bordi dei nodi ancorati agli estremi: circle, ellipse, gatebox, label/text fissi non vuoti. Funziona sul percorso effettivo, anche curvo. Non taglia contro oggetti arbitrari nel mezzo.</td>
+</tr>
+<tr>
+<td><code>background</code></td>
+<td><code>background N</code></td>
+<td>Dispone un oggetto sullo sfondo 2D; non prende on/off.</td>
+</tr>
+<tr>
+<td><code>nodefill</code></td>
+<td><code>nodefill N black</code></td>
+<td>Riempimento di un circle: black, white, none.</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>color N 0.2 0.4 0.8</code></td>
+<td>RGB 0…1 su geometria 2D/3D; non testi/punti invisibili. Su region controlla il riempimento; sul tratto 2D controlla il colore del tratto.</td>
+</tr>
+<tr>
+<td><code>fill</code></td>
+<td><code>fill N color</code></td>
+<td>auto, none, white, color per region/sphere/surface/mesh3. Non è il comando di riempimento dei circle: usa nodefill.</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td><code>opacity N 0.3</code></td>
+<td>Solo region, fra 0 (trasparente) e 1 (opaco), default 0.25.</td>
+</tr>
+<tr>
+<td><code>outline</code></td>
+<td><code>outline N off</code></td>
+<td>on/off per il contorno delle region riempite; default on.</td>
+</tr>
+</tbody></table></div>
+<p>Gli stili di percorso bend/curve/wave/flow/markers si applicano a line, arrow,
+path e plot; le region devono restare poligoni rettilinei senza onde/flusso/clipping.
+Una correzione di curve/bend/wave può cambiare il metodo del percorso:
+non trattarli come decorazioni indipendenti tutte simultanee.</p>
+</section><section class="manual-section"><h2 id="vincoli-geometrici">Vincoli geometrici</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Sintassi</th>
+<th>Spiegazione</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>tangent-circle</code></td>
+<td><code>tangent-circle B A east 0.3</code></td>
+<td>Crea B tangente esternamente al circle A. Direzioni north,south,east,west,ne,nw,se,sw. Il raggio di B è positivo.</td>
+</tr>
+<tr>
+<td><code>parallel</code></td>
+<td><code>parallel N P riferimento lunghezza</code></td>
+<td>Segmento centrato in P, parallelo a una line/arrow rettilinea non degenere.</td>
+</tr>
+<tr>
+<td><code>perpendicular</code></td>
+<td><code>perpendicular N P riferimento lunghezza</code></td>
+<td>Come parallel, direzione ruotata di 90°.</td>
+</tr>
+<tr>
+<td><code>parallel-arrow</code></td>
+<td><code>parallel-arrow N P riferimento lunghezza</code></td>
+<td>Variante con punta finale.</td>
+</tr>
+<tr>
+<td><code>perpendicular-arrow</code></td>
+<td><code>perpendicular-arrow N P riferimento lunghezza</code></td>
+<td>Variante con punta finale.</td>
+</tr>
+</tbody></table></div>
+<p>Lunghezze positive. Il riferimento può essere dichiarato dopo. Non assegnare
+offset al cerchio tangente: romperebbe la relazione. Spostando il cerchio di
+riferimento, il dipendente si aggiorna. Non è un solver di vincoli generali.</p>
+</section><section class="manual-section"><h2 id="geometria-3d">Geometria 3D</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Sintassi</th>
+<th>Spiegazione</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sphere</code></td>
+<td><code>sphere N [r]</code> oppure <code>sphere N x y z r</code></td>
+<td>Sfera; default origine e r=1.</td>
+</tr>
+<tr>
+<td><code>surface</code></td>
+<td><code>surface N xmin xmax ymin ymax mesh &quot;f(x,y)&quot;</code></td>
+<td>Superficie z=f(x,y), intervalli crescenti; mesh intera 2…60, campioni (mesh+1)². Esempio: <code>surface S -2 2 -2 2 16 &quot;x^2+y^2&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>path3</code></td>
+<td><code>path3 N &quot;x y z;x y z;…&quot;</code></td>
+<td>Polilinea 3D, 2…10000 vertici.</td>
+</tr>
+<tr>
+<td><code>arrow3</code></td>
+<td><code>arrow3 N &quot;x y z;x y z;…&quot;</code></td>
+<td>Percorso 3D con punta finale.</td>
+</tr>
+<tr>
+<td><code>mesh3</code></td>
+<td><code>mesh3 N righe colonne &quot;x y z;…&quot;</code></td>
+<td>Griglia rettangolare ordinata per righe; righe/colonne intere 2…61, esattamente righe×colonne vertici.</td>
+</tr>
+<tr>
+<td><code>label3</code></td>
+<td><code>label3 N [x y z] &quot;LaTeX&quot;</code></td>
+<td>Etichetta LaTeX 3D; default origine.</td>
+</tr>
+<tr>
+<td><code>text3</code></td>
+<td><code>text3 N [x y z] &quot;testo&quot;</code></td>
+<td>Testo letterale 3D.</td>
+</tr>
+<tr>
+<td><code>move3</code></td>
+<td><code>move3 N dx dy dz</code></td>
+<td>Traslazione di un oggetto 3D.</td>
+</tr>
+<tr>
+<td><code>detail</code></td>
+<td><code>detail N minimal</code></td>
+<td>Solo sphere: minimal, outline, mesh; default minimal.</td>
+</tr>
+<tr>
+<td><code>shading</code></td>
+<td><code>shading N 0.14</code></td>
+<td>Solo sphere, 0…0.8. Ombreggiatura vettoriale, non simulazione ottica.</td>
+</tr>
+</tbody></table></div>
+<p>Le scene 2D e 3D sono distinte: usa figure/ambienti separati. Il PDF/SVG è una
+proiezione vettoriale, non un modello 3D interattivo. Per RGB, fill, linewidth
+e direzione della vista usa color, fill, linewidth, camera.</p>
+</section><section class="manual-section"><h2 id="forma-a-blocchi-delle-primitive">Forma a blocchi delle primitive</h2>
+<p><code>tipo nome {</code> apre un blocco, <code>}</code> lo chiude su una propria riga. La tabella
+elenca tutte le proprietà ammesse. Numeri e coordinate fra parentesi/comma
+sono accettati nelle proprietà che normalizzano coordinate; le liste di punti
+rimangono stringhe separate da <code>;</code> o successioni di ancoraggi.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Proprietà geometriche/testuali</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>point</td>
+<td>at</td>
+</tr>
+<tr>
+<td>circle</td>
+<td>center, radius, tangent-to, direction, stroke</td>
+</tr>
+<tr>
+<td>ellipse</td>
+<td>center, radii, stroke</td>
+</tr>
+<tr>
+<td>line, arrow</td>
+<td>from, to, path, route, stroke, markers, controls, through, parallel-to, perpendicular-to, length, clip</td>
+</tr>
+<tr>
+<td>path</td>
+<td>points, route, stroke, markers, controls, clip</td>
+</tr>
+<tr>
+<td>region</td>
+<td>points (obbligatoria), color, fill, opacity, stroke, outline</td>
+</tr>
+<tr>
+<td>label, text</td>
+<td>at, text, placement, prefer, gap</td>
+</tr>
+<tr>
+<td>sphere</td>
+<td>center, radius, color, fill, detail, shading</td>
+</tr>
+<tr>
+<td>surface</td>
+<td>xrange, yrange, mesh, formula, color, fill</td>
+</tr>
+<tr>
+<td>label3, text3</td>
+<td>at, text</td>
+</tr>
+</tbody></table></div>
+<p>Tutti questi blocchi ammettono <code>offset</code>; figure non testuali/non point ammettono
+<code>stroke-width</code>. circle/ellipse/line/arrow/path ammettono anche <code>color</code>.
+<code>offset: (dx,dy)</code> equivale a move; sui tipi 3D <code>(dx,dy,dz)</code> equivale a move3.
+<code>controls: 1 c1x c1y c2x c2y</code> equivale a curve sul segmento 1.
+<code>markers: triangle(hollow,0.12)</code> equivale al comando markers.
+<code>path</code> o <code>route</code> (scegline uno): straight, arc(altezza), wave(ampiezza,oscillazioni).
+<code>prefer</code>/<code>gap</code> richiedono placement: auto.
+<code>through</code>/<code>length</code> richiedono parallel-to o perpendicular-to e sostituiscono from/to.
+<code>direction</code> richiede tangent-to; center e tangent-to sono incompatibili.
+gatebox/plot/path3/arrow3/mesh3 non hanno una forma a blocchi nella release 1.0.</p>
+<pre><code class="language-text">circle A {
+    center: (0,0)
+    radius: 0.4
+}
+circle B {
+    center: (2,0)
+    radius: 0.4
+}
+arrow connection {
+    from: A.center
+    to: B.center
+    path: arc(0.5)
+    clip: nodes
+    stroke-width: 0.7
+}
+</code></pre>
+</section><section class="manual-section"><h2 id="tutti-i-comandi-dei-pacchetti-fisici">Tutti i comandi dei pacchetti fisici</h2>
+<p>La sintassi è <code>tipo nome {</code> con una proprietà per riga. Prima importa il pacchetto.
+Il prefisso qualificato è facoltativo soltanto dopo l&#39;import e senza ambiguità.
+Per ogni proprietà, valori ammessi, default, convenzioni fisiche ed esempi completi
+sono nel <a href="PACCHETTI.html">manuale dei pacchetti</a>.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Descrizione</th>
+<th>Tutte le proprietà</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>qft.feynman</td>
+<td>Albero 2→2 s/t/u e bolla sul mediatore</td>
+<td>channel, incoming, outgoing, mediator, labels, loop, loop-position, loop-radius, label-placement</td>
+</tr>
+<tr>
+<td>quantum.circuit</td>
+<td>Righe di qubit in ordine, colonne separate da virgole</td>
+<td>Nomi dei qubit come proprietà; H,X,Y,Z,S,T,M, <code>_</code>, control(id), target(id), gate(&quot;U&quot;), oracle(id,&quot;$U_f$&quot;)</td>
+</tr>
+<tr>
+<td>quantum.tensor-network</td>
+<td>Catena MPS o reticolo PEPS aperto</td>
+<td>sites, labels, layout, rows, columns</td>
+</tr>
+<tr>
+<td>quantum.bloch</td>
+<td>Sfera di Bloch e vettore di uno stato puro</td>
+<td>theta, phi (deg/rad obbligatori)</td>
+</tr>
+<tr>
+<td>relativity.penrose</td>
+<td>Minkowski, Schwarzschild o schema Kerr sull&#39;asse</td>
+<td>metric, spin, bands</td>
+</tr>
+<tr>
+<td>relativity.embedding</td>
+<td>Paraboloide di Flamm</td>
+<td>metric, radius, extent, mesh, branch</td>
+</tr>
+<tr>
+<td>relativity.light-cones</td>
+<td>Coni nulli radiali locali Schwarzschild</td>
+<td>metric, chart, radii, rows, height</td>
+</tr>
+<tr>
+<td>relativity.geodesic</td>
+<td>Raggio nullo equatoriale Schwarzschild</td>
+<td>metric, kind, impact, extent, max-angle, max-step, abs-tol, rel-tol, max-steps, photon-sphere, view, mesh</td>
+</tr>
+<tr>
+<td>statmech.ising</td>
+<td>Reticolo/spin 2D o 3D</td>
+<td>rows, columns, state, spins, dimension, layers</td>
+</tr>
+<tr>
+<td>statmech.phase-diagram</td>
+<td>Diagramma P-T schematico</td>
+<td>model, melting, labels, point-labels, opacity</td>
+</tr>
+<tr>
+<td>statmech.phase-flow</td>
+<td>Traiettoria di ODE 2D</td>
+<td>dx, dy, start, duration, steps, integrator, abs-tol, rel-tol, max-step, max-steps</td>
+</tr>
+<tr>
+<td>statmech.lorenz</td>
+<td>Traiettoria del sistema di Lorenz</td>
+<td>sigma, rho, beta, start, duration, steps, integrator, abs-tol, rel-tol, max-step, max-steps</td>
+</tr>
+</tbody></table></div>
+<p>I comandi semantici generano componenti nominati, che puoi rifinire con i comandi
+geometrici. Disegnare un circuito non simula lo stato; disegnare un diagramma QFT
+non verifica le interazioni e non calcola l&#39;ampiezza. Kerr non è una carta generale
+fuori dall&#39;asse; phase-diagram non ricava l&#39;equazione di stato di un materiale.</p>
+</section><section class="manual-section"><h2 id="comandi-dell-39-editor-vs-code">Comandi dell&#39;editor VS Code</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando nella palette Ctrl+Shift+P</th>
+<th>Azione</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pyxis: Nuova figura</td>
+<td>Apre l&#39;editor/anteprima. Scorciatoia Ctrl+Alt+F mentre modifichi LaTeX.</td>
+</tr>
+<tr>
+<td>Pyxis: Modifica figura esistente</td>
+<td>Riapre un sorgente .pyxis per modificarlo.</td>
+</tr>
+<tr>
+<td>Pyxis: Figura da esempio del corso</td>
+<td>Crea una bozza da un esempio; il modello originale resta intatto.</td>
+</tr>
+<tr>
+<td>Pyxis: Compila documento LaTeX</td>
+<td>Genera il PDF degli appunti, seguendo i capitoli supportati.</td>
+</tr>
+<tr>
+<td>Pyxis: Guida rapida</td>
+<td>Apre la guida inclusa nell&#39;estensione.</td>
+</tr>
+</tbody></table></div>
+<p>La casella dei ritocchi rapidi comprende i comandi geometrici supportati e:</p>
+<pre><code class="language-text">set F mediator gluon
+set bell q0 X, control(pair)
+set orbit integrator rk4
+</code></pre>
+<p><code>set nome proprietà valore</code> è <strong>solo un comando dell&#39;editor</strong>, non del compilatore
+del linguaggio. Modifica una proprietà di un oggetto definito a blocco. Su rk4
+rimuove le proprietà riservate all&#39;integratore adaptive. <code>profile</code>/<code>use</code> nella
+casella aggiungono import; theme/grid/width/camera modificano le impostazioni.
+Salva figura produce .pyxis/.svg/.pdf e inserisce includegraphics nel documento.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Impostazione VS Code</th>
+<th>Valore / funzione</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pyxis.executable</td>
+<td>Percorso opzionale del compilatore; vuoto usa quello incluso.</td>
+</tr>
+<tr>
+<td>pyxis.asymptote</td>
+<td>Percorso di asy.exe quando non è nel PATH.</td>
+</tr>
+<tr>
+<td>pyxis.ghostscript</td>
+<td>Percorso di gswin64c.exe quando non è nel PATH.</td>
+</tr>
+<tr>
+<td>pyxis.buildOnSave</td>
+<td>true di default; false per disattivare la build LaTeX al salvataggio.</td>
+</tr>
+<tr>
+<td>pyxis.latexEngine</td>
+<td>pdflatex (default), lualatex o xelatex.</td>
+</tr>
+</tbody></table></div>
+</section><section class="manual-section"><h2 id="ambiente-latex">Ambiente LaTeX</h2>
+<pre><code class="language-latex">\documentclass{article}
+\usepackage{pyxis}
+\begin{document}
+\begin{pyxis}[width=90,theme=paper]
+profile quantum
+circuit bell {
+    q0: H, control(pair)
+    q1: _, target(pair), M
+}
+\end{pyxis}
+\end{document}
+</code></pre>
+<p>Opzioni dell&#39;ambiente: width in mm, theme. Chiudi con <code>\end{pyxis}</code> su una propria
+riga. Compila attraverso Pyxis: un normale pdflatex da solo non genera le figure.
+Nei blocchi nativi <code>%</code> fuori da stringhe diventa commento; il resto del documento
+mantiene la sintassi LaTeX. Sono supportati <code>\input</code>, <code>\include</code>, <code>\includeonly</code>
+con nomi letterali e <code>% !TeX root = ../main.tex</code> per i capitoli. Il preambolo
+condivide pacchetti e dichiarazioni newcommand/renewcommand/providecommand/
+DeclareMathOperator con le etichette. Subfiles/import, input costruiti da macro
+e orchestrazione BibTeX/Biber non sono supportati nella 1.0.</p>
+</section><section class="manual-section"><h2 id="terminale-e-script">Terminale e script</h2>
+<p>Questi comandi si eseguono dalla cartella del progetto completo, non dal solo VSIX.
+Per gli script JavaScript serve Node.js; per gli script PowerShell serve PowerShell.
+Asymptote/TeX/Ghostscript sono dipendenze esterne. Variabili opzionali per gli
+script: PYXIS_ASYMPTOTE e PYXIS_GHOSTSCRIPT (percorsi degli eseguibili).</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Cosa produce</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>node scripts/render.js examples/qft.pyxis pdf</code></td>
+<td>output/qft.pdf; sostituisci pdf con svg per SVG.</td>
+</tr>
+<tr>
+<td><code>node scripts/render.js examples/qft.pyxis svg --preview</code></td>
+<td>Esportazione con opzione anteprima; file .preview.svg.</td>
+</tr>
+<tr>
+<td><code>./scripts/render.ps1 -Source examples/qft.pyxis -Format pdf</code></td>
+<td>Wrapper PowerShell; -Preview è facoltativo.</td>
+</tr>
+<tr>
+<td><code>node scripts/build-latex.js documento.tex --engine=pdflatex</code></td>
+<td>PDF finale con nome del documento; engine facoltativo: pdflatex, lualatex, xelatex.</td>
+</tr>
+<tr>
+<td><code>node scripts/latex.js documento.tex derivato.tex --compile</code></td>
+<td>Pipeline a basso livello: documento derivato esplicito e compilazione facoltativa. Le figure referenziate sono protette nella cache.</td>
+</tr>
+<tr>
+<td><code>./build/pyxis.exe input.pyxis output.asy [--preview]</code></td>
+<td>Solo compilazione del linguaggio in Asymptote; non è ancora un PDF. --preview è facoltativo.</td>
+</tr>
+<tr>
+<td><code>node scripts/doctor.js</code></td>
+<td>Diagnostica degli strumenti disponibili.</td>
+</tr>
+<tr>
+<td><code>./scripts/build.ps1 -Release</code></td>
+<td>Compila nucleo e test con GCC C++17, poi esegue i test. -Compiler cambia il percorso GCC predefinito.</td>
+</tr>
+<tr>
+<td><code>./scripts/package.ps1 -SkipBuild</code></td>
+<td>Crea il VSIX dalla build già presente; senza SkipBuild ricompila in Release.</td>
+</tr>
+<tr>
+<td><code>./scripts/install.ps1 -SkipBuild</code></td>
+<td>Installer per il PC di sviluppo con .tools configurata; su un altro PC installa il VSIX e configura i runtime.</td>
+</tr>
+<tr>
+<td><code>./scripts/start.ps1 -Folder examples</code></td>
+<td>Apre un host di sviluppo VS Code; non serve per usare l&#39;estensione già installata.</td>
+</tr>
+<tr>
+<td><code>./scripts/test-editor.ps1</code></td>
+<td>Prova l&#39;editor in un profilo temporaneo.</td>
+</tr>
+<tr>
+<td><code>./scripts/test-package.ps1</code></td>
+<td>Prova il VSIX installato in un profilo temporaneo.</td>
+</tr>
+</tbody></table></div>
+<p>Per gli altri test e la loro copertura consulta <a href="VERIFICHE.html">VERIFICHE.md</a>.
+<code>_use</code> e <code>_group</code> sono istruzioni interne generate dal preprocessore, non API
+pubblica. I comandi vertex, fermion, momentum, replace, loop, rotate e i modelli
+proposti nei documenti di design non fanno parte della sintassi eseguibile 1.0.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

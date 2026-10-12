@@ -1,0 +1,620 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Imparare a sviluppare Pyxis — documentazione Pyxis 1.0, Luca Melani"><title>Imparare a sviluppare Pyxis · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Imparare a sviluppare Pyxis</h1><div class="docs-tools"><a href="GUIDA-SVILUPPO.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#1-che-cosa-stiamo-costruendo">1. Che cosa stiamo costruendo</a><a href="#2-il-primo-esperimento-dal-file-alla-figura">2. Il primo esperimento: dal file alla figura</a><a href="#3-le-due-compilazioni-che-non-vanno-confuse">3. Le due compilazioni che non vanno confuse</a><a href="#4-come-leggere-i-file-c-senza-perdersi">4. Come leggere i file C++ senza perdersi</a><a href="#5-seguire-una-singola-istruzione-passo-per-passo">5. Seguire una singola istruzione, passo per passo</a><a href="#6-ancoraggi-e-vincoli-la-differenza-pratica">6. Ancoraggi e vincoli: la differenza pratica</a><a href="#7-clipping-conservare-la-connessione-cambiare-il-tratto-visibile">7. Clipping: conservare la connessione, cambiare il tratto visibile</a><a href="#8-come-nasce-un-pacchetto-scientifico">8. Come nasce un pacchetto scientifico</a><a href="#9-test-cosa-stiamo-davvero-verificando">9. Test: cosa stiamo davvero verificando</a><a href="#10-la-parte-javascript-e-la-cache-anche-se-parti-dal-c">10. La parte JavaScript e la cache, anche se parti dal C++</a><a href="#11-provare-l-39-integrazione-latex">11. Provare l&amp;#39;integrazione LaTeX</a><a href="#12-un-metodo-pratico-per-lavorare-insieme">12. Un metodo pratico per lavorare insieme</a><a href="#13-capire-e-modificare-l-39-integratore-adattivo">13. Capire e modificare l&amp;#39;integratore adattivo</a><a href="#14-regioni-profili-e-composizione-dei-pacchetti">14. Regioni, profili e composizione dei pacchetti</a><a href="#15-perche-39-il-clipping-del-testo-avviene-alla-fine">15. Perche&amp;#39; il clipping del testo avviene alla fine</a><a href="#16-dal-modello-relativistico-al-percorso-numerico">16. Dal modello relativistico al percorso numerico</a><a href="#17-compilare-gli-ambienti-direttamente-dagli-appunti">17. Compilare gli ambienti direttamente dagli appunti</a><a href="#18-una-tesi-e-39-un-grafo-di-file">18. Una tesi e&amp;#39; un grafo di file</a><a href="#19-dalla-cartella-sorgente-all-39-estensione-installabile">19. Dalla cartella sorgente all&amp;#39;estensione installabile</a></nav></details></aside><article><section class="manual-section">
+<p>Questa guida e&#39; per chi conosce il C++ e ha una preparazione universitaria in
+fisica, ma non ha ancora costruito un linguaggio, un compilatore o un editor.
+Non devi conoscere queste cose prima di cominciare: le incontriamo attraverso
+il progetto che stiamo sviluppando insieme.</p>
+<p>Gli esempi indicati come eseguibili funzionano nel progetto attuale. Gli
+esercizi di estensione richiedono invece di modificare il codice: non sono
+comandi gia&#39; presenti. Per l&#39;elenco delle funzionalita&#39; effettive leggi anche
+<a href="PACCHETTI.html">PACCHETTI.md</a>.</p>
+</section><section class="manual-section"><h2 id="1-che-cosa-stiamo-costruendo">1. Che cosa stiamo costruendo</h2>
+<p>Pyxis e&#39; un linguaggio per descrivere figure scientifiche attraverso il loro
+significato. Per esempio, diciamo che una linea e&#39; un propagatore fotonico,
+che due gate sono connessi o che una retta e&#39; perpendicolare a un&#39;altra.
+Il programma traduce queste istruzioni in geometria e poi in un disegno.</p>
+<p>Il nucleo C++ non decide se un processo fisico e&#39; possibile. Per esempio,
+sapere disegnare un diagramma di Feynman non significa saper calcolare la
+sua ampiezza, assegnare tutte le regole di Feynman o verificarne i numeri quantici.
+Le equazioni numeriche presenti nei pacchetti hanno invece modelli espliciti,
+con parametri e ipotesi documentati.</p>
+<p>L&#39;analogia con LaTeX riguarda il livello di descrizione: scrivi la struttura
+che vuoi ottenere e il sistema si occupa di molti dettagli della rappresentazione.</p>
+</section><section class="manual-section"><h2 id="2-il-primo-esperimento-dal-file-alla-figura">2. Il primo esperimento: dal file alla figura</h2>
+<p>Apri PowerShell nella cartella del progetto. Nelle seguenti istruzioni <code>./</code>
+significa &quot;a partire dalla cartella in cui si trova il terminale&quot;.</p>
+<pre><code class="language-powershell">./scripts/build.ps1
+node scripts/render.js examples/constraints.pyxis svg
+</code></pre>
+<p>Il primo comando compila i sorgenti C++ e avvia i test del nucleo. Il secondo
+legge un esempio e salva la figura in <code>output/constraints.svg</code>.
+Se cambi soltanto un file <code>.pyxis</code>, non devi ricompilare il C++: basta il
+secondo comando. Se cambi un file <code>.cpp</code> o <code>.hpp</code>, devi eseguire anche il primo.</p>
+<p>Prova poi questi esempi, gia&#39; disponibili:</p>
+<pre><code class="language-powershell">node scripts/render.js examples/qft.pyxis svg
+node scripts/render.js examples/blackboard.pyxis svg
+node scripts/render.js examples/bloch.pyxis svg
+node scripts/render.js examples/lorenz.pyxis svg
+</code></pre>
+<p>SVG e&#39; un formato vettoriale: il disegno e&#39; descritto mediante tracciati, non
+mediante una matrice di pixel. Puoi ingrandirlo mantenendo nitidi i contorni.
+PDF e&#39; l&#39;altra esportazione usata per gli appunti; sostituisci <code>svg</code> con <code>pdf</code>.
+Le immagini PNG mostrate in chat sono anteprime dei risultati vettoriali.</p>
+</section><section class="manual-section"><h2 id="3-le-due-compilazioni-che-non-vanno-confuse">3. Le due compilazioni che non vanno confuse</h2>
+<p>Ci sono due trasformazioni diverse:</p>
+<ol>
+<li>GCC compila i file C++ di Pyxis e produce <code>build/pyxis.exe</code>.</li>
+<li>L&#39;eseguibile Pyxis legge un sorgente <code>.pyxis</code> e produce un sorgente <code>.asy</code>;
+Asymptote compila quest&#39;ultimo e produce la figura.</li>
+</ol>
+<p>Asymptote e&#39; un linguaggio e un motore per disegni scientifici, gia&#39; disponibile
+su questo PC. Lo usiamo per tracciati, frecce, testo LaTeX e scene 3D. Non stiamo
+riscrivendo da zero un renderer vettoriale.</p>
+<p>Il flusso completo per una figura e&#39;:</p>
+<pre><code class="language-text">testo .pyxis
+    ↓ semantic(): riconosce i pacchetti ed espande gli oggetti fisici
+istruzioni geometriche
+    ↓ normalize(): espande i blocchi di proprieta&#39;
+comandi elementari
+    ↓ parse(): crea e verifica gli oggetti della scena
+Scene
+    ↓ layout(), ancoraggi e vincoli: calcola le posizioni finali
+Scene risolta
+    ↓ asymptote(): scrive un programma per il backend
+testo .asy
+    ↓ Asymptote e, quando necessario, LaTeX/Ghostscript
+SVG oppure PDF
+</code></pre>
+<p>Non esiste ancora un parser generale con un AST completo per qualsiasi
+costrutto. Il frontend attuale riconosce blocchi e comandi, conserva le righe
+del sorgente e abbassa le macro al linguaggio geometrico. &quot;Abbassare&quot; significa
+tradurre una descrizione piu&#39; astratta in una piu&#39; concreta.</p>
+</section><section class="manual-section"><h2 id="4-come-leggere-i-file-c-senza-perdersi">4. Come leggere i file C++ senza perdersi</h2>
+<p>Leggi questi file nell&#39;ordine indicato. Non serve leggerli tutti in una volta.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Domanda a cui risponde</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/pyxis.hpp</code></td>
+<td>Quali dati conserviamo per una figura?</td>
+</tr>
+<tr>
+<td><code>src/main.cpp</code></td>
+<td>Come apriamo l&#39;input, generiamo l&#39;output e segnaliamo gli errori?</td>
+</tr>
+<tr>
+<td><code>src/semantic.cpp</code></td>
+<td>Come riconosciamo un pacchetto e scegliamo il suo generatore?</td>
+</tr>
+<tr>
+<td><code>src/packages/common.hpp</code></td>
+<td>Come descriviamo un blocco e produciamo primitive?</td>
+</tr>
+<tr>
+<td><code>src/packages/quantum.cpp</code></td>
+<td>Come un circuito diventa linee, nodi e gate?</td>
+</tr>
+<tr>
+<td><code>src/syntax.cpp</code></td>
+<td>Come un blocco di proprieta&#39; diventa comandi?</td>
+</tr>
+<tr>
+<td><code>src/pyxis.cpp</code></td>
+<td>Come i comandi diventano oggetti, e gli oggetti diventano Asymptote?</td>
+</tr>
+<tr>
+<td><code>src/constraints.cpp</code></td>
+<td>Come calcoliamo le relazioni geometriche?</td>
+</tr>
+<tr>
+<td><code>src/layout.cpp</code></td>
+<td>Come disponiamo gruppi e risolviamo le dipendenze?</td>
+</tr>
+<tr>
+<td><code>tests/core.cpp</code></td>
+<td>Quali proprieta&#39; del comportamento vengono verificate?</td>
+</tr>
+</tbody></table></div>
+<h3 id="scene-e-object-i-dati-prima-del-disegno">Scene e Object: i dati prima del disegno</h3>
+<p>In <code>pyxis.hpp</code>, <code>Scene</code> contiene una collezione di <code>Object</code>. Ogni oggetto ha
+un nome, un tipo (<code>Kind</code>) e attributi geometrici/grafici. <code>Kind</code> e&#39; un <code>enum class</code>:
+permette di distinguere un cerchio, una linea, un&#39;etichetta e cosi&#39; via.</p>
+<p>La scena e&#39; una rappresentazione intermedia: e&#39; gia&#39; piu&#39; concreta del testo
+fisico, ma non e&#39; ancora codice Asymptote. Tenerla separata dal renderer rende
+possibile fare calcoli, controlli e trasformazioni senza disegnare ogni volta.</p>
+<p>Nel prototipo alcuni campi sono riutilizzati secondo il tipo. Per un cerchio
+<code>x,y</code> sono il centro e <code>a</code> e&#39; il raggio; per una linea <code>x,y</code> sono il primo
+estremo e <code>a,b</code> il secondo. E&#39; una scelta compatta del prototipo, non una
+notazione universale di geometria. Una futura struttura con tipi geometrici
+separati potra&#39; rendere queste associazioni piu&#39; esplicite.</p>
+</section><section class="manual-section"><h2 id="5-seguire-una-singola-istruzione-passo-per-passo">5. Seguire una singola istruzione, passo per passo</h2>
+<p>Questa sintassi e&#39; eseguibile:</p>
+<pre><code class="language-text">circle A {
+    radius: 0.5
+}
+circle B {
+    tangent-to: A
+    direction: east
+    radius: 0.3
+}
+</code></pre>
+<p>In <code>syntax.cpp</code>, <code>normalize()</code> legge le proprieta&#39; e genera comandi
+equivalenti a questi:</p>
+<pre><code class="language-text">circle A 0 0 0.5
+tangent-circle B A east 0.3
+</code></pre>
+<p>Il blocco e&#39; una forma comoda per l&#39;utente; il comando e&#39; una forma semplice
+per il nucleo. Entrambi rappresentano la stessa richiesta.</p>
+<p>Per provare i due blocchi iniziali, salvali come <code>examples/mia-prova.pyxis</code>
+con un editor di testo, poi esegui:</p>
+<pre><code class="language-powershell">node scripts/render.js examples/mia-prova.pyxis svg
+</code></pre>
+<p>In <code>parse()</code> il secondo comando crea un cerchio B con raggio 0.3 e conserva
+un vincolo verso A. Non deve calcolare il centro subito: A potrebbe essere
+spostato piu&#39; avanti nel sorgente.</p>
+<p>Quando risolviamo i vincoli, A deve essere gia&#39; risolto. Per una tangenza
+esterna, la distanza tra i centri deve essere la somma dei raggi:</p>
+<pre><code class="language-text">|c_B - c_A| = r_A + r_B
+</code></pre>
+<p>La direzione east corrisponde al versore (1,0), quindi il centro di B e&#39;
+(0.8,0). Per ne il versore e&#39; (1,1)/sqrt(2). Il calcolo viene eseguito
+in <code>resolve_constraint()</code>, non richiesto all&#39;utente.</p>
+<p><strong>Esperimento:</strong> aggiungi <code>move A 1 0</code> dopo i due blocchi. Il centro di B
+deve seguire A e la tangenza deve rimanere valida. Esegui di nuovo il rendering.</p>
+</section><section class="manual-section"><h2 id="6-ancoraggi-e-vincoli-la-differenza-pratica">6. Ancoraggi e vincoli: la differenza pratica</h2>
+<p>Un ancoraggio e&#39; un punto nominato dell&#39;oggetto: A.center, A.north, A.east.
+Una linea puo&#39; usare <code>from: A.center</code> e <code>to: B.center</code>. Conserviamo i riferimenti,
+poi li risolviamo usando le posizioni finali. Non copiamo una coordinata e la
+dimentichiamo: se A viene spostato, il riferimento continua a indicare A.</p>
+<p>Un vincolo esprime invece una relazione da calcolare. Per esempio:</p>
+<pre><code class="language-text">line baseline {
+    from: A.center
+    to: B.center
+}
+line normal {
+    through: A.center
+    perpendicular-to: baseline
+    length: 2
+}
+</code></pre>
+<p>Se d e&#39; la direzione della baseline, la perpendicolare usa (-d_y,d_x).
+Prima normalizziamo d, poi scegliamo un segmento di lunghezza 2 centrato
+sul punto through. Non occorre trovare una pendenza, e le rette verticali
+non creano un caso di divisione per zero.</p>
+<p>Il test controlla d·n=0, entro una tolleranza. Per una parallela controlla
+che il determinante d_x p_y - d_y p_x sia zero. La forma vettoriale e&#39;
+piu&#39; robusta della rappresentazione y=mx+q.</p>
+<h3 id="perche-39-usiamo-tre-stati-per-le-dipendenze">Perche&#39; usiamo tre stati per le dipendenze</h3>
+<p>Durante la risoluzione ogni oggetto e&#39; in uno di tre stati:</p>
+<ul>
+<li>0: non ancora visitato;</li>
+<li>1: in corso di risoluzione;</li>
+<li>2: risolto.</li>
+</ul>
+<p>Se per risolvere A occorre B e, mentre risolviamo B, ritroviamo A nello stato 1,
+abbiamo un ciclo. Per esempio &quot;A parallela a B, B parallela ad A&quot; non specifica
+alcuna direzione iniziale. Invece di ricorrere senza fine, segnaliamo il problema.
+Il risolutore attuale usa dipendenze dirette; non e&#39; ancora un solver numerico
+generale per sistemi simultanei di vincoli.</p>
+</section><section class="manual-section"><h2 id="7-clipping-conservare-la-connessione-cambiare-il-tratto-visibile">7. Clipping: conservare la connessione, cambiare il tratto visibile</h2>
+<p>Se connetti i centri di due cerchi, la linea passa nei loro interni. Di solito
+vuoi che il disegno si fermi sui bordi:</p>
+<pre><code class="language-text">arrow connection {
+    from: A.center
+    to: B.center
+    path: arc(0.5)
+    clip: nodes
+}
+</code></pre>
+<p>Conserviamo i collegamenti A.center/B.center nella scena: restano il significato
+topologico della connessione. Soltanto il tratto visibile viene accorciato.
+Questo evita di perdere l&#39;informazione su quali nodi siano connessi.</p>
+<p>Per una curva, spostare semplicemente gli estremi lungo una retta cambierebbe
+anche la sua forma. Il backend usa invece le intersezioni tra il percorso
+effettivo e i bordi, trova i parametri iniziale/finale e prende il <code>subpath</code>.
+La freccia viene disegnata sul percorso gia&#39; tagliato.</p>
+<p>La piccola libreria Asymptote generata e&#39; in <code>src/asymptote_geometry.hpp</code>.
+Il test <code>tests/clipping.js</code> verifica i punti prodotti dal vero Asymptote per
+segmenti, curve Bezier, onde e polilinee. C&#39;e&#39; una sottigliezza utile da imparare:
+Asymptote approssima il cerchio con Bezier cubiche. Verifichiamo prima il bordo
+effettivamente disegnato, poi la vicinanza al cerchio analitico entro l&#39;errore
+di quell&#39;approssimazione. Non chiediamo una precisione che il modello non ha.</p>
+<h3 id="etichette-automatiche-perche-39-interviene-il-backend">Etichette automatiche: perche&#39; interviene il backend</h3>
+<p>Una formula non ha una larghezza prevedibile contando i caratteri: frazioni,
+indici e integrali hanno ingombri diversi. Inoltre il testo mantiene dimensioni
+tipografiche fisiche mentre le coordinate della figura vengono scalate.
+Per questo il C++ conserva richiesta, punto di attacco e preferenza, ma lascia
+al backend la misura tramite LaTeX e la scelta nel frame finale.</p>
+<pre><code class="language-text">label momentum {
+    at: connection.center
+    text: &quot;$p_1+p_2$&quot;
+    placement: auto
+    prefer: n
+    gap: 3
+}
+</code></pre>
+<p>L&#39;esempio completo e&#39; <code>examples/auto-labels.pyxis</code>. Il punto di attacco rimane
+un dato geometrico; la posizione effettiva del testo viene decisa in seguito.
+Non usare momentum.center come riferimento di un&#39;altra costruzione quando
+momentum e&#39; automatico: scegli il nodo o il punto geometrico sottostante.</p>
+<p>In <code>src/asymptote_labels.hpp</code> trovi codice Asymptote dentro una stringa C++.
+Non e&#39; C++ da eseguire durante il parsing: il generatore lo scrive nel .asy.
+<code>label(frame,...)</code> fa misurare il testo a LaTeX. La callback
+<code>new void(frame f, transform t)</code> viene eseguita quando la picture e&#39; adattata
+alla dimensione richiesta: t trasforma allora la geometria in coordinate
+fisiche. Misure del testo e ostacoli diventano confrontabili nello stesso sistema.</p>
+<p>Per ogni etichetta proviamo otto posizioni e scegliamo il punteggio minore.
+Le sovrapposizioni con altri testi hanno una penalita&#39; elevata; consideriamo
+anche nodi, tratti e la forma delle punte prodotte dal renderer nativo.
+Il rettangolo scelto diventa un ostacolo per le etichette successive. E&#39;
+un algoritmo greedy: una scelta locale non e&#39; una prova di ottimalita&#39; globale.
+Se tutte le posizioni sono occupate, serve una rifinitura o piu&#39; spazio.</p>
+<p>Il test <code>tests/labels.js</code> misura una formula indipendentemente, confronta
+il rettangolo ottenuto e ripete il disegno con width differenti. Verifica
+cosi&#39; che ingrandire la geometria non ingrandisca i caratteri. Controlla anche
+che un ostacolo cambi la direzione e che due formule si separino.</p>
+<p>Un dettaglio di linguaggio incontrato qui: in Asymptote pair.x/pair.y sono
+proprieta&#39; in sola lettura. Per modificare una componente si costruisce un
+nuovo pair, per esempio <code>p=(p.x+1,p.y)</code>. La somiglianza sintattica con C++
+non implica che tutte le operazioni abbiano le stesse regole.</p>
+</section><section class="manual-section"><h2 id="8-come-nasce-un-pacchetto-scientifico">8. Come nasce un pacchetto scientifico</h2>
+<p>Apri <code>src/packages/quantum.cpp</code> e cerca <code>circuit()</code>.
+Un <code>Block</code> contiene il tipo, il nome, le proprieta&#39; e il loro ordine nel sorgente.
+Il <code>Builder</code> offre operazioni come line(), label(), path() e object().
+Il pacchetto traduce una descrizione del dominio in queste primitive.</p>
+<p>Per un circuito:</p>
+<ol>
+<li>ogni riga descrive un qubit e determina una quota nel disegno;</li>
+<li>ogni colonna determina un istante grafico, non una durata fisica simulata;</li>
+<li>un gate H diventa una scatola e una scritta;</li>
+<li>control(pair) e target(pair) vengono associati attraverso lo stesso nome;</li>
+<li>vengono prodotte le connessioni e un gruppo per il layout.</li>
+</ol>
+<p>Il codice di questo pacchetto non deve gestire file, processi Asymptote o cache.
+Questo e&#39; il motivo della separazione dei moduli: una nuova convenzione grafica
+non deve costringerti a riscrivere la pipeline.</p>
+<p><code>src/semantic.cpp</code> contiene il registro che associa un nome, per esempio
+<code>quantum.circuit</code>, alla funzione C++ che lo genera. Le funzioni dei pacchetti
+sono dichiarate in <code>src/packages/common.hpp</code>.</p>
+<h3 id="seguire-i-nodi-nelle-reti-tensoriali">Seguire i nodi nelle reti tensoriali</h3>
+<p>In tensor_network() i legami usano ora riferimenti ai centri dei tensori,
+anziche&#39; copie delle loro coordinate. Il Builder emette una line e il comando
+clip nodes. Le gambe fisiche terminano su point invisibili riferiti al tensore;
+le etichette hanno anch&#39;esse un riferimento al nodo.</p>
+<pre><code class="language-text">use quantum
+tensor-network net {
+    layout: peps
+    rows: 3
+    columns: 3
+}
+move net.r2c2 0.25 0.15
+</code></pre>
+<p>Salva l&#39;esempio come un file .pyxis e renderizzalo. Dovresti riconoscere il nodo
+centrale spostato e i quattro legami che lo seguono. La topologia non cambia.
+Puoi confrontarlo con <code>examples/tensor-networks.pyxis</code>.</p>
+<p>Una sottigliezza del layout: quando spostiamo l&#39;intero gruppo, non dobbiamo
+traslare sia il nodo sia l&#39;offset di una linea che segue quel nodo. Altrimenti
+la traslazione verrebbe applicata due volte. In layout.cpp distinguiamo le
+coordinate autonome dagli ancoraggi interni al gruppo.</p>
+<h3 id="esercizio-guidato-aggiungere-una-configurazione-di-spin">Esercizio guidato: aggiungere una configurazione di spin</h3>
+<p>Questo esercizio aggiunge una funzionalita&#39; nuova; <code>state: stripes</code> non e&#39;
+presente nella versione descritta qui.</p>
+<ol>
+<li>In <code>src/packages/statmech.cpp</code>, trova <code>ising()</code>.</li>
+<li>Leggi il controllo dei valori ammessi di state e il calcolo di sign.</li>
+<li>Aggiungi stripes ai valori ammessi, aggiornando anche il messaggio d&#39;errore.</li>
+<li>Assegna +1 alle righe pari e -1 alle righe dispari. Nel ciclo C++ r inizia da 0.</li>
+<li>Aggiungi un test con rows=2 e columns=2: tutti gli spin della prima riga
+devono puntare in alto, tutti quelli della seconda in basso.</li>
+<li>Verifica che una lista spins esplicita continui ad avere precedenza su state.</li>
+<li>Compila, prova un esempio e aggiornane il manuale.</li>
+</ol>
+<p>Il nuovo ramo del calcolo puo&#39; essere scritto cosi&#39;:</p>
+<pre><code class="language-cpp">if (state == &quot;stripes&quot;) {
+    sign = (r % 2 == 0) ? 1 : -1;
+}
+</code></pre>
+<p>Non basta aggiungere questo ramo: senza aggiornare la validazione il parser
+rifiuterebbe il valore prima di arrivare al calcolo.</p>
+</section><section class="manual-section"><h2 id="9-test-cosa-stiamo-davvero-verificando">9. Test: cosa stiamo davvero verificando</h2>
+<p>Un test utile controlla un risultato o un&#39;invariante, non riscrive il codice
+con altre parole. Per esempio, per una perpendicolare controlliamo il prodotto
+scalare, non che il programma abbia usato un particolare scambio di variabili.</p>
+<pre><code class="language-powershell">./scripts/build.ps1
+node tests/source.js
+node tests/cache-latex.js
+node tests/backend.js
+node tests/clipping.js
+node tests/labels.js
+</code></pre>
+<p>I primi test C++ sono eseguiti dallo script di build. source.js controlla i
+ritocchi dell&#39;editor; cache-latex.js controlla cache ed estrazione; backend.js,
+clipping.js e labels.js richiedono il vero backend installato. Esegui backend.js senza
+altri rendering contemporanei: il suo controllo dei temporanei fotografa
+anche le cartelle delle altre richieste.</p>
+<p>Per verificare la vera estensione VS Code:</p>
+<pre><code class="language-powershell">./scripts/test-editor.ps1
+</code></pre>
+<p>Questo comando crea un profilo e un workspace isolati, controlla anteprima,
+salvataggio e inserimento LaTeX, e rimuove il materiale temporaneo.
+Non sostituisce ogni possibile prova manuale dell&#39;interfaccia.</p>
+<p>In C++ <code>check(condizione, messaggio)</code> solleva un&#39;eccezione se il controllo fallisce.
+Con double usiamo una tolleranza ragionevole. Per un integratore confrontiamo
+anche risultati con passi diversi: un grafico plausibile non basta a garantire
+la correttezza della numerica.</p>
+</section><section class="manual-section"><h2 id="10-la-parte-javascript-e-la-cache-anche-se-parti-dal-c">10. La parte JavaScript e la cache, anche se parti dal C++</h2>
+<p>Il C++ calcola e genera il programma grafico. Node.js gestisce i processi,
+i file temporanei e l&#39;editor. In JavaScript <code>await</code> aspetta il risultato di
+un&#39;operazione asincrona senza bloccare l&#39;intero processo come un&#39;attesa sincrona.
+<code>execFile</code> avvia un eseguibile con argomenti separati, senza costruire un comando
+da interpretare attraverso una shell.</p>
+<p>In <code>vscode/backend.js</code>, render() e&#39; il servizio comune a editor e script.
+Il programma crea una cartella temporanea distinta per richiesta; nel blocco
+<code>finally</code> la elimina sia dopo un successo sia dopo un errore. <code>finally</code> non
+significa &quot;esegui solo se tutto e&#39; riuscito&quot;: e&#39; proprio il posto per la pulizia.</p>
+<p>La cache conserva invece risultati riutilizzabili. Un hash SHA-256 riassume
+sorgente, opzioni e dipendenze rilevanti. Se cambia un ingrediente, cambia
+la chiave. Il risultato viene verificato con un altro hash prima di riusarlo.
+Questo evita di accettare un PDF troncato soltanto perche&#39; il nome esiste.</p>
+<p>La cache non e&#39; un parser e non verifica la fisica. Inoltre non rileviamo
+automaticamente ogni modifica dell&#39;intera installazione TeX: le dipendenze
+aggiuntive vanno dichiarate o la cache va invalidata dopo aggiornamenti esterni.
+Le nuove voci conservano anche l&#39;identita&#39; del compilatore/renderer: una build
+nuova consente di ripulire le voci obsolete. Un PDF ancora referenziato da un
+documento derivato conservato viene invece protetto, per non rompere il documento.</p>
+</section><section class="manual-section"><h2 id="11-provare-l-39-integrazione-latex">11. Provare l&#39;integrazione LaTeX</h2>
+<pre><code class="language-powershell">node scripts/latex.js examples/semantic-notes.tex --compile
+</code></pre>
+<p>Il preprocessore trova gli ambienti pyxis, renderizza le figure e sostituisce
+gli ambienti con includegraphics in un documento derivato. Il file originale
+non viene riscritto. Il comando compila il documento e conserva il PDF finale;
+ausiliari e documento derivato predefinito vengono rimossi automaticamente.
+Se vuoi conservare il derivato per leggerlo, fornisci un percorso esplicito:</p>
+<pre><code class="language-powershell">node scripts/latex.js examples/semantic-notes.tex output/notes-inspect.tex
+</code></pre>
+<p>Il secondo comando non avvia pdflatex: ti lascia vedere la trasformazione.
+Quel file e&#39; un risultato chiesto da te, non un intermedio da cancellare in
+modo automatico. La compilazione automatica aggiunge al percorso di ricerca
+LaTeX la cartella <code>latex</code>, che contiene <code>pyxis.sty</code>.</p>
+</section><section class="manual-section"><h2 id="12-un-metodo-pratico-per-lavorare-insieme">12. Un metodo pratico per lavorare insieme</h2>
+<p>Per ogni funzionalita&#39; prendiamo una figura concreta e scriviamo prima il
+sorgente che vorremmo poter usare. Poi fissiamo nomi, convenzioni, modello
+matematico e limiti. Implementiamo una modifica piccola e verificabile,
+aggiungiamo i test necessari e guardiamo il rendering reale.</p>
+<p>Una buona prima divisione del lavoro e&#39; questa:</p>
+<ul>
+<li>tu scegli le convenzioni fisiche del corso e aggiungi configurazioni o
+oggetti a un pacchetto esistente, con un esempio e un test;</li>
+<li>io curo inizialmente le parti comuni del linguaggio, la gestione delle
+dipendenze e la pipeline, e revisiono con te le modifiche;</li>
+<li>quando padroneggi quel percorso, puoi implementare un nuovo generatore,
+poi un vincolo o un algoritmo numerico.</li>
+</ul>
+<p>Questa e&#39; una proposta di progressione, non una separazione rigida dei compiti.
+Il primo risultato da raggiungere e&#39; saper spiegare dove passa una tua
+istruzione e modificare un comportamento senza rompere gli altri pacchetti.</p>
+<p>Quando una prova fallisce, conserva il piu&#39; piccolo sorgente che la riproduce.
+Controlla prima se l&#39;errore e&#39; di sintassi, di geometria, di numerica o di backend.
+Non correggere simultaneamente tutti i livelli: altrimenti non saprai quale
+modifica ha risolto il problema.</p>
+<p>Gli esempi e i test riutilizzabili fanno parte del progetto. Script di migrazione,
+log, profili di prova e intermedi di compilazione vengono invece rimossi.</p>
+</section><section class="manual-section"><h2 id="13-capire-e-modificare-l-39-integratore-adattivo">13. Capire e modificare l&#39;integratore adattivo</h2>
+<p>Apri <code>src/numerics.hpp</code>: qui la numerica e&#39; separata dai nomi degli oggetti,
+dai pacchetti e dal rendering. <code>std::array&lt;double,N&gt;</code> rappresenta uno stato
+di dimensione N fissata in compilazione; <code>integrate&lt;2&gt;</code> e <code>integrate&lt;3&gt;</code>
+riusano lo stesso algoritmo. Il parametro Derivative e&#39; una funzione/lambda
+che riceve lo stato e il tempo e restituisce le derivate.</p>
+<p><code>src/packages/statmech.cpp</code> traduce le proprieta&#39; del blocco in Options.
+Per phase-flow, la lambda valuta le espressioni dx e dy; per Lorenz usa
+direttamente le tre equazioni. Il risultato contiene punti, tempi accettati
+e numero dei tentativi respinti. Il pacchetto converte i punti in un percorso:
+Asymptote riceve geometria gia&#39; calcolata, non integra le equazioni.</p>
+<p>RK4 classico stima quattro pendenze e le combina con pesi 1,2,2,1 divisi
+per 6. Nel modo adaptive facciamo una previsione con passo h e una con
+due passi h/2. L&#39;errore locale principale di RK4 e&#39; proporzionale a h^5:
+i due mezzi passi ne accumulano circa 1/16. La differenza fra le due
+previsioni e&#39; quindi circa 15 volte l&#39;errore della previsione piu&#39; fine.
+Dividiamo per 15, poi normalizziamo componente per componente con:</p>
+<pre><code class="language-cpp">scale = abs_tol + rel_tol * std::max(std::abs(before), std::abs(after));
+ratio = std::abs(fine - coarse) / (15 * scale);
+</code></pre>
+<p>Se il rapporto massimo supera 1, riduciamo h e riproviamo dallo stato
+precedente. Non spostiamo il tempo e non salviamo il tentativo respinto.
+Altrimenti accettiamo fine. Il nuovo passo usa una potenza -1/5 del
+rapporto, un fattore prudenziale 0.9 e limiti alla variazione. Il passo
+non supera max-step; l&#39;ultimo viene tagliato per arrivare alla durata.
+Non stiamo usando un integratore embedded RK45: questo e&#39; RK4 con step doubling.
+Puoi confrontare la descrizione con il
+<a href="https://www.gnu.org/software/gsl/doc/html/ode-initval.html">manuale ufficiale GSL</a>.</p>
+<p>Esegui il caso concreto:</p>
+<pre><code class="language-powershell">./scripts/build.ps1
+node scripts/render.js examples/adaptive-flow.pyxis pdf
+</code></pre>
+<p>Nel pendolo, x e&#39; theta e y e&#39; omega. Il tempo e&#39; adimensionale: abbiamo
+assorbito la frequenza sqrt(g/l), percio&#39; dy = -sin(x). Nel pannello
+smorzato aggiungiamo -0.2*y. Il pendolo conservativo mantiene circa
+<code>E = omega^2/2 + 1 - cos(theta)</code>; quello smorzato perde energia.
+Questo offre un controllo fisico oltre al confronto visivo delle orbite.
+Il test C++ verifica la conservazione entro una soglia, senza pretendere
+che RK4 sia un metodo simplettico o conservi l&#39;energia esattamente.</p>
+<p>Per un esperimento cambia abs-tol/rel-tol da 1e-9 a 1e-7, ricompila
+la figura e confronta il risultato. Cambiare questi valori nel sorgente
+non richiede ricompilare l&#39;eseguibile. Riduci max-step se i segmenti
+appaiono troppo distanti: la precisione del calcolo e il campionamento
+grafico sono problemi collegati, ma diversi. Se usi componenti con unita&#39;
+e scale molto diverse, considera prima una nondimensionalizzazione;
+attualmente la tolleranza assoluta e&#39; comune a tutte le componenti.</p>
+<p>I test confrontano anche il decadimento esponenziale con exp(-t), una
+componente non autonoma con t^2 e Lorenz a breve termine con un RK4
+molto raffinato. Stringere le tolleranze deve migliorare l&#39;accordo e
+aumentare il lavoro. Non interpretare abs-tol come una garanzia sull&#39;errore
+totale: controlliamo una stima locale. Per sistemi stiff, eventi complessi e
+osservabili caotiche a lungo termine servono strumenti e verifiche ulteriori.</p>
+</section><section class="manual-section"><h2 id="14-regioni-profili-e-composizione-dei-pacchetti">14. Regioni, profili e composizione dei pacchetti</h2>
+<p>Un <code>profile</code> importa i pacchetti del corso; un successivo use ne aggiunge altri.
+Non blocca la tua tesi in un dominio. In <code>src/semantic.cpp</code> trovi la tabella
+dei profili e il registry degli oggetti. Il profilo research abilita tutti.</p>
+<pre><code class="language-text">profile statmech
+use quantum
+phase-diagram phases {
+    melting: negative
+}
+</code></pre>
+<p>Il diagramma P-T e&#39; un modello topologico per gli appunti. Tre curve si
+incontrano al punto triplo; la curva liquido-vapore termina al punto critico.
+Le zone colorate oltre il critico non sono nuove transizioni. La forma delle
+curve e le scale sono schematiche. Per un materiale reale servono i suoi dati
+o un&#39;equazione di stato, che questo comando non calcola.</p>
+<p>Leggi phase_diagram in <code>src/packages/statmech.cpp</code>: costruisce quattro regioni,
+poi curve, assi e annotazioni. <code>region</code> riusa la geometria dei percorsi ma
+chiude il bordo con <code>--cycle</code> e usa un riempimento. Gli incroci tra bordi
+non adiacenti e l&#39;area nulla vengono rifiutati. I vertici possono anche
+usare point e ancoraggi, per seguire i nodi spostati.</p>
+<pre><code class="language-text">region domain {
+    points: &quot;0 0;2 0;1 1&quot;
+    color: (0.2,0.4,0.6)
+    opacity: 0.25
+    outline: off
+}
+</code></pre>
+<p>Il compilatore conserva RGB e opacity, il backend genera primitive vettoriali.
+outline off evita di trasformare i bordi ausiliari di una zona in linee
+fisiche. Le regioni sono sullo sfondo per lasciare visibili curve ed etichette.
+Per sperimentare: cambia il segno di melting e confronta i due schemi.</p>
+<p>Ising 3D aggiunge un ciclo sugli strati al ciclo riga/colonna. Il punto
+spaziale e&#39; (colonna,-riga,strato), lo spin punta lungo +/-z e i legami
+collegano soltanto i vicini esistenti. <code>checkerboard</code> dipende dalla parita&#39;
+di riga+colonna+strato. Prova examples/ising3d.pyxis; nel test del cubo 2x2x2
+trovi otto spin e dodici legami. Questo controlla la topologia, non soltanto
+che il renderer produca un file.</p>
+</section><section class="manual-section"><h2 id="15-perche-39-il-clipping-del-testo-avviene-alla-fine">15. Perche&#39; il clipping del testo avviene alla fine</h2>
+<p>La larghezza della formula e&#39; in bp, la geometria degli oggetti e&#39; in unita&#39;
+del disegno. Prima del fitting non conosci il rapporto tra le due. Il caso
+e&#39; in examples/text-clipping.pyxis: frecce tra ket e operatore, tagliate
+senza inventare coordinate per il bordo delle formule.</p>
+<p>In <code>src/asymptote_geometry.hpp</code>, pyxis_text_box usa min/max di un frame
+misurato da LaTeX. In <code>src/pyxis.cpp</code> il percorso viene disegnato attraverso
+un callback che riceve la trasformazione finale t. Trasformiamo la curva
+con t, costruiamo le scatole nel medesimo spazio fisico e cerchiamo le
+intersezioni reali. La punta della freccia viene applicata dopo il taglio.
+Il margine contiene 1.5bp e meta&#39; dello spessore della linea.</p>
+<p>Il testo resta fisso, percio&#39; puo&#39; essere un ancoraggio. Un&#39;etichetta automatica
+non puo&#39;: la sua posizione dipende a sua volta dalle linee, e introdurrebbe
+una dipendenza circolare. Per quel caso usa un point geometrico separato.
+<code>node tests/clipping.js</code> verifica sia le intersezioni sia l&#39;invarianza delle
+dimensioni fisiche del testo quando cambia la larghezza del disegno.</p>
+</section><section class="manual-section"><h2 id="16-dal-modello-relativistico-al-percorso-numerico">16. Dal modello relativistico al percorso numerico</h2>
+<p>Il package relativity non deriva da solo una metrica. Ogni generatore espone
+un modello e una carta. Nei coni di luce abbiamo scelto la carta ingoing di
+Painleve-Gullstrand, con c=1:</p>
+<pre><code class="language-text">ds^2 = -dt^2 + (dr + sqrt(r_s/r) dt)^2 + r^2 dOmega^2
+dr/dt = -sqrt(r_s/r) +/- 1
+</code></pre>
+<p>La seconda relazione segue da ds²=0 per moto radiale. All&#39;orizzonte il
+generatore uscente ha dr/dt=0; dentro l&#39;orizzonte entrambe le direzioni future
+hanno dr/dt&lt;0. Il test controlla questi segni e le pendenze. I triangoli sono
+coni tangenti locali: i lati non sono geodesiche finite rettilinee.</p>
+<p>Per il raggio nullo equatoriale di Schwarzschild poniamo u=r_s/r e usiamo
+phi come variabile indipendente. Il sistema e&#39; u&#39;=v, v&#39;=1.5u²-u. Il dato
+iniziale v viene dall&#39;integrale v²=1/b²-u²+u³, con b in unita&#39; r_s.
+Quindi impact non e&#39; una posizione scelta sul foglio: e&#39; il parametro
+d&#39;impatto fisico normalizzato. extent e&#39; il raggio di ingresso normalizzato.</p>
+<p>L&#39;integratore comune accetta un callback di evento. Dopo un passo accettato
+che attraversa l&#39;evento, riduce l&#39;intervallo con bisezione e reintegra fino
+alla radice. Per il raggio si ferma all&#39;orizzonte oppure al raggio iniziale
+sul ramo uscente. Il test controlla cattura per b=2r_s e scattering per
+b=3r_s; il cerchio tratteggiato e&#39; la sfera dei fotoni r=1.5r_s.</p>
+<pre><code class="language-powershell">node scripts/render.js examples/geodesics.pyxis pdf
+node scripts/render.js examples/light-cones.pyxis pdf
+node scripts/render.js examples/geodesic-embedding.pyxis pdf
+</code></pre>
+<p>La vista embedding trasforma il percorso spaziale in punti sulla superficie
+di Flamm. Non confondere il raggio nullo dello spaziotempo con una geodetica
+intrinseca della sola superficie a tempo costante. Un piccolo offset grafico
+evita che il renderer nasconda la linea nella mesh. Queste convenzioni e i
+riferimenti sono nel manuale PACCHETTI.md.</p>
+</section><section class="manual-section"><h2 id="17-compilare-gli-ambienti-direttamente-dagli-appunti">17. Compilare gli ambienti direttamente dagli appunti</h2>
+<p>Nell&#39;estensione usa Pyxis: Compila documento LaTeX, oppure salva un file .tex
+che contiene un ambiente pyxis. La build automatica e&#39; configurabile con
+pyxis.buildOnSave; pyxis.latexEngine sceglie il motore. Il PDF prende il nome
+standard del documento. Il sorgente resta identico e gli ausiliari vengono
+rimossi, anche dopo un errore. Da terminale:</p>
+<pre><code class="language-powershell">node scripts/build-latex.js examples/semantic-notes.tex
+node tests/native-latex.js
+</code></pre>
+<p><code>vscode/native-latex.js</code> riusa il preprocessore e il servizio di rendering;
+non e&#39; un secondo compilatore. Fa due passaggi LaTeX, verifica che il sorgente
+non sia cambiato e pubblica il PDF soltanto dopo successo. La coda dell&#39;editor
+accorpa i salvataggi mentre una build e&#39; gia&#39; in corso. Il test controlla anche
+che un errore conservi il PDF precedente. Ora la build segue anche i capitoli
+input/include: il paragrafo seguente spiega il passaggio aggiuntivo.
+L&#39;orchestrazione BibTeX/Biber rimane distinta dalla preparazione delle figure.</p>
+</section><section class="manual-section"><h2 id="18-una-tesi-e-39-un-grafo-di-file">18. Una tesi e&#39; un grafo di file</h2>
+<p><code>tools/pyxis/project.js</code> tratta ogni file .tex come un nodo e ogni input/include
+come un arco. <code>references</code> trova i comandi ignorando commenti, verbatim e
+stringhe degli ambienti Pyxis. Non basta cercare tutte le occorrenze di input
+con una regex: potresti interpretare un esempio stampato negli appunti come
+un vero capitolo da compilare.</p>
+<p>La funzione visit legge il file, prepara le figure, visita i figli e scrive
+una copia temporanea. <code>stack</code> contiene il cammino corrente: se il prossimo
+file e&#39; gia&#39; nello stack abbiamo un ciclo. <code>outputs</code> contiene invece i file
+gia&#39; preparati, per riusarli se un capitolo viene incluso due volte.
+Sono due informazioni diverse: un file visitato non implica da solo un ciclo.</p>
+<p>Le copie hanno nomi basati sull&#39;hash del percorso. Riscriviamo i riferimenti
+verso queste copie e aggiungiamo la directory temporanea a TEXINPUTS.
+Con include conserviamo anche la semantica di pagina e degli ausiliari;
+includeonly viene riscritto con gli stessi nomi temporanei e filtra i capitoli.
+Non riscriviamo nessun originale. I percorsi letterali si risolvono dalla
+directory del principale, come in una compilazione LaTeX normale.</p>
+<p>Il preambolo principale fornisce pacchetti e macro alle etichette dei figli.
+newcommand e DeclareMathOperator possono contenere gruppi annidati: il parser
+dei gruppi bilanciati mantiene il loro testo completo. L&#39;hash della figura
+include questo contesto, quindi cambiare la definizione di ket invalida anche
+le figure che lo usano.</p>
+<p>Prima di pubblicare il PDF rileggiamo gli originali preparati: se un capitolo
+e&#39; cambiato durante il rendering, il risultato obsoleto viene scartato.
+Il marker <code>% !TeX root = main.tex</code> permette all&#39;editor di risalire dal capitolo
+alla tesi. Dopo una build, l&#39;editor conserva inoltre la mappa dei sottofile.</p>
+<pre><code class="language-powershell">node scripts/build-latex.js examples/thesis/main.tex
+node tests/native-latex.js
+</code></pre>
+<p>Questo test controlla file inclusi su piu&#39; livelli, macro del principale,
+includeonly, cicli, PDF precedente conservato su errore e originali immutati.
+Se aggiungi import/subfiles in futuro, devi specificare le nuove regole dei
+percorsi prima di modificarne il parser.</p>
+</section><section class="manual-section"><h2 id="19-dalla-cartella-sorgente-all-39-estensione-installabile">19. Dalla cartella sorgente all&#39;estensione installabile</h2>
+<p>Durante lo sviluppo VS Code carica direttamente vscode/extension.js. Nella
+release legge il medesimo codice dal VSIX e usa bin/pyxis.exe. La funzione
+compilerPath in vscode/environment.js distingue questi due percorsi.
+Il pacchetto contiene anche il codice C++, le guide e gli esempi, per poterli
+leggere e modificare; i programmi esterni rimangono installazioni separate.</p>
+<pre><code class="language-powershell">./scripts/build.ps1 -Release
+./scripts/package.ps1 -SkipBuild
+./scripts/test-package.ps1
+./scripts/install.ps1 -SkipBuild
+</code></pre>
+<p>Release abilita -O2 e rimuove i simboli di debug: l&#39;eseguibile e&#39; piu&#39; piccolo,
+ma non e&#39; la scelta adatta quando vuoi ispezionarlo passo per passo in un debugger.
+La build senza Release conserva -g. I test C++ vengono compilati ed eseguiti
+in entrambi i casi.</p>
+<p>Un VSIX e&#39; un archivio ZIP con un manifest, i file dell&#39;estensione e il nucleo.
+package.ps1 usa le API ZIP di .NET e una lista di cartelle sorgenti. Esclude
+cache, intermedi, output e runtime .tools; l&#39;archivio temporaneo viene eliminato
+se qualcosa fallisce. Non richiede scaricare un nuovo strumento npm per confezionarlo.
+Le regole standard di distribuzione sono nella
+<a href="https://code.visualstudio.com/api/working-with-extensions/publishing-extension">documentazione di VS Code</a>.</p>
+<p>test-package.ps1 installa l&#39;archivio in un profilo isolato e punta il test host
+ai file installati, usando il loro compilatore. Cosi&#39; non basta che funzioni
+la cartella sorgente: devono essere corretti anche main, risorse, grammar e
+dipendenze relative nel pacchetto. Il profilo viene rimosso alla fine.
+L&#39;installer normale collega le copie Asymptote/Ghostscript del workspace con
+pyxis-runtime.json nell&#39;estensione installata; questo e&#39; un file di configurazione
+utile, non un intermedio. Non modifica impostazioni di altre estensioni.</p>
+<p>Il codice Pyxis e&#39; MIT; THIRD-PARTY.md distingue i programmi esterni e il
+runtime del compilatore. Pubblicare su un marketplace o un repository remoto
+e&#39; un&#39;operazione separata dall&#39;installazione locale.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

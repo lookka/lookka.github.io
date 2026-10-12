@@ -1,0 +1,3 @@
+11f6891bf283d68dc42eed448e370e20a44dde3174483bfc5b69ef8e2bed347e  pyxis-1.0.0-documentation.zip
+4d1f4c5ebf25add559f26410c364751a9a1a5317aa24e84a4b2c4106edea995b  pyxis-1.0.0-project.zip
+ba8f7aaef411e5841886f14dceb4763abeb79cd8d9fab62b8f370afc63fdd430  pyxis-1.0.0-win32-x64.vsix

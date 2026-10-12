@@ -1,0 +1,81 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Generalita&#39; di Pyxis: casi di verifica dell&#39;architettura — documentazione Pyxis 1.0, Luca Melani"><title>Generalita&#39; di Pyxis: casi di verifica dell&#39;architettura · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Generalita&#39; di Pyxis: casi di verifica dell&#39;architettura</h1><div class="docs-tools"><a href="FIGURE-TEORICHE.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#nucleo-da-consolidare">Nucleo da consolidare</a><a href="#priorita-39-dopo-il-nuovo-incremento-2d">Priorita&amp;#39; dopo il nuovo incremento 2D</a></nav></details></aside><article><section class="manual-section">
+<p>Questo documento descrive gli obiettivi, non funzionalita&#39; tutte gia&#39; disponibili.
+Feynman e&#39; un pacchetto specializzato. Il nucleo deve poter sostenere altre
+famiglie di figure senza imitare il modello Feynman quando non e&#39; appropriato.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Famiglia</th>
+<th>Esempi</th>
+<th>Capacita&#39; comuni o specifiche necessarie</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>QFT</td>
+<td>Propagatori, loop, flussi, schemi di rinormalizzazione</td>
+<td>Grafi, percorsi decorati, frecce, annotazioni e pacchetti</td>
+</tr>
+<tr>
+<td>Relativita&#39;</td>
+<td>Penrose, coni di luce, diagrammi causali</td>
+<td>Regioni, clipping, curve, stili, sistemi di coordinate</td>
+</tr>
+<tr>
+<td>Geometria</td>
+<td>Mappe, griglie deformate, geodetiche, campi</td>
+<td>Funzioni multivariate, curve parametriche, numerica, trasformazioni</td>
+</tr>
+<tr>
+<td>Superfici</td>
+<td>Sfere, piani, embedding, z=f(x,y), masse schematiche</td>
+<td>Coordinate 3D, camera, proiezione, visibilita&#39;</td>
+</tr>
+<tr>
+<td>Statistica</td>
+<td>Reticoli, spin, fasi, curve critiche</td>
+<td>Ripetizioni, simboli, dati, assi, legende e barre d&#39;errore</td>
+</tr>
+<tr>
+<td>Informazione quantistica</td>
+<td>Circuiti, stati, canali, tensor network</td>
+<td>Allineamento, porte e nodi composti, fili, gruppi</td>
+</tr>
+<tr>
+<td>Meccanica quantistica</td>
+<td>Livelli, transizioni, potenziali, funzioni d&#39;onda</td>
+<td>Curve, segmenti, frecce, formule ed etichette</td>
+</tr>
+<tr>
+<td>Tesi e ricerca</td>
+<td>Risultati numerici, confronti, figure multipannello</td>
+<td>Import dati, scale, layout, dimensioni fisiche e riproducibilita&#39;</td>
+</tr>
+</tbody></table></div>
+</section><section class="manual-section"><h2 id="nucleo-da-consolidare">Nucleo da consolidare</h2>
+<ol>
+<li>Percorsi e regioni geometriche, non un elenco chiuso di disegni.</li>
+<li>Espressioni, funzioni, variabili, cicli e moduli.</li>
+<li>Oggetti nominati, ancoraggi, gruppi e dipendenze esplicite.</li>
+<li>Stili, marcatori e simboli riutilizzabili, anche personalizzati.</li>
+<li>Coordinate, unita&#39;, trasformazioni e sistemi di riferimento.</li>
+<li>Dati e calcolo numerico separati dalle convenzioni visive.</li>
+<li>Scene 3D e proiezione separate dall&#39;orientamento sul foglio.</li>
+<li>Backend di anteprima/esportazione e integrazione con l&#39;editor.</li>
+</ol>
+<p>I punti della griglia sono riferimenti di costruzione, non elementi della figura
+scientifica. I nodi di un percorso sono geometria; i simboli sui nodi sono
+marcatori sostituibili. Una proprieta&#39; fisica puo&#39; scegliere uno stile tramite
+un pacchetto, ma non deve eliminare l&#39;accesso ai componenti geometrici sottostanti.</p>
+</section><section class="manual-section"><h2 id="priorita-39-dopo-il-nuovo-incremento-2d">Priorita&#39; dopo il nuovo incremento 2D</h2>
+<ul>
+<li>Rendere affidabili PDF ed etichette LaTeX sui backend del PC.</li>
+<li>Provare il flusso VS Code completo.</li>
+<li>Consolidare sintassi, diagnostica e trasformazioni.</li>
+<li>Aggiungere regioni, gruppi, funzioni multivariate e importazione dati.</li>
+<li>Introdurre scene 3D, camera e superfici usando prima il backend Asymptote.</li>
+<li>Costruire i pacchetti sulle primitive effettivamente verificate.</li>
+</ul>
+<p>La rappresentazione schematica dello spaziotempo e un embedding derivato da una
+metrica devono entrambi essere esprimibili: il secondo richiede formule fisiche
+esplicite dell&#39;utente. Il programma non sostituisce quella derivazione.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

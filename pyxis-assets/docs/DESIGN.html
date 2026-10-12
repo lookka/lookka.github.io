@@ -1,0 +1,74 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Decisioni provvisorie di Pyxis — documentazione Pyxis 1.0, Luca Melani"><title>Decisioni provvisorie di Pyxis · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Decisioni provvisorie di Pyxis</h1><div class="docs-tools"><a href="DESIGN.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#obiettivo">Obiettivo</a><a href="#percorso-dei-dati">Percorso dei dati</a><a href="#sintassi-da-discutere-insieme">Sintassi da discutere insieme</a><a href="#confini-dello-scheletro">Confini dello scheletro</a><a href="#generalita-39-richiesta-e-ordine-degli-incrementi">Generalita&amp;#39; richiesta e ordine degli incrementi</a></nav></details></aside><article><section class="manual-section">
+</section><section class="manual-section"><h2 id="obiettivo">Obiettivo</h2>
+<p>Creare figure scientifiche da tastiera senza interrompere gli appunti in VS Code.
+Il sorgente <code>.pyxis</code> e&#39; il progetto; SVG/PDF sono esportazioni.
+Asymptote e&#39; il backend scelto. L&#39;anteprima usa inizialmente lo stesso backend:
+misureremo i tempi prima di costruire un secondo renderer.</p>
+</section><section class="manual-section"><h2 id="percorso-dei-dati">Percorso dei dati</h2>
+<p>Editor Pyxis nella webview VS Code → sorgente → eseguibile C++ → scena →
+generatore Asymptote → processo asy → SVG nell&#39;anteprima / PDF negli appunti.</p>
+<p>Il nucleo non dipende da VS Code. L&#39;estensione gestisce interfaccia, processi,
+salvataggio e inserimento attraverso le API dell&#39;editor.</p>
+</section><section class="manual-section"><h2 id="sintassi-da-discutere-insieme">Sintassi da discutere insieme</h2>
+<p>La prima sintassi posizionale serve a verificare l&#39;intera catena. La proposta
+successiva dovra&#39; privilegiare termini espliciti e parametri nominati:</p>
+<pre><code class="language-text"># ESEMPI DI DESIGN: NON ANCORA IMPLEMENTATI
+circle S center=(0,0) radius=1
+label T at=S.north text=&quot;$S^2$&quot;
+move S by=(1,0)
+rotate S angle=15deg axis=world.z
+camera orbit azimuth=30deg elevation=20deg
+view rotate angle=15deg
+attach P to=S mode=rigid
+detach P
+</code></pre>
+<ul>
+<li>Un nome identifica sempre lo stesso oggetto all&#39;interno del sorgente.</li>
+<li>Angoli geometrici con unita&#39; esplicite; funzioni trigonometriche da documentare.</li>
+<li><code>rotate</code> modifica un oggetto nello spazio, <code>camera</code> cambia il punto di vista,
+<code>view rotate</code> ruota il disegno sul foglio.</li>
+<li>Un ancoraggio e&#39; un punto nominato ricalcolato dall&#39;oggetto, non una coordinata copiata.</li>
+<li><code>attach</code> stabilisce una dipendenza diretta; <code>detach</code> deve conservare la posa corrente.</li>
+<li>Ritaglio del disegno 2D e intersezione geometrica 3D sono operazioni distinte.</li>
+<li>Le dipendenze cicliche devono essere rifiutate, con un messaggio utile.</li>
+</ul>
+<p>Prima di fissare queste forme, proveremo esempi di Feynman, livelli energetici,
+Penrose, reticoli, circuiti quantistici e superfici. Sintassi corta e comprensibile:
+le abbreviazioni saranno alias, non il solo modo di leggere un progetto.</p>
+<p>La proposta Feynman e&#39; in <code>FEYNMAN.md</code>; le altre famiglie di figure e i requisiti
+comuni sono in <code>FIGURE-TEORICHE.md</code>. Questi documenti distinguono gli obiettivi
+dalle capacita&#39; gia&#39; implementate. Percorso, tratto e marcatori sono componenti
+indipendenti; i simboli poligonali personalizzati sono gia&#39; supportati.</p>
+</section><section class="manual-section"><h2 id="confini-dello-scheletro">Confini dello scheletro</h2>
+<p>Ci sono un primo valutatore matematico, curve campionate e ancoraggi di base.
+Sono disponibili sfere, superfici z=f(x,y), mesh parametriche campionate,
+camera ortografica ed etichette 3D. I quattro pacchetti semantici e i vincoli
+direzionali/tangenza sono implementati; non c&#39;e&#39; ancora un risolutore generale
+di vincoli simultanei. Funzionalita&#39; attuali e limiti sono in PACCHETTI.md.
+La struttura attuale permette di aggiungerli.
+Non possiamo dichiarare adozione generale prima di prove con altri utenti.
+La release 1.0 usa MIT per Pyxis e distribuisce un VSIX Windows x64; i backend
+rimangono installazioni esterne con le proprie licenze. La pubblicazione remota
+e&#39; distinta dal pacchetto locale.</p>
+</section><section class="manual-section"><h2 id="generalita-39-richiesta-e-ordine-degli-incrementi">Generalita&#39; richiesta e ordine degli incrementi</h2>
+<ol>
+<li>Primitivi: punti, segmenti, frecce, curve, aree e testi.</li>
+<li>Linguaggio: espressioni, funzioni con piu&#39; argomenti, cicli, moduli e diagnostica.</li>
+<li>Figure: stili, unita&#39;, ancoraggi, gruppi, layer e vincoli espliciti.</li>
+<li>Dati: tabelle da file, assi, scale lineari/logaritmiche, legende e incertezze.</li>
+<li>Geometria 3D: trasformazioni locali/mondiali, camera ortografica, superfici
+parametriche e z=f(x,y), sfere/piani e visibilita&#39;.</li>
+<li>Pacchetti: Feynman, livelli energetici, Penrose, reticoli, campi vettoriali,
+circuiti quantistici, varieta&#39; e figure di relativita&#39;.</li>
+<li>Numerica: mappe, campionamento adattivo e ODE fornite dall&#39;utente, con tolleranze
+e controlli di convergenza. Pyxis non deriva la fisica del problema.</li>
+<li>Distribuzione: manuale, esempi, compatibilita&#39; dei sorgenti, installazione
+riproducibile e prove con utenti esterni.</li>
+</ol>
+<p>Le figure con superfici curve e sfere rappresentanti masse appartengono al punto 5.
+Una superficie z=f(x,y) puo&#39; essere una visualizzazione schematica; un diagramma
+di embedding da una metrica richiede invece formule e ipotesi fisiche specificate.
+Prima di implementare visibilita&#39; proprietaria, sfrutteremo e verificheremo le
+capacita&#39; vettoriali del backend Asymptote. Floating horizon resta una possibilita&#39;
+specializzata per superfici altezza, non la soluzione generale per scene arbitrarie.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

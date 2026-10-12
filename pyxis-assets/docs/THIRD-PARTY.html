@@ -1,0 +1,15 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Dipendenze di Pyxis — documentazione Pyxis 1.0, Luca Melani"><title>Dipendenze di Pyxis · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Dipendenze di Pyxis</h1><div class="docs-tools"><a href="THIRD-PARTY.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"></nav></details></aside><article><section class="manual-section">
+<p>Il codice Pyxis e la sua documentazione sono distribuiti con licenza MIT.
+La licenza non sostituisce quelle dei programmi esterni.</p>
+<ul>
+<li>Il VSIX Windows include il nucleo Pyxis compilato con GCC/MinGW-w64.
+Le librerie runtime GCC sono soggette alla GCC Runtime Library Exception:
+<a href="https://www.gnu.org/licenses/gcc-exception-3.1.html">https://www.gnu.org/licenses/gcc-exception-3.1.html</a>.</li>
+<li>Asymptote, Ghostscript, LaTeX/dvisvgm, Node.js e VS Code sono programmi
+esterni. Il VSIX non li redistribuisce; usa installazioni locali.</li>
+<li>Le copie portatili in <code>.tools</code> servono a questo workspace. Mantengono
+licenze, risorse e avvisi propri. Non sono inserite nel pacchetto VSIX.</li>
+</ul>
+<p>Per costruire su altri sistemi usare CMake e un compilatore C++17. Il pacchetto
+binario prodotto da scripts/package.ps1 e&#39; destinato a Windows x64.</p>
+</section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>
