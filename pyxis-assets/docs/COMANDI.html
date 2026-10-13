@@ -1,398 +1,2635 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Riferimento dei comandi — Pyxis 1.0 — documentazione Pyxis 1.0, Luca Melani"><title>Riferimento dei comandi — Pyxis 1.0 · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Riferimento dei comandi — Pyxis 1.0</h1><div class="docs-tools"><a href="COMANDI.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#come-leggere-la-sintassi">Come leggere la sintassi</a><a href="#scena-profili-e-import">Scena, profili e import</a><a href="#primitive-geometriche-2d">Primitive geometriche 2D</a><a href="#formule-variabili-e-funzioni">Formule, variabili e funzioni</a><a href="#testi-e-posizionamento">Testi e posizionamento</a><a href="#percorsi-stili-e-modifiche">Percorsi, stili e modifiche</a><a href="#vincoli-geometrici">Vincoli geometrici</a><a href="#geometria-3d">Geometria 3D</a><a href="#forma-a-blocchi-delle-primitive">Forma a blocchi delle primitive</a><a href="#tutti-i-comandi-dei-pacchetti-fisici">Tutti i comandi dei pacchetti fisici</a><a href="#comandi-dell-39-editor-vs-code">Comandi dell&amp;#39;editor VS Code</a><a href="#ambiente-latex">Ambiente LaTeX</a><a href="#terminale-e-script">Terminale e script</a></nav></details></aside><article><section class="manual-section">
-<p>Ho raccolto qui la sintassi implementata nella release 1.0. Questo è un riferimento
-da consultare mentre scrivi, non una lista di funzionalità future. Per iniziare
-segui <a href="INIZIA-QUI.html">la guida pratica</a>; per le proprietà dei modelli fisici consulta
-<a href="PACCHETTI.html">il manuale dei pacchetti</a>, che completa questo riferimento.</p>
-</section><section class="manual-section"><h2 id="come-leggere-la-sintassi">Come leggere la sintassi</h2>
-<p><code>N</code> è il nome univoco di un oggetto, <code>P</code> un punto 2D, <code>r</code> una dimensione positiva.
-Le parentesi quadre nella descrizione indicano argomenti facoltativi, non caratteri
-da digitare. Nei blocchi semantici, invece, le liste come <code>[electron, positron]</code>
-richiedono davvero le parentesi quadre. Un comando per riga; proprietà dei blocchi
-una per riga. I commenti iniziano con <code>#</code>, fuori dalle stringhe.</p>
-<p>I numeri usano il punto decimale. Le coordinate sono unità geometriche arbitrarie;
-<code>width</code> è in mm, spessori e distanze delle etichette sono in bp (1/72 di pollice).
-Le stringhe sono fra doppi apici; le barre inverse LaTeX restano letterali.
-Non sono supportati doppi apici escapati dentro una stringa. I nomi cominciano
-con una lettera o <code>_</code>, poi ammettono lettere, cifre, <code>_</code> e punti gerarchici.</p>
-<p>Un punto <code>P</code> può essere <code>x y</code>, un riferimento della griglia (<code>@A1</code> … <code>@G7</code>)
-o un ancoraggio (<code>A.center</code>). <code>@D4</code> è l&#39;origine; lettere verso destra, numeri
-verso il basso. Gli ancoraggi possono riferirsi a oggetti dichiarati più avanti.
-I comandi di modifica richiedono invece che l&#39;oggetto sia già stato dichiarato.</p>
-</section><section class="manual-section"><h2 id="scena-profili-e-import">Scena, profili e import</h2>
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Manuale di riferimento — Pyxis 1.0 — documentazione Pyxis 1.0, Luca Melani"><title>Manuale di riferimento — Pyxis 1.0 · Pyxis</title><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet"><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css?v=20261013-reference"><script defer src="../pyxis.js?v=20261013-reference"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Manuale di riferimento — Pyxis 1.0</h1><div class="docs-tools"><a href="COMANDI.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><div class="reference-controls"><label for="search">Trova un comando<input class="docs-search" id="search" type="search" list="command-names" placeholder="circle, curve, qft.feynman…" autocomplete="off"></label><datalist id="command-names"><option value="arrow"></option><option value="arrow3"></option><option value="background"></option><option value="bend"></option><option value="camera"></option><option value="circle"></option><option value="clip"></option><option value="color"></option><option value="curve"></option><option value="detail"></option><option value="ellipse"></option><option value="fill"></option><option value="flow"></option><option value="function"></option><option value="gatebox"></option><option value="grid"></option><option value="label"></option><option value="label3"></option><option value="let"></option><option value="line"></option><option value="linewidth"></option><option value="markers"></option><option value="mesh3"></option><option value="move"></option><option value="move3"></option><option value="nodefill"></option><option value="opacity"></option><option value="outline"></option><option value="parallel"></option><option value="parallel-arrow"></option><option value="path"></option><option value="path3"></option><option value="perpendicular"></option><option value="perpendicular-arrow"></option><option value="place"></option><option value="placement"></option><option value="plot"></option><option value="point"></option><option value="profile"></option><option value="qft.feynman"></option><option value="quantum.bloch"></option><option value="quantum.circuit"></option><option value="quantum.tensor-network"></option><option value="region"></option><option value="relativity.embedding"></option><option value="relativity.geodesic"></option><option value="relativity.light-cones"></option><option value="relativity.penrose"></option><option value="shading"></option><option value="sphere"></option><option value="statmech.ising"></option><option value="statmech.lorenz"></option><option value="statmech.phase-diagram"></option><option value="statmech.phase-flow"></option><option value="stroke"></option><option value="surface"></option><option value="symbol"></option><option value="tangent-circle"></option><option value="text"></option><option value="text3"></option><option value="theme"></option><option value="use"></option><option value="wave"></option><option value="width"></option></datalist><label for="category">Categoria<select id="category" class="reference-category"><option value="">Tutte le categorie</option><option value="Primitive geometriche 2D">Primitive geometriche 2D</option><option value="Geometria 3D">Geometria 3D</option><option value="Percorsi, stili e modifiche">Percorsi, stili e modifiche</option><option value="Scena, profili e import">Scena, profili e import</option><option value="Formule, variabili e funzioni">Formule, variabili e funzioni</option><option value="Testi e posizionamento">Testi e posizionamento</option><option value="Vincoli geometrici">Vincoli geometrici</option><option value="pacchetto qft">pacchetto qft</option><option value="pacchetto quantum">pacchetto quantum</option><option value="pacchetto relativity">pacchetto relativity</option><option value="pacchetto statmech">pacchetto statmech</option></select></label></div><p class="reference-hint">Un nome esatto apre la sua scheda; puoi cercare anche parametri e concetti. Gli esempi «Esempio completo» sono sorgenti eseguibili.</p><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#indice-dei-comandi">Indice dei comandi</a><a href="#convenzioni-sintattiche">Convenzioni sintattiche</a><a href="#arrow">arrow</a><a href="#arrow3">arrow3</a><a href="#background">background</a><a href="#bend">bend</a><a href="#camera">camera</a><a href="#circle">circle</a><a href="#clip">clip</a><a href="#color">color</a><a href="#curve">curve</a><a href="#detail">detail</a><a href="#ellipse">ellipse</a><a href="#fill">fill</a><a href="#flow">flow</a><a href="#function">function</a><a href="#gatebox">gatebox</a><a href="#grid">grid</a><a href="#label">label</a><a href="#label3">label3</a><a href="#let">let</a><a href="#line">line</a><a href="#linewidth">linewidth</a><a href="#markers">markers</a><a href="#mesh3">mesh3</a><a href="#move">move</a><a href="#move3">move3</a><a href="#nodefill">nodefill</a><a href="#opacity">opacity</a><a href="#outline">outline</a><a href="#parallel">parallel</a><a href="#parallel-arrow">parallel-arrow</a><a href="#path">path</a><a href="#path3">path3</a><a href="#perpendicular">perpendicular</a><a href="#perpendicular-arrow">perpendicular-arrow</a><a href="#place">place</a><a href="#placement">placement</a><a href="#plot">plot</a><a href="#point">point</a><a href="#profile">profile</a><a href="#region">region</a><a href="#shading">shading</a><a href="#sphere">sphere</a><a href="#stroke">stroke</a><a href="#surface">surface</a><a href="#symbol">symbol</a><a href="#tangent-circle">tangent-circle</a><a href="#text">text</a><a href="#text3">text3</a><a href="#theme">theme</a><a href="#use">use</a><a href="#wave">wave</a><a href="#width">width</a><a href="#qft-feynman">qft.feynman</a><a href="#quantum-circuit">quantum.circuit</a><a href="#quantum-tensor-network">quantum.tensor-network</a><a href="#quantum-bloch">quantum.bloch</a><a href="#relativity-penrose">relativity.penrose</a><a href="#relativity-embedding">relativity.embedding</a><a href="#relativity-light-cones">relativity.light-cones</a><a href="#relativity-geodesic">relativity.geodesic</a><a href="#statmech-ising">statmech.ising</a><a href="#statmech-phase-diagram">statmech.phase-diagram</a><a href="#statmech-phase-flow">statmech.phase-flow</a><a href="#statmech-lorenz">statmech.lorenz</a><a href="#sintassi-a-blocchi">Sintassi a blocchi</a><a href="#espressioni-matematiche">Espressioni matematiche</a><a href="#comandi-dell-editor-vs-code">Comandi dell&#39;editor VS Code</a><a href="#ambiente-latex">Ambiente LaTeX</a><a href="#terminale-e-script">Terminale e script</a></nav></details></aside><article><section class="manual-section">
+<p>Questo manuale documenta l’API pubblica del linguaggio Pyxis 1.0.
+Ogni comando ha una scheda autonoma: sintassi, parametri, default, esempio
+completo e vincoli. Per iniziare a usare l’applicazione: <a href="INIZIA-QUI.html">guida di installazione</a>.
+Per studiare l’implementazione C++: <a href="CODICE-CPP.html">lettura del codice reale</a>.</p>
+</section><section class="manual-section"><h2 id="indice-dei-comandi">Indice dei comandi</h2>
+<p><strong>Scena, profili e import</strong> — <a href="#camera">camera</a>, <a href="#grid">grid</a>, <a href="#place">place</a>, <a href="#profile">profile</a>, <a href="#theme">theme</a>, <a href="#use">use</a>, <a href="#width">width</a></p>
+<p><strong>Primitive geometriche 2D</strong> — <a href="#arrow">arrow</a>, <a href="#circle">circle</a>, <a href="#ellipse">ellipse</a>, <a href="#gatebox">gatebox</a>, <a href="#line">line</a>, <a href="#path">path</a>, <a href="#plot">plot</a>, <a href="#point">point</a>, <a href="#region">region</a></p>
+<p><strong>Formule, variabili e funzioni</strong> — <a href="#function">function</a>, <a href="#let">let</a></p>
+<p><strong>Testi e posizionamento</strong> — <a href="#label">label</a>, <a href="#placement">placement</a>, <a href="#text">text</a></p>
+<p><strong>Percorsi, stili e modifiche</strong> — <a href="#background">background</a>, <a href="#bend">bend</a>, <a href="#clip">clip</a>, <a href="#color">color</a>, <a href="#curve">curve</a>, <a href="#fill">fill</a>, <a href="#flow">flow</a>, <a href="#linewidth">linewidth</a>, <a href="#markers">markers</a>, <a href="#move">move</a>, <a href="#nodefill">nodefill</a>, <a href="#opacity">opacity</a>, <a href="#outline">outline</a>, <a href="#stroke">stroke</a>, <a href="#symbol">symbol</a>, <a href="#wave">wave</a></p>
+<p><strong>Vincoli geometrici</strong> — <a href="#parallel">parallel</a>, <a href="#parallel-arrow">parallel-arrow</a>, <a href="#perpendicular">perpendicular</a>, <a href="#perpendicular-arrow">perpendicular-arrow</a>, <a href="#tangent-circle">tangent-circle</a></p>
+<p><strong>Geometria 3D</strong> — <a href="#arrow3">arrow3</a>, <a href="#detail">detail</a>, <a href="#label3">label3</a>, <a href="#mesh3">mesh3</a>, <a href="#move3">move3</a>, <a href="#path3">path3</a>, <a href="#shading">shading</a>, <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#text3">text3</a></p>
+<p><strong>Pacchetti</strong> — <a href="#qft-feynman">qft.feynman</a>, <a href="#quantum-circuit">quantum.circuit</a>, <a href="#quantum-tensor-network">quantum.tensor-network</a>, <a href="#quantum-bloch">quantum.bloch</a>, <a href="#statmech-ising">statmech.ising</a>, <a href="#statmech-phase-flow">statmech.phase-flow</a>, <a href="#statmech-lorenz">statmech.lorenz</a>, <a href="#statmech-phase-diagram">statmech.phase-diagram</a>, <a href="#relativity-penrose">relativity.penrose</a>, <a href="#relativity-embedding">relativity.embedding</a>, <a href="#relativity-light-cones">relativity.light-cones</a>, <a href="#relativity-geodesic">relativity.geodesic</a></p>
+</section><section class="manual-section"><h2 id="convenzioni-sintattiche">Convenzioni sintattiche</h2>
+<ul>
+<li><code>N</code>: identificatore univoco. Gli oggetti da modificare devono essere già dichiarati.</li>
+<li><code>P</code>, <code>Q</code>: punti 2D; scrivere due numeri (<code>1 2</code>), un punto della griglia (<code>@D4</code>) o un ancoraggio (<code>A.center</code>).</li>
+<li><code>[argomento]</code> nella <strong>firma</strong>: argomento facoltativo. Le liste nelle proprietà dei pacchetti, per esempio <code>[electron, positron]</code>, richiedono invece le parentesi.</li>
+<li>Una istruzione per riga; una proprietà per riga nei blocchi. Commenti <code>#</code> fuori dalle stringhe.</li>
+<li>Stringhe fra doppi apici. Le barre inverse LaTeX sono letterali; doppi apici escapati nella stringa non sono supportati.</li>
+<li>Coordinate in unità geometriche; width in mm; linewidth e gap delle etichette in bp (1/72 di pollice). Numeri con punto decimale.</li>
+<li>Nomi: lettera o <code>_</code> iniziale, poi lettere/cifre/underscore; punti per nomi gerarchici. Nessun punto finale o doppio punto.</li>
+<li>Scene 2D e 3D separate. Non mescolare le loro primitive nella stessa figura.</li>
+</ul>
+<p><strong>Ancoraggi.</strong> circle/ellipse/gatebox: center, north, south, east, west.
+line/arrow: start, end, center. path/plot: start, end, node1, node2, ….
+point e testi fissi: center. I riferimenti geometrici possono anticipare una
+dichiarazione successiva, purché non producano un ciclo. Le etichette automatiche
+non sono ancoraggi geometrici.</p>
+</section><section class="manual-section command-entry" data-command="arrow" data-category="Primitive geometriche 2D"><h2 id="arrow">arrow</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Come line, con punta finale. <code>arrow axis 0 0 3 0</code>.</p>
+<h3 id="sintassi">Sintassi</h3>
+<pre><code class="language-text">arrow N [P Q]
+</code></pre>
+<h3 id="parametri">Parametri</h3>
 <div class="table-scroll"><table>
 <thead>
 <tr>
-<th>Comando</th>
-<th>Sintassi ed esempio</th>
-<th>Spiegazione</th>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>width</code></td>
-<td><code>width 120</code></td>
-<td>Larghezza finale in mm, positiva; default 100. Il testo conserva dimensioni fisiche.</td>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
 </tr>
 <tr>
-<td><code>grid</code></td>
-<td><code>grid off</code>, <code>grid on</code>, <code>grid 0.5</code></td>
-<td>Nasconde/mostra la griglia o ne cambia il passo. Passo tra 1e-6 e 1e6; default 1 e visibile. Gli ancoraggi esistono anche con griglia nascosta.</td>
-</tr>
-<tr>
-<td><code>theme</code></td>
-<td><code>theme paper</code> oppure <code>theme: paper</code></td>
-<td><code>paper</code>, <code>wire</code>, <code>color</code>, <code>blackboard</code>, <code>modern-vector</code>, <code>overleaf-classic</code> (alias di paper). I temi scelgono convenzioni visive; non cambiano il modello fisico.</td>
-</tr>
-<tr>
-<td><code>use</code></td>
-<td><code>use qft, quantum</code></td>
-<td>Importa uno o più pacchetti fra qft, quantum, relativity, statmech. Import ripetuti ignorati.</td>
-</tr>
-<tr>
-<td><code>profile</code></td>
-<td><code>profile statmech</code></td>
-<td>Importa il pacchetto del corso; <code>research</code> importa tutti e quattro. È additivo, non sostituisce gli import precedenti.</td>
-</tr>
-<tr>
-<td><code>camera</code></td>
-<td><code>camera 5 -7 5</code></td>
-<td>Direzione di vista 3D, diversa dal vettore nullo. Default (5,-7,5).</td>
-</tr>
-<tr>
-<td><code>place</code></td>
-<td><code>place B below A gap=1</code></td>
-<td>Dispone gruppi semantici 2D: above, below, right-of, left-of. gap geometrico 0…1000, default 1. Non è una traslazione di primitive singole; cicli e disposizioni duplicate sono errori.</td>
+<td><code>P / Q</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
 </tr>
 </tbody></table></div>
-<pre><code class="language-text">use qft, quantum
+<h3 id="valori-predefiniti">Valori predefiniti</h3>
+<p>Estremi (-0.5,0) e (0.5,0) se omessi.</p>
+<h3 id="esempio-completo">Esempio completo</h3>
+<pre><code class="language-pyxis">arrow L 0 0 2 1
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#point">point</a>, <a href="#circle">circle</a>, <a href="#ellipse">ellipse</a>, <a href="#line">line</a>, <a href="#path">path</a>.</p>
+</section><section class="manual-section command-entry" data-command="arrow3" data-category="Geometria 3D"><h2 id="arrow3">arrow3</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Percorso 3D con punta finale.</p>
+<h3 id="sintassi-1">Sintassi</h3>
+<pre><code class="language-text">arrow3 N &quot;x y z;x y z;…&quot;
+</code></pre>
+<h3 id="parametri-1">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>vertici</code></td>
+<td>stringa</td>
+<td>2…10000 terne x y z separate da ;, con punta finale.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-1">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-1">Esempio completo</h3>
+<pre><code class="language-pyxis">arrow3 A &quot;0 0 0;1 1 1&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#path3">path3</a>, <a href="#mesh3">mesh3</a>, <a href="#label3">label3</a>.</p>
+</section><section class="manual-section command-entry" data-command="background" data-category="Percorsi, stili e modifiche"><h2 id="background">background</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Dispone un oggetto sullo sfondo 2D; non prende on/off.</p>
+<h3 id="sintassi-2">Sintassi</h3>
+<pre><code class="language-text">background N
+</code></pre>
+<h3 id="parametri-2">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-2">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-2">Esempio completo</h3>
+<pre><code class="language-pyxis">line L -1 0 1 0
+circle A 0.3
+background L
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="bend" data-category="Percorsi, stili e modifiche"><h2 id="bend">bend</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Arco costruito da un&#39;altezza relativa alla corda, positiva a sinistra del verso start→end. 0 torna rettilineo. Rimuove onde e controlli espliciti.</p>
+<h3 id="sintassi-3">Sintassi</h3>
+<pre><code class="language-text">bend N altezza
+</code></pre>
+<h3 id="parametri-3">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>altezza</code></td>
+<td>reale</td>
+<td>Curvatura relativa alla corda; positiva verso la sua sinistra, 0 rettilineo.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-3">Valori predefiniti</h3>
+<p><code>0</code>.</p>
+<h3 id="esempio-completo-3">Esempio completo</h3>
+<pre><code class="language-pyxis">arrow A 0 0 2 0
+bend A 0.4
+</code></pre>
+<h3 id="interazioni">Interazioni</h3>
+<p>Rimuove onde e controlli Bézier espliciti. Non usarlo sui bordi delle region, che devono rimanere poligonali.</p>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#curve">curve</a>, <a href="#wave">wave</a>.</p>
+</section><section class="manual-section command-entry" data-command="camera" data-category="Scena, profili e import"><h2 id="camera">camera</h2>
+<p><strong>Categoria:</strong> Scena, profili e import.</p>
+<p>Direzione di vista 3D, diversa dal vettore nullo. Default (5,-7,5).</p>
+<h3 id="sintassi-4">Sintassi</h3>
+<pre><code class="language-text">camera x y z
+</code></pre>
+<h3 id="parametri-4">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>x y z</code></td>
+<td>tre reali</td>
+<td>Direzione di vista 3D; il vettore non può essere nullo.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-4">Valori predefiniti</h3>
+<p>(5,-7,5).</p>
+<h3 id="esempio-completo-4">Esempio completo</h3>
+<pre><code class="language-pyxis">camera 5 -7 5
+sphere S 1
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#width">width</a>, <a href="#grid">grid</a>, <a href="#theme">theme</a>, <a href="#use">use</a>, <a href="#profile">profile</a>.</p>
+</section><section class="manual-section command-entry" data-command="circle" data-category="Primitive geometriche 2D"><h2 id="circle">circle</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Cerchio; default origine e r=1. <code>circle A 0 0 0.5</code>.</p>
+<h3 id="sintassi-5">Sintassi</h3>
+<pre><code class="language-text">circle N [r]
+circle N x y r
+circle N ancoraggio [r]
+</code></pre>
+<h3 id="parametri-5">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>reale positivo</td>
+<td>Raggio, in unità geometriche.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-5">Valori predefiniti</h3>
+<p>Centro (0,0), raggio 1.</p>
+<h3 id="esempio-completo-5">Esempio completo</h3>
+<pre><code class="language-pyxis">circle A 0 0 0.5
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#point">point</a>, <a href="#ellipse">ellipse</a>, <a href="#line">line</a>, <a href="#arrow">arrow</a>, <a href="#path">path</a>.</p>
+</section><section class="manual-section command-entry" data-command="clip" data-category="Percorsi, stili e modifiche"><h2 id="clip">clip</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Taglia line/arrow/path ai bordi dei nodi ancorati agli estremi: circle, ellipse, gatebox, label/text fissi non vuoti. Funziona sul percorso effettivo, anche curvo. Non taglia contro oggetti arbitrari nel mezzo.</p>
+<h3 id="sintassi-6">Sintassi</h3>
+<pre><code class="language-text">clip N nodes
+clip N off
+</code></pre>
+<h3 id="parametri-6">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>modalità</code></td>
+<td>nodes / off</td>
+<td>Taglio ai bordi dei nodi ancorati agli estremi, oppure disattivazione.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-6">Valori predefiniti</h3>
+<p>off per primitive esplicite; alcuni pacchetti emettono nodes.</p>
+<h3 id="esempio-completo-6">Esempio completo</h3>
+<pre><code class="language-pyxis">circle A 0 0 0.3
+circle B 2 0 0.3
+arrow L A.center B.center
+clip L nodes
+</code></pre>
+<h3 id="vincoli">Vincoli</h3>
+<p>Richiede estremi con ancoraggi nominati: circle, ellipse, gatebox o label/text fissi non vuoti. Il taglio avviene sul percorso effettivo anche per curve/onde. Un point è invisibile e non ha un bordo. Non taglia contro oggetti arbitrari nel mezzo del percorso.</p>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="color" data-category="Percorsi, stili e modifiche"><h2 id="color">color</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>RGB 0…1 su geometria 2D/3D; non testi/punti invisibili. Su region controlla il riempimento; sul tratto 2D controlla il colore del tratto.</p>
+<h3 id="sintassi-7">Sintassi</h3>
+<pre><code class="language-text">color N r g b
+</code></pre>
+<h3 id="parametri-7">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>r g b</code></td>
+<td>tre reali 0…1</td>
+<td>Colore RGB; su region cambia il riempimento, sulle linee 2D il tratto.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-7">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-7">Esempio completo</h3>
+<pre><code class="language-pyxis">line L 0 0 2 0
+color L 0.2 0.4 0.8
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="curve" data-category="Percorsi, stili e modifiche"><h2 id="curve">curve</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Bézier cubica per il segmento numerato da 1. Controlli in coordinate assolute; line/arrow hanno un solo segmento. <code>curve C 1 0 1 2 1</code>. Rimuove l&#39;onda.</p>
+<h3 id="sintassi-8">Sintassi</h3>
+<pre><code class="language-text">curve N segmento c1x c1y c2x c2y
+</code></pre>
+<h3 id="parametri-8">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>segmento</code></td>
+<td>intero da 1</td>
+<td>Segmento da modificare; line/arrow hanno solo il segmento 1.</td>
+</tr>
+<tr>
+<td><code>c1x c1y c2x c2y</code></td>
+<td>quattro reali</td>
+<td>Coordinate assolute dei due controlli Bézier.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-8">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-8">Esempio completo</h3>
+<pre><code class="language-pyxis">line L 0 0 2 0
+curve L 1 0 1 2 1
+</code></pre>
+<h3 id="interazioni-1">Interazioni</h3>
+<p>Rimuove l’onda; sostituisce i controlli dello stesso segmento. Non usarlo sui bordi delle region, che devono rimanere poligonali.</p>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#wave">wave</a>.</p>
+</section><section class="manual-section command-entry" data-command="detail" data-category="Geometria 3D"><h2 id="detail">detail</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Solo sphere: minimal, outline, mesh; default minimal.</p>
+<h3 id="sintassi-9">Sintassi</h3>
+<pre><code class="language-text">detail N minimal|outline|mesh
+</code></pre>
+<h3 id="parametri-9">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>modalità</code></td>
+<td>minimal / outline / mesh</td>
+<td>Dettaglio della sphere.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-9">Valori predefiniti</h3>
+<p>minimal.</p>
+<h3 id="esempio-completo-9">Esempio completo</h3>
+<pre><code class="language-pyxis">sphere S 1
+detail S mesh
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#path3">path3</a>, <a href="#arrow3">arrow3</a>, <a href="#mesh3">mesh3</a>.</p>
+</section><section class="manual-section command-entry" data-command="ellipse" data-category="Primitive geometriche 2D"><h2 id="ellipse">ellipse</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Ellisse, semiassi positivi. Default origine, rx=1, ry=0.5.</p>
+<h3 id="sintassi-10">Sintassi</h3>
+<pre><code class="language-text">ellipse N [rx ry]
+ellipse N x y rx ry
+ellipse N ancoraggio [rx ry]
+</code></pre>
+<h3 id="parametri-10">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+<tr>
+<td><code>rx ry</code></td>
+<td>due reali positivi</td>
+<td>Semiassi orizzontale e verticale.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-10">Valori predefiniti</h3>
+<p>Centro (0,0), semiassi 1 e 0.5.</p>
+<h3 id="esempio-completo-10">Esempio completo</h3>
+<pre><code class="language-pyxis">ellipse E 0 0 1 0.5
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#point">point</a>, <a href="#circle">circle</a>, <a href="#line">line</a>, <a href="#arrow">arrow</a>, <a href="#path">path</a>.</p>
+</section><section class="manual-section command-entry" data-command="fill" data-category="Percorsi, stili e modifiche"><h2 id="fill">fill</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>auto, none, white, color per region/sphere/surface/mesh3. Non è il comando di riempimento dei circle: usa nodefill.</p>
+<h3 id="sintassi-11">Sintassi</h3>
+<pre><code class="language-text">fill N auto|none|white|color
+</code></pre>
+<h3 id="parametri-11">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>modalità</code></td>
+<td>auto / none / white / color</td>
+<td>Riempimento per region, sphere, surface e mesh3.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-11">Valori predefiniti</h3>
+<p>auto.</p>
+<h3 id="esempio-completo-11">Esempio completo</h3>
+<pre><code class="language-pyxis">sphere S 1
+fill S none
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="flow" data-category="Percorsi, stili e modifiche"><h2 id="flow">flow</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>none, forward, reverse: freccia di flusso sul percorso. Distinta dalla punta finale di arrow.</p>
+<h3 id="sintassi-12">Sintassi</h3>
+<pre><code class="language-text">flow N verso
+</code></pre>
+<h3 id="parametri-12">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>verso</code></td>
+<td>none / forward / reverse</td>
+<td>Freccia di flusso; distinta dalla punta finale di arrow.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-12">Valori predefiniti</h3>
+<p>none.</p>
+<h3 id="esempio-completo-12">Esempio completo</h3>
+<pre><code class="language-pyxis">line L 0 0 2 0
+flow L forward
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="function" data-category="Formule, variabili e funzioni"><h2 id="function">function</h2>
+<p><strong>Categoria:</strong> Formule, variabili e funzioni.</p>
+<p>Definisce una funzione di un argomento, usabile come wave(x). Le variabili necessarie devono esistere quando l&#39;espressione viene valutata.</p>
+<h3 id="sintassi-13">Sintassi</h3>
+<pre><code class="language-text">function nome &quot;espressione&quot;
+</code></pre>
+<h3 id="parametri-13">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nome</code></td>
+<td>identificatore</td>
+<td>Nome della funzione, non riservato.</td>
+</tr>
+<tr>
+<td><code>espressione</code></td>
+<td>stringa</td>
+<td>Corpo della funzione di un argomento, rappresentato da x.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-13">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-13">Esempio completo</h3>
+<pre><code class="language-pyxis">function f &quot;sin(x)*exp(-x/6)&quot;
+plot C 0 6 100 &quot;f(x)&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#let">let</a>.</p>
+</section><section class="manual-section command-entry" data-command="gatebox" data-category="Primitive geometriche 2D"><h2 id="gatebox">gatebox</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Rettangolo centrato in (x,y), dimensioni positive; primitiva usata anche dai circuiti.</p>
+<h3 id="sintassi-14">Sintassi</h3>
+<pre><code class="language-text">gatebox N x y larghezza altezza
+</code></pre>
+<h3 id="parametri-14">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>x y</code></td>
+<td>due reali</td>
+<td>Centro del rettangolo.</td>
+</tr>
+<tr>
+<td><code>larghezza altezza</code></td>
+<td>due reali positivi</td>
+<td>Dimensioni geometriche complete, non semiassi.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-14">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-14">Esempio completo</h3>
+<pre><code class="language-pyxis">gatebox G 0 0 1 0.7
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#point">point</a>, <a href="#circle">circle</a>, <a href="#ellipse">ellipse</a>, <a href="#line">line</a>, <a href="#arrow">arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="grid" data-category="Scena, profili e import"><h2 id="grid">grid</h2>
+<p><strong>Categoria:</strong> Scena, profili e import.</p>
+<p>Nasconde/mostra la griglia o ne cambia il passo. Passo tra 1e-6 e 1e6; default 1 e visibile. Gli ancoraggi esistono anche con griglia nascosta.</p>
+<h3 id="sintassi-15">Sintassi</h3>
+<pre><code class="language-text">grid on
 grid off
-feynman F {
+grid passo
+</code></pre>
+<h3 id="parametri-15">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>opzione</code></td>
+<td>on / off / numero</td>
+<td>on/off cambia la visibilità; un numero 1e-6…1e6 imposta il passo e mostra la griglia.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-15">Valori predefiniti</h3>
+<p>Visibile, passo 1.</p>
+<h3 id="esempio-completo-15">Esempio completo</h3>
+<pre><code class="language-pyxis">grid 0.5
+circle A @D4 0.5
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#width">width</a>, <a href="#theme">theme</a>, <a href="#use">use</a>, <a href="#profile">profile</a>, <a href="#camera">camera</a>.</p>
+</section><section class="manual-section command-entry" data-command="label" data-category="Testi e posizionamento"><h2 id="label">label</h2>
+<p><strong>Categoria:</strong> Testi e posizionamento.</p>
+<p>Etichetta LaTeX; default origine. <code>label E 1 0 &quot;$E=mc^2$&quot;</code>.</p>
+<h3 id="sintassi-16">Sintassi</h3>
+<pre><code class="language-text">label N [P] &quot;testo LaTeX&quot;
+</code></pre>
+<h3 id="parametri-16">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+<tr>
+<td><code>testo</code></td>
+<td>stringa</td>
+<td>LaTeX; delimitare la matematica con $…$.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-16">Valori predefiniti</h3>
+<p>Posizione (0,0), placement fixed.</p>
+<h3 id="esempio-completo-16">Esempio completo</h3>
+<pre><code class="language-pyxis">label E 0 0 &quot;$E=mc^2$&quot;
+</code></pre>
+<h3 id="posizionamento">Posizionamento</h3>
+<p>Con auto, la scelta è greedy fra otto candidati misurati con TeX. Non garantisce l’assenza globale di collisioni. prefer/gap sono proprietà del posizionamento automatico.</p>
+<p><strong>Vedi anche:</strong> <a href="#text">text</a>, <a href="#placement">placement</a>.</p>
+</section><section class="manual-section command-entry" data-command="label3" data-category="Geometria 3D"><h2 id="label3">label3</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Etichetta LaTeX 3D; default origine.</p>
+<h3 id="sintassi-17">Sintassi</h3>
+<pre><code class="language-text">label3 N [x y z] &quot;LaTeX&quot;
+</code></pre>
+<h3 id="parametri-17">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>x y z</code></td>
+<td>tre reali opzionali</td>
+<td>Posizione 3D.</td>
+</tr>
+<tr>
+<td><code>testo</code></td>
+<td>stringa</td>
+<td>Formula o testo LaTeX.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-17">Valori predefiniti</h3>
+<p>(0,0,0).</p>
+<h3 id="esempio-completo-17">Esempio completo</h3>
+<pre><code class="language-pyxis">sphere S 1
+label3 T 0 0 1.3 &quot;$S^2$&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#path3">path3</a>, <a href="#arrow3">arrow3</a>, <a href="#mesh3">mesh3</a>.</p>
+</section><section class="manual-section command-entry" data-command="let" data-category="Formule, variabili e funzioni"><h2 id="let">let</h2>
+<p><strong>Categoria:</strong> Formule, variabili e funzioni.</p>
+<p>Valuta una costante all&#39;atto della dichiarazione; nomi univoci. Non rende espressioni tutti i parametri geometrici.</p>
+<h3 id="sintassi-18">Sintassi</h3>
+<pre><code class="language-text">let nome &quot;espressione&quot;
+</code></pre>
+<h3 id="parametri-18">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nome</code></td>
+<td>identificatore</td>
+<td>Nome della costante, non riservato.</td>
+</tr>
+<tr>
+<td><code>espressione</code></td>
+<td>stringa</td>
+<td>Valutata alla dichiarazione; le dipendenze devono essere definite.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-18">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-18">Esempio completo</h3>
+<pre><code class="language-pyxis">let a &quot;0.8&quot;
+plot C 0 6 100 &quot;a*sin(x)&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#function">function</a>.</p>
+</section><section class="manual-section command-entry" data-command="line" data-category="Primitive geometriche 2D"><h2 id="line">line</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Segmento senza punta. Senza punti va da (-0.5,0) a (0.5,0). <code>line L A.center B.center</code>.</p>
+<h3 id="sintassi-19">Sintassi</h3>
+<pre><code class="language-text">line N [P Q]
+</code></pre>
+<h3 id="parametri-19">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P / Q</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-19">Valori predefiniti</h3>
+<p>Estremi (-0.5,0) e (0.5,0) se omessi.</p>
+<h3 id="esempio-completo-19">Esempio completo</h3>
+<pre><code class="language-pyxis">line L 0 0 2 1
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#point">point</a>, <a href="#circle">circle</a>, <a href="#ellipse">ellipse</a>, <a href="#arrow">arrow</a>, <a href="#path">path</a>.</p>
+</section><section class="manual-section command-entry" data-command="linewidth" data-category="Percorsi, stili e modifiche"><h2 id="linewidth">linewidth</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Spessore in bp, &gt;0 e ≤20, non sui testi. Default geometria 0.5, sfere 0.45, superfici 0.25.</p>
+<h3 id="sintassi-20">Sintassi</h3>
+<pre><code class="language-text">linewidth N bp
+</code></pre>
+<h3 id="parametri-20">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>bp</code></td>
+<td>reale &gt;0 e ≤20</td>
+<td>Spessore fisico in bp (1/72 di pollice).</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-20">Valori predefiniti</h3>
+<p>0.5 bp; sphere 0.45 bp; surface 0.25 bp.</p>
+<h3 id="esempio-completo-20">Esempio completo</h3>
+<pre><code class="language-pyxis">line L 0 0 2 0
+linewidth L 0.8
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>, <a href="#wave">wave</a>.</p>
+</section><section class="manual-section command-entry" data-command="markers" data-category="Percorsi, stili e modifiche"><h2 id="markers">markers</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Marcatori sui nodi: none, circle, square, triangle, diamond o simbolo personalizzato. filled/hollow, dimensione positiva; default filled e 0.08.</p>
+<h3 id="sintassi-21">Sintassi</h3>
+<pre><code class="language-text">markers N simbolo [filled|hollow [dimensione]]
+</code></pre>
+<h3 id="parametri-21">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>simbolo</code></td>
+<td>enumerazione / nome</td>
+<td>none, circle, square, triangle, diamond, oppure simbolo definito con symbol.</td>
+</tr>
+<tr>
+<td><code>riempimento</code></td>
+<td>opzionale</td>
+<td>filled / hollow.</td>
+</tr>
+<tr>
+<td><code>dimensione</code></td>
+<td>reale positivo opzionale</td>
+<td>Dimensione geometrica del marcatore.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-21">Valori predefiniti</h3>
+<p>none sull’oggetto; quando specificato, filled e dimensione 0.08 se omessi.</p>
+<h3 id="esempio-completo-21">Esempio completo</h3>
+<pre><code class="language-pyxis">path P &quot;0 0;1 1;2 0&quot;
+markers P triangle hollow 0.12
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="mesh3" data-category="Geometria 3D"><h2 id="mesh3">mesh3</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Griglia rettangolare ordinata per righe; righe/colonne intere 2…61, esattamente righe×colonne vertici.</p>
+<h3 id="sintassi-22">Sintassi</h3>
+<pre><code class="language-text">mesh3 N righe colonne &quot;x y z;…&quot;
+</code></pre>
+<h3 id="parametri-22">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>righe colonne</code></td>
+<td>due interi 2…61</td>
+<td>Dimensioni della griglia.</td>
+</tr>
+<tr>
+<td><code>vertici</code></td>
+<td>stringa</td>
+<td>Esattamente righe×colonne terne x y z in ordine di riga.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-22">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-22">Esempio completo</h3>
+<pre><code class="language-pyxis">mesh3 M 2 2 &quot;0 0 0;1 0 0;0 1 0;1 1 1&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#path3">path3</a>, <a href="#arrow3">arrow3</a>, <a href="#label3">label3</a>.</p>
+</section><section class="manual-section command-entry" data-command="move" data-category="Percorsi, stili e modifiche"><h2 id="move">move</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Trasla un oggetto 2D e i suoi controlli; su un oggetto ancorato aggiunge un offset. Per i gruppi usa place.</p>
+<h3 id="sintassi-23">Sintassi</h3>
+<pre><code class="language-text">move N dx dy
+</code></pre>
+<h3 id="parametri-23">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>dx dy</code></td>
+<td>due reali</td>
+<td>Spostamento relativo 2D; somma un offset alle coordinate/ancoraggi.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-23">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-23">Esempio completo</h3>
+<pre><code class="language-pyxis">circle A 0.5
+move A 1 0
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>, <a href="#wave">wave</a>.</p>
+</section><section class="manual-section command-entry" data-command="move3" data-category="Geometria 3D"><h2 id="move3">move3</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Traslazione di un oggetto 3D.</p>
+<h3 id="sintassi-24">Sintassi</h3>
+<pre><code class="language-text">move3 N dx dy dz
+</code></pre>
+<h3 id="parametri-24">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>dx dy dz</code></td>
+<td>tre reali</td>
+<td>Spostamento relativo 3D.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-24">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-24">Esempio completo</h3>
+<pre><code class="language-pyxis">sphere S 1
+move3 S 1 0 0
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#path3">path3</a>, <a href="#arrow3">arrow3</a>, <a href="#mesh3">mesh3</a>.</p>
+</section><section class="manual-section command-entry" data-command="nodefill" data-category="Percorsi, stili e modifiche"><h2 id="nodefill">nodefill</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Riempimento di un circle: black, white, none.</p>
+<h3 id="sintassi-25">Sintassi</h3>
+<pre><code class="language-text">nodefill N black|white|none
+</code></pre>
+<h3 id="parametri-25">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>riempimento</code></td>
+<td>black / white / none</td>
+<td>Solo circle; non usare fill per riempire un cerchio 2D.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-25">Valori predefiniti</h3>
+<p>none.</p>
+<h3 id="esempio-completo-25">Esempio completo</h3>
+<pre><code class="language-pyxis">circle A 0.3
+nodefill A black
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="opacity" data-category="Percorsi, stili e modifiche"><h2 id="opacity">opacity</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Solo region, fra 0 (trasparente) e 1 (opaco), default 0.25.</p>
+<h3 id="sintassi-26">Sintassi</h3>
+<pre><code class="language-text">opacity N alpha
+</code></pre>
+<h3 id="parametri-26">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>alpha</code></td>
+<td>reale 0…1</td>
+<td>Opacità di region: 0 trasparente, 1 opaca.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-26">Valori predefiniti</h3>
+<p>0.25 sulle primitive region; i pacchetti possono impostarla diversamente.</p>
+<h3 id="esempio-completo-26">Esempio completo</h3>
+<pre><code class="language-pyxis">region R &quot;0 0;2 0;1 1&quot;
+opacity R 0.5
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="outline" data-category="Percorsi, stili e modifiche"><h2 id="outline">outline</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>on/off per il contorno delle region riempite; default on.</p>
+<h3 id="sintassi-27">Sintassi</h3>
+<pre><code class="language-text">outline N on|off
+</code></pre>
+<h3 id="parametri-27">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>modalità</code></td>
+<td>on / off</td>
+<td>Contorno delle region riempite.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-27">Valori predefiniti</h3>
+<p>on.</p>
+<h3 id="esempio-completo-27">Esempio completo</h3>
+<pre><code class="language-pyxis">region R &quot;0 0;2 0;1 1&quot;
+outline R off
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="parallel" data-category="Vincoli geometrici"><h2 id="parallel">parallel</h2>
+<p><strong>Categoria:</strong> Vincoli geometrici.</p>
+<p>Segmento centrato in P, parallelo a una line/arrow rettilinea non degenere.</p>
+<h3 id="sintassi-28">Sintassi</h3>
+<pre><code class="language-text">parallel N P riferimento lunghezza
+</code></pre>
+<h3 id="parametri-28">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+<tr>
+<td><code>riferimento</code></td>
+<td>nome</td>
+<td>Line/arrow rettilinea e non degenere.</td>
+</tr>
+<tr>
+<td><code>lunghezza</code></td>
+<td>reale positivo</td>
+<td>Lunghezza del segmento, centrato in P.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-28">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-28">Esempio completo</h3>
+<pre><code class="language-pyxis">line L -1 0 1 0
+parallel N 0 1 L 2
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#tangent-circle">tangent-circle</a>, <a href="#perpendicular">perpendicular</a>, <a href="#parallel-arrow">parallel-arrow</a>, <a href="#perpendicular-arrow">perpendicular-arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="parallel-arrow" data-category="Vincoli geometrici"><h2 id="parallel-arrow">parallel-arrow</h2>
+<p><strong>Categoria:</strong> Vincoli geometrici.</p>
+<p>Variante con punta finale.</p>
+<h3 id="sintassi-29">Sintassi</h3>
+<pre><code class="language-text">parallel-arrow N P riferimento lunghezza
+</code></pre>
+<h3 id="parametri-29">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+<tr>
+<td><code>riferimento</code></td>
+<td>nome</td>
+<td>Line/arrow rettilinea e non degenere.</td>
+</tr>
+<tr>
+<td><code>lunghezza</code></td>
+<td>reale positivo</td>
+<td>Lunghezza del segmento, centrato in P.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-29">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-29">Esempio completo</h3>
+<pre><code class="language-pyxis">line L -1 0 1 0
+parallel-arrow N 0 1 L 2
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#tangent-circle">tangent-circle</a>, <a href="#parallel">parallel</a>, <a href="#perpendicular">perpendicular</a>, <a href="#perpendicular-arrow">perpendicular-arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="path" data-category="Primitive geometriche 2D"><h2 id="path">path</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Polilinea, almeno due punti, massimo 10000; ammette ancoraggi. <code>path C &quot;0 0;1 2;3 0&quot;</code>.</p>
+<h3 id="sintassi-30">Sintassi</h3>
+<pre><code class="language-text">path N &quot;x1 y1;x2 y2;…&quot;
+path N P Q …
+</code></pre>
+<h3 id="parametri-30">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>punti</code></td>
+<td>sequenza 2D</td>
+<td>Almeno 2, massimo 10000. Stringa con ; oppure successione di punti/ancoraggi.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-30">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-30">Esempio completo</h3>
+<pre><code class="language-pyxis">path P &quot;0 0;1 1;2 0&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#point">point</a>, <a href="#circle">circle</a>, <a href="#ellipse">ellipse</a>, <a href="#line">line</a>, <a href="#arrow">arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="path3" data-category="Geometria 3D"><h2 id="path3">path3</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Polilinea 3D, 2…10000 vertici.</p>
+<h3 id="sintassi-31">Sintassi</h3>
+<pre><code class="language-text">path3 N &quot;x y z;x y z;…&quot;
+</code></pre>
+<h3 id="parametri-31">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>vertici</code></td>
+<td>stringa</td>
+<td>2…10000 terne x y z separate da ;.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-31">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-31">Esempio completo</h3>
+<pre><code class="language-pyxis">path3 P &quot;0 0 0;1 0 1;1 1 2&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#arrow3">arrow3</a>, <a href="#mesh3">mesh3</a>, <a href="#label3">label3</a>.</p>
+</section><section class="manual-section command-entry" data-command="perpendicular" data-category="Vincoli geometrici"><h2 id="perpendicular">perpendicular</h2>
+<p><strong>Categoria:</strong> Vincoli geometrici.</p>
+<p>Come parallel, direzione ruotata di 90°.</p>
+<h3 id="sintassi-32">Sintassi</h3>
+<pre><code class="language-text">perpendicular N P riferimento lunghezza
+</code></pre>
+<h3 id="parametri-32">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+<tr>
+<td><code>riferimento</code></td>
+<td>nome</td>
+<td>Line/arrow rettilinea e non degenere.</td>
+</tr>
+<tr>
+<td><code>lunghezza</code></td>
+<td>reale positivo</td>
+<td>Lunghezza del segmento, centrato in P.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-32">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-32">Esempio completo</h3>
+<pre><code class="language-pyxis">line L -1 0 1 0
+perpendicular N 0 1 L 2
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#tangent-circle">tangent-circle</a>, <a href="#parallel">parallel</a>, <a href="#parallel-arrow">parallel-arrow</a>, <a href="#perpendicular-arrow">perpendicular-arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="perpendicular-arrow" data-category="Vincoli geometrici"><h2 id="perpendicular-arrow">perpendicular-arrow</h2>
+<p><strong>Categoria:</strong> Vincoli geometrici.</p>
+<p>Variante con punta finale.</p>
+<h3 id="sintassi-33">Sintassi</h3>
+<pre><code class="language-text">perpendicular-arrow N P riferimento lunghezza
+</code></pre>
+<h3 id="parametri-33">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+<tr>
+<td><code>riferimento</code></td>
+<td>nome</td>
+<td>Line/arrow rettilinea e non degenere.</td>
+</tr>
+<tr>
+<td><code>lunghezza</code></td>
+<td>reale positivo</td>
+<td>Lunghezza del segmento, centrato in P.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-33">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-33">Esempio completo</h3>
+<pre><code class="language-pyxis">line L -1 0 1 0
+perpendicular-arrow N 0 1 L 2
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#tangent-circle">tangent-circle</a>, <a href="#parallel">parallel</a>, <a href="#perpendicular">perpendicular</a>, <a href="#parallel-arrow">parallel-arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="place" data-category="Scena, profili e import"><h2 id="place">place</h2>
+<p><strong>Categoria:</strong> Scena, profili e import.</p>
+<p>Dispone gruppi semantici 2D: above, below, right-of, left-of. gap geometrico 0…1000, default 1. Non è una traslazione di primitive singole; cicli e disposizioni duplicate sono errori.</p>
+<h3 id="sintassi-34">Sintassi</h3>
+<pre><code class="language-text">place B relazione A [gap=numero]
+</code></pre>
+<h3 id="parametri-34">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>B / A</code></td>
+<td>nomi di gruppi</td>
+<td>Gruppo da disporre / gruppo di riferimento.</td>
+</tr>
+<tr>
+<td><code>relazione</code></td>
+<td>enumerazione</td>
+<td>above, below, left-of, right-of.</td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>reale opzionale</td>
+<td>Distanza geometrica 0…1000; scrivere gap=numero.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-34">Valori predefiniti</h3>
+<p>gap=1.</p>
+<h3 id="esempio-completo-34">Esempio completo</h3>
+<pre><code class="language-pyxis">use quantum
+circuit A {
+    q0: H
+}
+circuit B {
+    q0: X
+}
+place B below A gap=2
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#width">width</a>, <a href="#grid">grid</a>, <a href="#theme">theme</a>, <a href="#use">use</a>, <a href="#profile">profile</a>.</p>
+</section><section class="manual-section command-entry" data-command="placement" data-category="Testi e posizionamento"><h2 id="placement">placement</h2>
+<p><strong>Categoria:</strong> Testi e posizionamento.</p>
+<p>Label/text 2D. Preferenze n,ne,e,se,s,sw,w,nw; default n. Gap in bp, 0…100, default 3. Cerca fra otto posizioni usando misure TeX, senza garantire un layout globalmente privo di collisioni.</p>
+<h3 id="sintassi-35">Sintassi</h3>
+<pre><code class="language-text">placement N auto [preferenza] [gap]
+placement N fixed
+</code></pre>
+<h3 id="parametri-35">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>modalità</code></td>
+<td>auto / fixed</td>
+<td>Scelta automatica o posizione fissa.</td>
+</tr>
+<tr>
+<td><code>preferenza</code></td>
+<td>opzionale</td>
+<td>n, ne, e, se, s, sw, w, nw.</td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>reale opzionale 0…100</td>
+<td>Distanza in bp, non in unità geometriche.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-35">Valori predefiniti</h3>
+<p>Posizionamento iniziale fixed; con auto, preferenza n e gap 3 bp se omessi.</p>
+<h3 id="esempio-completo-35">Esempio completo</h3>
+<pre><code class="language-pyxis">circle A 0.5
+label T A.center &quot;$A$&quot;
+placement T auto ne 4
+</code></pre>
+<h3 id="posizionamento-1">Posizionamento</h3>
+<p>Con auto, la scelta è greedy fra otto candidati misurati con TeX. Non garantisce l’assenza globale di collisioni. prefer/gap sono proprietà del posizionamento automatico.</p>
+<p><strong>Vedi anche:</strong> <a href="#label">label</a>, <a href="#text">text</a>.</p>
+</section><section class="manual-section command-entry" data-command="plot" data-category="Primitive geometriche 2D"><h2 id="plot">plot</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Campiona una funzione reale; xmin&lt;xmax, 2…10000 punti. <code>plot C 0 6 200 &quot;sin(x)&quot;</code>. Non crea automaticamente gli assi.</p>
+<h3 id="sintassi-36">Sintassi</h3>
+<pre><code class="language-text">plot N xmin xmax campioni &quot;f(x)&quot;
+</code></pre>
+<h3 id="parametri-36">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>xmin xmax</code></td>
+<td>due reali</td>
+<td>Intervallo crescente.</td>
+</tr>
+<tr>
+<td><code>campioni</code></td>
+<td>intero 2…10000</td>
+<td>Numero dei punti della polilinea campionata.</td>
+</tr>
+<tr>
+<td><code>formula</code></td>
+<td>stringa</td>
+<td>Espressione reale in x, per esempio &quot;sin(x)&quot;.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-36">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-36">Esempio completo</h3>
+<pre><code class="language-pyxis">plot C 0 6 100 &quot;sin(x)&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#point">point</a>, <a href="#circle">circle</a>, <a href="#ellipse">ellipse</a>, <a href="#line">line</a>, <a href="#arrow">arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="point" data-category="Primitive geometriche 2D"><h2 id="point">point</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Punto invisibile di costruzione; default origine. <code>point O 0 0</code>; ancoraggio O.center.</p>
+<h3 id="sintassi-37">Sintassi</h3>
+<pre><code class="language-text">point N [P]
+</code></pre>
+<h3 id="parametri-37">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-37">Valori predefiniti</h3>
+<p>(0,0).</p>
+<h3 id="esempio-completo-37">Esempio completo</h3>
+<pre><code class="language-pyxis">point P 1 0
+circle A P.center 0.3
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#circle">circle</a>, <a href="#ellipse">ellipse</a>, <a href="#line">line</a>, <a href="#arrow">arrow</a>, <a href="#path">path</a>.</p>
+</section><section class="manual-section command-entry" data-command="profile" data-category="Scena, profili e import"><h2 id="profile">profile</h2>
+<p><strong>Categoria:</strong> Scena, profili e import.</p>
+<p>Importa il pacchetto del corso; <code>research</code> importa tutti e quattro. È additivo, non sostituisce gli import precedenti.</p>
+<h3 id="sintassi-38">Sintassi</h3>
+<pre><code class="language-text">profile nome
+</code></pre>
+<h3 id="parametri-38">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nome</code></td>
+<td>enumerazione</td>
+<td>qft, quantum, relativity, statmech, research; research importa tutti.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-38">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-38">Esempio completo</h3>
+<pre><code class="language-pyxis">profile quantum
+circuit C {
+    q0: H
+}
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#width">width</a>, <a href="#grid">grid</a>, <a href="#theme">theme</a>, <a href="#use">use</a>, <a href="#camera">camera</a>.</p>
+</section><section class="manual-section command-entry" data-command="region" data-category="Primitive geometriche 2D"><h2 id="region">region</h2>
+<p><strong>Categoria:</strong> Primitive geometriche 2D.</p>
+<p>Poligono semplice chiuso automaticamente, 3…512 vertici. Niente auto-intersezioni, area nulla o bordi curvi. Nasce sullo sfondo.</p>
+<h3 id="sintassi-39">Sintassi</h3>
+<pre><code class="language-text">region N &quot;x1 y1;x2 y2;x3 y3;…&quot;
+</code></pre>
+<h3 id="parametri-39">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>vertici</code></td>
+<td>sequenza 2D</td>
+<td>3…512 vertici; poligono semplice con area non nulla, chiuso automaticamente.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-39">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-39">Esempio completo</h3>
+<pre><code class="language-pyxis">region R &quot;0 0;2 0;1 1&quot;
+color R 0.2 0.5 0.8
+opacity R 0.3
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#point">point</a>, <a href="#circle">circle</a>, <a href="#ellipse">ellipse</a>, <a href="#line">line</a>, <a href="#arrow">arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="shading" data-category="Geometria 3D"><h2 id="shading">shading</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Solo sphere, 0…0.8. Ombreggiatura vettoriale, non simulazione ottica.</p>
+<h3 id="sintassi-40">Sintassi</h3>
+<pre><code class="language-text">shading N intensità
+</code></pre>
+<h3 id="parametri-40">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>intensità</code></td>
+<td>reale 0…0.8</td>
+<td>Ombreggiatura vettoriale della sphere.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-40">Valori predefiniti</h3>
+<p>0.14.</p>
+<h3 id="esempio-completo-40">Esempio completo</h3>
+<pre><code class="language-pyxis">sphere S 1
+shading S 0.2
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#path3">path3</a>, <a href="#arrow3">arrow3</a>, <a href="#mesh3">mesh3</a>.</p>
+</section><section class="manual-section command-entry" data-command="sphere" data-category="Geometria 3D"><h2 id="sphere">sphere</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Sfera; default origine e r=1.</p>
+<h3 id="sintassi-41">Sintassi</h3>
+<pre><code class="language-text">sphere N [r]
+sphere N x y z r
+</code></pre>
+<h3 id="parametri-41">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>x y z</code></td>
+<td>tre reali opzionali</td>
+<td>Centro.</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>reale positivo opzionale</td>
+<td>Raggio.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-41">Valori predefiniti</h3>
+<p>Centro (0,0,0), raggio 1.</p>
+<h3 id="esempio-completo-41">Esempio completo</h3>
+<pre><code class="language-pyxis">sphere S 0 0 0 1
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#surface">surface</a>, <a href="#path3">path3</a>, <a href="#arrow3">arrow3</a>, <a href="#mesh3">mesh3</a>, <a href="#label3">label3</a>.</p>
+</section><section class="manual-section command-entry" data-command="stroke" data-category="Percorsi, stili e modifiche"><h2 id="stroke">stroke</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>solid, dashed, dotted; geometria 2D, non testo.</p>
+<h3 id="sintassi-42">Sintassi</h3>
+<pre><code class="language-text">stroke N stile
+</code></pre>
+<h3 id="parametri-42">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>stile</code></td>
+<td>solid / dashed / dotted</td>
+<td>Stile del tratto 2D.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-42">Valori predefiniti</h3>
+<p>solid.</p>
+<h3 id="esempio-completo-42">Esempio completo</h3>
+<pre><code class="language-pyxis">line L 0 0 2 0
+stroke L dashed
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>, <a href="#wave">wave</a>.</p>
+</section><section class="manual-section command-entry" data-command="surface" data-category="Geometria 3D"><h2 id="surface">surface</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Superficie z=f(x,y), intervalli crescenti; mesh intera 2…60, campioni (mesh+1)². Esempio: <code>surface S -2 2 -2 2 16 &quot;x^2+y^2&quot;</code>.</p>
+<h3 id="sintassi-43">Sintassi</h3>
+<pre><code class="language-text">surface N xmin xmax ymin ymax mesh &quot;f(x,y)&quot;
+</code></pre>
+<h3 id="parametri-43">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>xmin xmax ymin ymax</code></td>
+<td>quattro reali</td>
+<td>Intervalli crescenti per x e y.</td>
+</tr>
+<tr>
+<td><code>mesh</code></td>
+<td>intero 2…60</td>
+<td>Suddivisioni per asse; (mesh+1)² campioni.</td>
+</tr>
+<tr>
+<td><code>formula</code></td>
+<td>stringa</td>
+<td>Espressione z=f(x,y), per esempio &quot;x^2+y^2&quot;.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-43">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-43">Esempio completo</h3>
+<pre><code class="language-pyxis">surface S -2 2 -2 2 12 &quot;x^2+y^2&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#path3">path3</a>, <a href="#arrow3">arrow3</a>, <a href="#mesh3">mesh3</a>, <a href="#label3">label3</a>.</p>
+</section><section class="manual-section command-entry" data-command="symbol" data-category="Percorsi, stili e modifiche"><h2 id="symbol">symbol</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Poligono personalizzato per markers, 3…1000 vertici; nome diverso dai marcatori predefiniti.</p>
+<h3 id="sintassi-44">Sintassi</h3>
+<pre><code class="language-text">symbol nome &quot;x y;x y;…&quot;
+</code></pre>
+<h3 id="parametri-44">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nome</code></td>
+<td>identificatore</td>
+<td>Nome non riservato del simbolo.</td>
+</tr>
+<tr>
+<td><code>vertici</code></td>
+<td>stringa</td>
+<td>3…1000 coppie x y separate da ;.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-44">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-44">Esempio completo</h3>
+<pre><code class="language-pyxis">symbol kite &quot;0 1;0.6 0;0 -1;-0.6 0&quot;
+path P &quot;0 0;1 0&quot;
+markers P kite filled 0.12
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="tangent-circle" data-category="Vincoli geometrici"><h2 id="tangent-circle">tangent-circle</h2>
+<p><strong>Categoria:</strong> Vincoli geometrici.</p>
+<p>Crea B tangente esternamente al circle A. Direzioni north,south,east,west,ne,nw,se,sw. Il raggio di B è positivo.</p>
+<h3 id="sintassi-45">Sintassi</h3>
+<pre><code class="language-text">tangent-circle B A direzione r
+</code></pre>
+<h3 id="parametri-45">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>B / A</code></td>
+<td>identificatori</td>
+<td>Nuovo cerchio / cerchio di riferimento.</td>
+</tr>
+<tr>
+<td><code>direzione</code></td>
+<td>enumerazione</td>
+<td>north, south, east, west, ne, nw, se, sw.</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>reale positivo</td>
+<td>Raggio del nuovo cerchio; tangenza esterna.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-45">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-45">Esempio completo</h3>
+<pre><code class="language-pyxis">circle A 0.5
+tangent-circle B A east 0.3
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#parallel">parallel</a>, <a href="#perpendicular">perpendicular</a>, <a href="#parallel-arrow">parallel-arrow</a>, <a href="#perpendicular-arrow">perpendicular-arrow</a>.</p>
+</section><section class="manual-section command-entry" data-command="text" data-category="Testi e posizionamento"><h2 id="text">text</h2>
+<p><strong>Categoria:</strong> Testi e posizionamento.</p>
+<p>Testo letterale: caratteri speciali TeX escapati dal programma. Non interpreta <code>$…$</code> come matematica.</p>
+<h3 id="sintassi-46">Sintassi</h3>
+<pre><code class="language-text">text N [P] &quot;testo normale&quot;
+</code></pre>
+<h3 id="parametri-46">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>punto 2D</td>
+<td>Coppia x y, punto @A1…@G7 oppure ancoraggio come A.center.</td>
+</tr>
+<tr>
+<td><code>testo</code></td>
+<td>stringa</td>
+<td>Testo letterale; i caratteri speciali TeX vengono escapati.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-46">Valori predefiniti</h3>
+<p>Posizione (0,0), placement fixed.</p>
+<h3 id="esempio-completo-46">Esempio completo</h3>
+<pre><code class="language-pyxis">text T 0 0 &quot;Energia totale&quot;
+</code></pre>
+<h3 id="posizionamento-2">Posizionamento</h3>
+<p>Con auto, la scelta è greedy fra otto candidati misurati con TeX. Non garantisce l’assenza globale di collisioni. prefer/gap sono proprietà del posizionamento automatico.</p>
+<p><strong>Vedi anche:</strong> <a href="#label">label</a>, <a href="#placement">placement</a>.</p>
+</section><section class="manual-section command-entry" data-command="text3" data-category="Geometria 3D"><h2 id="text3">text3</h2>
+<p><strong>Categoria:</strong> Geometria 3D.</p>
+<p>Testo letterale 3D.</p>
+<h3 id="sintassi-47">Sintassi</h3>
+<pre><code class="language-text">text3 N [x y z] &quot;testo&quot;
+</code></pre>
+<h3 id="parametri-47">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>x y z</code></td>
+<td>tre reali opzionali</td>
+<td>Posizione 3D.</td>
+</tr>
+<tr>
+<td><code>testo</code></td>
+<td>stringa</td>
+<td>Testo letterale.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-47">Valori predefiniti</h3>
+<p>(0,0,0).</p>
+<h3 id="esempio-completo-47">Esempio completo</h3>
+<pre><code class="language-pyxis">sphere S 1
+text3 T 0 0 1.3 &quot;Sfera&quot;
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#sphere">sphere</a>, <a href="#surface">surface</a>, <a href="#path3">path3</a>, <a href="#arrow3">arrow3</a>, <a href="#mesh3">mesh3</a>.</p>
+</section><section class="manual-section command-entry" data-command="theme" data-category="Scena, profili e import"><h2 id="theme">theme</h2>
+<p><strong>Categoria:</strong> Scena, profili e import.</p>
+<p><code>paper</code>, <code>wire</code>, <code>color</code>, <code>blackboard</code>, <code>modern-vector</code>, <code>overleaf-classic</code> (alias di paper). I temi scelgono convenzioni visive; non cambiano il modello fisico.</p>
+<h3 id="sintassi-48">Sintassi</h3>
+<pre><code class="language-text">theme nome
+theme: nome
+</code></pre>
+<h3 id="parametri-48">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nome</code></td>
+<td>enumerazione</td>
+<td>paper, wire, color, blackboard, modern-vector, overleaf-classic.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-48">Valori predefiniti</h3>
+<p>paper.</p>
+<h3 id="esempio-completo-48">Esempio completo</h3>
+<pre><code class="language-pyxis">theme blackboard
+circle A 1
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#width">width</a>, <a href="#grid">grid</a>, <a href="#use">use</a>, <a href="#profile">profile</a>, <a href="#camera">camera</a>.</p>
+</section><section class="manual-section command-entry" data-command="use" data-category="Scena, profili e import"><h2 id="use">use</h2>
+<p><strong>Categoria:</strong> Scena, profili e import.</p>
+<p>Importa uno o più pacchetti fra qft, quantum, relativity, statmech. Import ripetuti ignorati.</p>
+<h3 id="sintassi-49">Sintassi</h3>
+<pre><code class="language-text">use pacchetto[, pacchetto…]
+</code></pre>
+<h3 id="parametri-49">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pacchetti</code></td>
+<td>lista separata da virgole</td>
+<td>qft, quantum, relativity, statmech; import cumulativi.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-49">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-49">Esempio completo</h3>
+<pre><code class="language-pyxis">use quantum
+circuit C {
+    q0: H
+}
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#width">width</a>, <a href="#grid">grid</a>, <a href="#theme">theme</a>, <a href="#profile">profile</a>, <a href="#camera">camera</a>.</p>
+</section><section class="manual-section command-entry" data-command="wave" data-category="Percorsi, stili e modifiche"><h2 id="wave">wave</h2>
+<p><strong>Categoria:</strong> Percorsi, stili e modifiche.</p>
+<p>Onda lungo il percorso; oscillazioni intere 1…64. Rimuove bend e controlli.</p>
+<h3 id="sintassi-50">Sintassi</h3>
+<pre><code class="language-text">wave N ampiezza oscillazioni
+</code></pre>
+<h3 id="parametri-50">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>N</code></td>
+<td>identificatore</td>
+<td>Nome univoco dell’oggetto; dichiarato prima se il comando lo modifica.</td>
+</tr>
+<tr>
+<td><code>ampiezza</code></td>
+<td>reale</td>
+<td>Ampiezza geometrica dell’onda.</td>
+</tr>
+<tr>
+<td><code>oscillazioni</code></td>
+<td>intero 1…64</td>
+<td>Numero di oscillazioni intere lungo il percorso.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-50">Valori predefiniti</h3>
+<p>Gli argomenti della firma sono obbligatori, salvo quelli indicati fra parentesi quadre. Il comando non viene applicato automaticamente.</p>
+<h3 id="esempio-completo-50">Esempio completo</h3>
+<pre><code class="language-pyxis">line L 0 0 2 0
+wave L 0.1 6
+</code></pre>
+<h3 id="interazioni-2">Interazioni</h3>
+<p>Rimuove bend e controlli Bézier. Non usarlo sui bordi delle region, che devono rimanere poligonali.</p>
+<p><strong>Vedi anche:</strong> <a href="#move">move</a>, <a href="#stroke">stroke</a>, <a href="#linewidth">linewidth</a>, <a href="#bend">bend</a>, <a href="#curve">curve</a>.</p>
+</section><section class="manual-section command-entry" data-command="width" data-category="Scena, profili e import"><h2 id="width">width</h2>
+<p><strong>Categoria:</strong> Scena, profili e import.</p>
+<p>Larghezza finale in mm, positiva; default 100. Il testo conserva dimensioni fisiche.</p>
+<h3 id="sintassi-51">Sintassi</h3>
+<pre><code class="language-text">width mm
+</code></pre>
+<h3 id="parametri-51">Parametri</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parametro</th>
+<th>Tipo</th>
+<th>Significato e vincoli</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>mm</code></td>
+<td>reale positivo</td>
+<td>Larghezza finale della figura in millimetri.</td>
+</tr>
+</tbody></table></div>
+<h3 id="valori-predefiniti-51">Valori predefiniti</h3>
+<p>100 mm.</p>
+<h3 id="esempio-completo-51">Esempio completo</h3>
+<pre><code class="language-pyxis">width 90
+circle A 1
+</code></pre>
+<p><strong>Vedi anche:</strong> <a href="#grid">grid</a>, <a href="#theme">theme</a>, <a href="#use">use</a>, <a href="#profile">profile</a>, <a href="#camera">camera</a>.</p>
+</section><section class="manual-section command-entry" data-command="qft.feynman" data-category="pacchetto qft"><h2 id="qft-feynman">qft.feynman</h2>
+<p><strong>Categoria:</strong> pacchetto qft.</p>
+<p>Albero 2→2 s/t/u e bolla sul mediatore.</p>
+<h3 id="sintassi-52">Sintassi</h3>
+<pre><code class="language-text">use qft
+feynman N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>feynman</code>; il nome qualificato <code>qft.feynman</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>channel</code></td>
+<td>Canale topologico: s, t, u.</td>
+<td><code>s</code></td>
+</tr>
+<tr>
+<td><code>incoming</code></td>
+<td>Lista di due particelle entranti.</td>
+<td><code>[electron, positron]</code></td>
+</tr>
+<tr>
+<td><code>outgoing</code></td>
+<td>Lista di due particelle uscenti.</td>
+<td><code>[muon, antimuon]</code></td>
+</tr>
+<tr>
+<td><code>mediator</code></td>
+<td>Tipo di particella del mediatore.</td>
+<td><code>photon</code></td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td>Etichette esplicite fra virgolette; numero richiesto dipendente dal modello. Esattamente quattro, nell’ordine incoming/outgoing.</td>
+<td><code>Da particelle</code></td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td>Bolla: fermion, scalar, ghost, photon. Assente per il diagramma ad albero.</td>
+<td><code>Assente</code></td>
+</tr>
+<tr>
+<td><code>loop-position</code></td>
+<td>Frazione della posizione sul mediatore; richiede loop. Reale nell’intervallo [0.05, 0.95].</td>
+<td><code>0.5</code></td>
+</tr>
+<tr>
+<td><code>loop-radius</code></td>
+<td>Raggio geometrico della bolla; richiede loop e spazio sufficiente sul mediatore. Reale nell’intervallo [0.05, 0.5].</td>
+<td><code>0.25</code></td>
+</tr>
+<tr>
+<td><code>label-placement</code></td>
+<td>auto / fixed per etichette esterne.</td>
+<td><code>auto</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-52">Esempio completo</h3>
+<pre><code class="language-pyxis">use qft
+grid off
+feynman tree {
     mediator: photon
 }
-circuit bell {
-    q0: H, control(pair)
-    q1: _, target(pair), M
-}
-place bell below F gap=2
 </code></pre>
-</section><section class="manual-section"><h2 id="primitive-geometriche-2d">Primitive geometriche 2D</h2>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>Comando</th>
-<th>Sintassi</th>
-<th>Spiegazione ed esempio</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>point</code></td>
-<td><code>point N [P]</code></td>
-<td>Punto invisibile di costruzione; default origine. <code>point O 0 0</code>; ancoraggio O.center.</td>
-</tr>
-<tr>
-<td><code>circle</code></td>
-<td><code>circle N [r]</code> oppure <code>circle N x y r</code> oppure <code>circle N P r</code></td>
-<td>Cerchio; default origine e r=1. <code>circle A 0 0 0.5</code>.</td>
-</tr>
-<tr>
-<td><code>ellipse</code></td>
-<td><code>ellipse N [rx ry]</code> oppure <code>ellipse N x y rx ry</code> oppure <code>ellipse N P rx ry</code></td>
-<td>Ellisse, semiassi positivi. Default origine, rx=1, ry=0.5.</td>
-</tr>
-<tr>
-<td><code>line</code></td>
-<td><code>line N [P Q]</code></td>
-<td>Segmento senza punta. Senza punti va da (-0.5,0) a (0.5,0). <code>line L A.center B.center</code>.</td>
-</tr>
-<tr>
-<td><code>arrow</code></td>
-<td><code>arrow N [P Q]</code></td>
-<td>Come line, con punta finale. <code>arrow axis 0 0 3 0</code>.</td>
-</tr>
-<tr>
-<td><code>path</code></td>
-<td><code>path N &quot;x1 y1;x2 y2;…&quot;</code> oppure <code>path N P Q …</code></td>
-<td>Polilinea, almeno due punti, massimo 10000; ammette ancoraggi. <code>path C &quot;0 0;1 2;3 0&quot;</code>.</td>
-</tr>
-<tr>
-<td><code>region</code></td>
-<td><code>region N &quot;x1 y1;x2 y2;x3 y3;…&quot;</code></td>
-<td>Poligono semplice chiuso automaticamente, 3…512 vertici. Niente auto-intersezioni, area nulla o bordi curvi. Nasce sullo sfondo.</td>
-</tr>
-<tr>
-<td><code>gatebox</code></td>
-<td><code>gatebox N x y larghezza altezza</code></td>
-<td>Rettangolo centrato in (x,y), dimensioni positive; primitiva usata anche dai circuiti.</td>
-</tr>
-<tr>
-<td><code>plot</code></td>
-<td><code>plot N xmin xmax campioni &quot;f(x)&quot;</code></td>
-<td>Campiona una funzione reale; xmin&lt;xmax, 2…10000 punti. <code>plot C 0 6 200 &quot;sin(x)&quot;</code>. Non crea automaticamente gli assi.</td>
-</tr>
-</tbody></table></div>
-<p>Ancoraggi: circle/ellipse/gatebox hanno <code>center</code>, <code>north</code>, <code>south</code>, <code>east</code>, <code>west</code>;
-line/arrow <code>start</code>, <code>end</code>, <code>center</code>; path/plot <code>start</code>, <code>end</code>, <code>node1</code>, <code>node2</code>, …;
-point e testi fissi soltanto <code>center</code>. Per un percorso, <code>node1</code> è il primo punto
-campionato. Gli oggetti 3D non espongono questi ancoraggi 2D.</p>
-</section><section class="manual-section"><h2 id="formule-variabili-e-funzioni">Formule, variabili e funzioni</h2>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>Comando</th>
-<th>Esempio</th>
-<th>Significato</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>let</code></td>
-<td><code>let a &quot;0.8&quot;</code></td>
-<td>Valuta una costante all&#39;atto della dichiarazione; nomi univoci. Non rende espressioni tutti i parametri geometrici.</td>
-</tr>
-<tr>
-<td><code>function</code></td>
-<td><code>function wave &quot;a*sin(x)*exp(-x/6)&quot;</code></td>
-<td>Definisce una funzione di un argomento, usabile come wave(x). Le variabili necessarie devono esistere quando l&#39;espressione viene valutata.</td>
-</tr>
-</tbody></table></div>
-<p>Operatori: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code>, parentesi e segni unari. Moltiplicazione
-esplicita: scrivi <code>2*x</code>, non <code>2x</code>. La potenza è associativa a destra:
-<code>2^3^2</code> significa <code>2^(3^2)</code>. <code>-x^2</code> significa <code>-(x^2)</code>.
-Costante <code>pi</code>, funzioni <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>exp</code>, <code>log</code> (naturale), <code>sqrt</code>, <code>abs</code>.
-Trigonometria in radianti. I risultati devono essere reali e finiti.
-<code>plot</code> fornisce x; <code>surface</code> fornisce x,y; phase-flow fornisce x,y,t.
-Non sono disponibili confronti, condizioni, cicli, derivate simboliche o lettura CSV.</p>
-</section><section class="manual-section"><h2 id="testi-e-posizionamento">Testi e posizionamento</h2>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>Comando</th>
-<th>Sintassi</th>
-<th>Spiegazione</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>label</code></td>
-<td><code>label N [P] &quot;testo LaTeX&quot;</code></td>
-<td>Etichetta LaTeX; default origine. <code>label E 1 0 &quot;$E=mc^2$&quot;</code>.</td>
-</tr>
-<tr>
-<td><code>text</code></td>
-<td><code>text N [P] &quot;testo normale&quot;</code></td>
-<td>Testo letterale: caratteri speciali TeX escapati dal programma. Non interpreta <code>$…$</code> come matematica.</td>
-</tr>
-<tr>
-<td><code>placement</code></td>
-<td><code>placement N auto [preferenza] [gap]</code> oppure <code>placement N fixed</code></td>
-<td>Label/text 2D. Preferenze n,ne,e,se,s,sw,w,nw; default n. Gap in bp, 0…100, default 3. Cerca fra otto posizioni usando misure TeX, senza garantire un layout globalmente privo di collisioni.</td>
-</tr>
-</tbody></table></div>
-<pre><code class="language-text">circle A 0.5
-label name {
-    at: A.center
-    text: &quot;$A$&quot;
-    placement: auto
-    prefer: ne
-    gap: 4
+<p><strong>Esempio distribuito:</strong> <code>examples/qft.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="quantum.circuit" data-category="pacchetto quantum"><h2 id="quantum-circuit">quantum.circuit</h2>
+<p><strong>Categoria:</strong> pacchetto quantum.</p>
+<p>Righe di qubit in ordine, colonne separate da virgole.</p>
+<h3 id="sintassi-53">Sintassi</h3>
+<pre><code class="language-text">use quantum
+circuit N {
+    proprietà: valore
 }
 </code></pre>
-<p>Un&#39;etichetta automatica non può essere un ancoraggio di altra geometria:
-usa il nodo a cui è associata. Un testo fisso non vuoto può essere un nodo
-di clipping: viene misurato realmente con TeX.</p>
-</section><section class="manual-section"><h2 id="percorsi-stili-e-modifiche">Percorsi, stili e modifiche</h2>
+<p>Dopo l’import è ammesso il nome breve <code>circuit</code>; il nome qualificato <code>quantum.circuit</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-1">Proprietà</h3>
 <div class="table-scroll"><table>
 <thead>
 <tr>
-<th>Comando</th>
-<th>Sintassi ed esempio</th>
-<th>Effetto e limiti</th>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>move</code></td>
-<td><code>move N dx dy</code></td>
-<td>Trasla un oggetto 2D e i suoi controlli; su un oggetto ancorato aggiunge un offset. Per i gruppi usa place.</td>
+<td><code>nome_qubit</code></td>
+<td>Nome arbitrario valido del qubit; valore = lista dei gate, colonne separate da virgole.</td>
+<td><code>Nessun default: almeno una riga</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-53">Esempio completo</h3>
+<pre><code class="language-pyxis">use quantum
+grid off
+circuit controlled {
+    ancilla: H, control(f), H, M
+    q0: _, oracle(f,&quot;$U_f$&quot;), _, M
+    q1: _, oracle(f,&quot;$U_f$&quot;), _, M
+}
+</code></pre>
+<h3 id="istruzioni-di-gate">Istruzioni di gate</h3>
+<p><code>H</code>, <code>X</code>, <code>Y</code>, <code>Z</code>, <code>S</code>, <code>T</code>, <code>M</code>, <code>_</code>, <code>control(id)</code>, <code>target(id)</code>, <code>gate(&quot;U&quot;)</code>, <code>oracle(id,&quot;$U_f$&quot;)</code>. Le virgole separano le colonne; l’ordine delle proprietà determina l’ordine dei qubit. Un oracle occupa almeno due righe contigue, con formula condivisa. Un controllo esterno con lo stesso id lo collega al blocco. Pyxis disegna il circuito, non simula le misure.</p>
+<p><strong>Esempio distribuito:</strong> <code>examples/oracles.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="quantum.tensor-network" data-category="pacchetto quantum"><h2 id="quantum-tensor-network">quantum.tensor-network</h2>
+<p><strong>Categoria:</strong> pacchetto quantum.</p>
+<p>Catena MPS o reticolo PEPS aperto.</p>
+<h3 id="sintassi-54">Sintassi</h3>
+<pre><code class="language-text">use quantum
+tensor-network N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>tensor-network</code>; il nome qualificato <code>quantum.tensor-network</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-2">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>layout</code></td>
+<td>mps / peps.</td>
+<td><code>mps</code></td>
 </tr>
 <tr>
-<td><code>stroke</code></td>
-<td><code>stroke N dashed</code></td>
-<td>solid, dashed, dotted; geometria 2D, non testo.</td>
+<td><code>sites</code></td>
+<td>Numero di tensori della catena; soltanto MPS. Intero nell’intervallo [1, 32].</td>
+<td><code>4</code></td>
 </tr>
 <tr>
-<td><code>linewidth</code></td>
-<td><code>linewidth N 0.7</code></td>
-<td>Spessore in bp, &gt;0 e ≤20, non sui testi. Default geometria 0.5, sfere 0.45, superfici 0.25.</td>
+<td><code>rows</code></td>
+<td>Numero di righe. Intero nell’intervallo [1, 16]. Soltanto PEPS; 1…16, massimo 128 siti complessivi.</td>
+<td><code>3</code></td>
 </tr>
 <tr>
-<td><code>bend</code></td>
-<td><code>bend N 0.4</code></td>
-<td>Arco costruito da un&#39;altezza relativa alla corda, positiva a sinistra del verso start→end. 0 torna rettilineo. Rimuove onde e controlli espliciti.</td>
+<td><code>columns</code></td>
+<td>Numero di colonne. Intero nell’intervallo [1, 16]. Soltanto PEPS; 1…16, massimo 128 siti complessivi.</td>
+<td><code>3</code></td>
 </tr>
 <tr>
-<td><code>curve</code></td>
-<td><code>curve N segmento c1x c1y c2x c2y</code></td>
-<td>Bézier cubica per il segmento numerato da 1. Controlli in coordinate assolute; line/arrow hanno un solo segmento. <code>curve C 1 0 1 2 1</code>. Rimuove l&#39;onda.</td>
+<td><code>labels</code></td>
+<td>Etichette esplicite fra virgolette; numero richiesto dipendente dal modello. Una per tensore, in ordine di riga.</td>
+<td><code>A_1, A_2, …</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-54">Esempio completo</h3>
+<pre><code class="language-pyxis">use quantum
+grid off
+tensor-network chain {
+    layout: mps
+    sites: 4
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/tensor-networks.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="quantum.bloch" data-category="pacchetto quantum"><h2 id="quantum-bloch">quantum.bloch</h2>
+<p><strong>Categoria:</strong> pacchetto quantum.</p>
+<p>Sfera di Bloch e vettore di uno stato puro.</p>
+<h3 id="sintassi-55">Sintassi</h3>
+<pre><code class="language-text">use quantum
+bloch N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>bloch</code>; il nome qualificato <code>quantum.bloch</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-3">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>theta</code></td>
+<td>Angolo polare 0…180deg, oppure equivalente in rad. Unità obbligatoria.</td>
+<td><code>60deg</code></td>
 </tr>
 <tr>
-<td><code>wave</code></td>
-<td><code>wave N ampiezza oscillazioni</code></td>
-<td>Onda lungo il percorso; oscillazioni intere 1…64. Rimuove bend e controlli.</td>
+<td><code>phi</code></td>
+<td>Angolo azimutale; suffisso deg/rad obbligatorio.</td>
+<td><code>35deg</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-55">Esempio completo</h3>
+<pre><code class="language-pyxis">use quantum
+grid off
+quantum.bloch qubit {
+    theta: 60deg
+    phi: 35deg
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/bloch.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="relativity.penrose" data-category="pacchetto relativity"><h2 id="relativity-penrose">relativity.penrose</h2>
+<p><strong>Categoria:</strong> pacchetto relativity.</p>
+<p>Minkowski, Schwarzschild o schema Kerr sull&#39;asse.</p>
+<h3 id="sintassi-56">Sintassi</h3>
+<pre><code class="language-text">use relativity
+penrose N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>penrose</code>; il nome qualificato <code>relativity.penrose</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-4">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>metric</code></td>
+<td>minkowski, schwarzschild, kerr (soltanto asse subestremale).</td>
+<td><code>minkowski</code></td>
 </tr>
 <tr>
-<td><code>flow</code></td>
-<td><code>flow N forward</code></td>
-<td>none, forward, reverse: freccia di flusso sul percorso. Distinta dalla punta finale di arrow.</td>
+<td><code>spin</code></td>
+<td>Rapporto a/M, soltanto Kerr subestremale sull’asse. Reale nell’intervallo [1e-6, 0.999999].</td>
+<td><code>0.7</code></td>
 </tr>
 <tr>
-<td><code>markers</code></td>
-<td><code>markers N triangle hollow 0.12</code></td>
-<td>Marcatori sui nodi: none, circle, square, triangle, diamond o simbolo personalizzato. filled/hollow, dimensione positiva; default filled e 0.08.</td>
+<td><code>bands</code></td>
+<td>Numero di bande del diagramma Kerr: 3, 5, 7. Intero nell’intervallo [3, 7].</td>
+<td><code>3</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-56">Esempio completo</h3>
+<pre><code class="language-pyxis">use relativity
+grid off
+penrose flat {
+    metric: minkowski
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/penrose.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="relativity.embedding" data-category="pacchetto relativity"><h2 id="relativity-embedding">relativity.embedding</h2>
+<p><strong>Categoria:</strong> pacchetto relativity.</p>
+<p>Paraboloide di Flamm.</p>
+<h3 id="sintassi-57">Sintassi</h3>
+<pre><code class="language-text">use relativity
+embedding N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>embedding</code>; il nome qualificato <code>relativity.embedding</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-5">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>metric</code></td>
+<td>schwarzschild (sezione equatoriale spaziale).</td>
+<td><code>schwarzschild</code></td>
 </tr>
 <tr>
-<td><code>symbol</code></td>
-<td><code>symbol kite &quot;0 1;0.6 0;0 -1;-0.6 0&quot;</code></td>
-<td>Poligono personalizzato per markers, 3…1000 vertici; nome diverso dai marcatori predefiniti.</td>
+<td><code>radius</code></td>
+<td>Raggio r_s in unità geometriche. Reale nell’intervallo [1e-4, 1e4].</td>
+<td><code>1</code></td>
 </tr>
 <tr>
-<td><code>clip</code></td>
-<td><code>clip N nodes</code> oppure <code>clip N off</code></td>
-<td>Taglia line/arrow/path ai bordi dei nodi ancorati agli estremi: circle, ellipse, gatebox, label/text fissi non vuoti. Funziona sul percorso effettivo, anche curvo. Non taglia contro oggetti arbitrari nel mezzo.</td>
+<td><code>extent</code></td>
+<td>Raggio esterno espresso come rapporto r/r_s. Reale nell’intervallo [1.01, 100].</td>
+<td><code>4</code></td>
 </tr>
 <tr>
-<td><code>background</code></td>
-<td><code>background N</code></td>
-<td>Dispone un oggetto sullo sfondo 2D; non prende on/off.</td>
+<td><code>mesh</code></td>
+<td>Risoluzione della superficie; per geodesic richiede view: embedding. Intero nell’intervallo [4, 30].</td>
+<td><code>16</code></td>
 </tr>
 <tr>
-<td><code>nodefill</code></td>
-<td><code>nodefill N black</code></td>
-<td>Riempimento di un circle: black, white, none.</td>
+<td><code>branch</code></td>
+<td>upper / lower del paraboloide di Flamm.</td>
+<td><code>upper</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-57">Esempio completo</h3>
+<pre><code class="language-pyxis">use relativity
+grid off
+relativity.embedding flamm {
+    metric: schwarzschild
+    radius: 1
+    extent: 4
+    mesh: 16
+    branch: upper
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/embedding.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="relativity.light-cones" data-category="pacchetto relativity"><h2 id="relativity-light-cones">relativity.light-cones</h2>
+<p><strong>Categoria:</strong> pacchetto relativity.</p>
+<p>Coni nulli radiali locali Schwarzschild.</p>
+<h3 id="sintassi-58">Sintassi</h3>
+<pre><code class="language-text">use relativity
+light-cones N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>light-cones</code>; il nome qualificato <code>relativity.light-cones</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-6">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>metric</code></td>
+<td>schwarzschild (unica metrica implementata per questo oggetto).</td>
+<td><code>schwarzschild</code></td>
 </tr>
 <tr>
-<td><code>color</code></td>
-<td><code>color N 0.2 0.4 0.8</code></td>
-<td>RGB 0…1 su geometria 2D/3D; non testi/punti invisibili. Su region controlla il riempimento; sul tratto 2D controlla il colore del tratto.</td>
+<td><code>chart</code></td>
+<td>painleve-gullstrand ingoing (unico modello).</td>
+<td><code>painleve-gullstrand</code></td>
 </tr>
 <tr>
-<td><code>fill</code></td>
-<td><code>fill N color</code></td>
-<td>auto, none, white, color per region/sphere/surface/mesh3. Non è il comando di riempimento dei circle: usa nodefill.</td>
+<td><code>radii</code></td>
+<td>Lista crescente di 1…16 raggi; ogni rapporto r/r_s tra 0.1 e 100.</td>
+<td><code>[0.6, 1, 1.8, 3.2, 5]</code></td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>Numero di righe. Intero nell’intervallo [1, 8].</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>Estensione locale del cono; viene ridotta vicino a r=0. Reale nell’intervallo [0.01, 0.5].</td>
+<td><code>0.32</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-58">Esempio completo</h3>
+<pre><code class="language-pyxis">use relativity
+grid off
+light-cones causal {
+    metric: schwarzschild
+    chart: painleve-gullstrand
+    radii: [0.6, 1, 1.8, 3.2, 5]
+    rows: 3
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/light-cones.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="relativity.geodesic" data-category="pacchetto relativity"><h2 id="relativity-geodesic">relativity.geodesic</h2>
+<p><strong>Categoria:</strong> pacchetto relativity.</p>
+<p>Raggio nullo equatoriale Schwarzschild.</p>
+<h3 id="sintassi-59">Sintassi</h3>
+<pre><code class="language-text">use relativity
+geodesic N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>geodesic</code>; il nome qualificato <code>relativity.geodesic</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-7">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>metric</code></td>
+<td>schwarzschild (unica metrica implementata per questo oggetto).</td>
+<td><code>schwarzschild</code></td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>null (raggi nulli equatoriali).</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td><code>impact</code></td>
+<td>Parametro d’impatto b/r_s; deve consentire il ramo iniziale entrante. Reale nell’intervallo [0.1, 100].</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>extent</code></td>
+<td>Raggio esterno espresso come rapporto r/r_s. Reale nell’intervallo [2, 1000].</td>
+<td><code>12</code></td>
+</tr>
+<tr>
+<td><code>max-angle</code></td>
+<td>Limite di phi in radianti: errore se il raggio non termina entro questo limite. Reale nell’intervallo [0.01, 100].</td>
+<td><code>37.69911184307752</code></td>
+</tr>
+<tr>
+<td><code>max-step</code></td>
+<td>Passo massimo; nelle ODE richiede adaptive, in geodesic è in radianti. Reale nell’intervallo [1e-6, 0.05].</td>
+<td><code>0.01</code></td>
+</tr>
+<tr>
+<td><code>abs-tol</code></td>
+<td>Tolleranza assoluta locale; nelle ODE richiede adaptive. Reale nell’intervallo [1e-14, 1e-3].</td>
+<td><code>1e-10</code></td>
+</tr>
+<tr>
+<td><code>rel-tol</code></td>
+<td>Tolleranza relativa locale; nelle ODE richiede adaptive. Reale nell’intervallo [0, 1e-3].</td>
+<td><code>1e-10</code></td>
+</tr>
+<tr>
+<td><code>max-steps</code></td>
+<td>Limite di passi accettati; nelle ODE richiede adaptive. Intero nell’intervallo [1, 9999].</td>
+<td><code>9999</code></td>
+</tr>
+<tr>
+<td><code>photon-sphere</code></td>
+<td>on / off per la circonferenza r=1.5r_s.</td>
+<td><code>on</code></td>
+</tr>
+<tr>
+<td><code>view</code></td>
+<td>plane (2D) / embedding (3D).</td>
+<td><code>plane</code></td>
+</tr>
+<tr>
+<td><code>mesh</code></td>
+<td>Intero 4…30; richiede view: embedding.</td>
+<td><code>12</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-59">Esempio completo</h3>
+<pre><code class="language-pyxis">use relativity
+grid off
+geodesic scattered {
+    impact: 3
+    extent: 10
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/geodesics.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="statmech.ising" data-category="pacchetto statmech"><h2 id="statmech-ising">statmech.ising</h2>
+<p><strong>Categoria:</strong> pacchetto statmech.</p>
+<p>Reticolo/spin 2D o 3D.</p>
+<h3 id="sintassi-60">Sintassi</h3>
+<pre><code class="language-text">use statmech
+ising N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>ising</code>; il nome qualificato <code>statmech.ising</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-8">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>dimension</code></td>
+<td>2 / 3. Intero nell’intervallo [2, 3].</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>Numero di righe. Intero nell’intervallo [1, 32].</td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td><code>columns</code></td>
+<td>Numero di colonne. Intero nell’intervallo [1, 32].</td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td><code>layers</code></td>
+<td>Numero di strati, soltanto dimension: 3. Intero nell’intervallo [1, 16]. Il 3D ha massimo 512 siti.</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>state</code></td>
+<td>up / down / checkerboard / domains; configura spin predefiniti.</td>
+<td><code>up</code></td>
+</tr>
+<tr>
+<td><code>spins</code></td>
+<td>Lista esplicita di +1/-1; esattamente un valore per sito, ordine strato-riga-colonna.</td>
+<td><code>Da state</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-60">Esempio completo</h3>
+<pre><code class="language-pyxis">use statmech
+grid off
+ising lattice {
+    dimension: 3
+    rows: 3
+    columns: 3
+    layers: 3
+    state: checkerboard
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/ising3d.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="statmech.phase-diagram" data-category="pacchetto statmech"><h2 id="statmech-phase-diagram">statmech.phase-diagram</h2>
+<p><strong>Categoria:</strong> pacchetto statmech.</p>
+<p>Diagramma P-T schematico.</p>
+<h3 id="sintassi-61">Sintassi</h3>
+<pre><code class="language-text">use statmech
+phase-diagram N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>phase-diagram</code>; il nome qualificato <code>statmech.phase-diagram</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-9">Proprietà</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>model</code></td>
+<td>schematic (unico modello P–T).</td>
+<td><code>schematic</code></td>
+</tr>
+<tr>
+<td><code>melting</code></td>
+<td>positive / negative per la pendenza della linea di fusione.</td>
+<td><code>positive</code></td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td>Quattro stringhe nell’ordine solido, liquido, gas, supercritico.</td>
+<td><code>[&quot;Solid&quot;, &quot;Liquid&quot;, &quot;Gas&quot;, &quot;Supercritical&quot;]</code></td>
+</tr>
+<tr>
+<td><code>point-labels</code></td>
+<td>Due stringhe, punto triplo e punto critico.</td>
+<td><code>[&quot;TP&quot;, &quot;CP&quot;]</code></td>
 </tr>
 <tr>
 <td><code>opacity</code></td>
-<td><code>opacity N 0.3</code></td>
-<td>Solo region, fra 0 (trasparente) e 1 (opaco), default 0.25.</td>
-</tr>
-<tr>
-<td><code>outline</code></td>
-<td><code>outline N off</code></td>
-<td>on/off per il contorno delle region riempite; default on.</td>
+<td>Opacità delle regioni, 0…1. Reale nell’intervallo [0, 1].</td>
+<td><code>0.22</code></td>
 </tr>
 </tbody></table></div>
-<p>Gli stili di percorso bend/curve/wave/flow/markers si applicano a line, arrow,
-path e plot; le region devono restare poligoni rettilinei senza onde/flusso/clipping.
-Una correzione di curve/bend/wave può cambiare il metodo del percorso:
-non trattarli come decorazioni indipendenti tutte simultanee.</p>
-</section><section class="manual-section"><h2 id="vincoli-geometrici">Vincoli geometrici</h2>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-61">Esempio completo</h3>
+<pre><code class="language-pyxis">use statmech
+grid off
+phase-diagram ordinary {
+    melting: positive
+    labels: [&quot;Solido&quot;, &quot;Liquido&quot;, &quot;Gas&quot;, &quot;Supercritico&quot;]
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/phase-diagrams.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="statmech.phase-flow" data-category="pacchetto statmech"><h2 id="statmech-phase-flow">statmech.phase-flow</h2>
+<p><strong>Categoria:</strong> pacchetto statmech.</p>
+<p>Traiettoria di ODE 2D.</p>
+<h3 id="sintassi-62">Sintassi</h3>
+<pre><code class="language-text">use statmech
+phase-flow N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>phase-flow</code>; il nome qualificato <code>statmech.phase-flow</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-10">Proprietà</h3>
 <div class="table-scroll"><table>
 <thead>
 <tr>
-<th>Comando</th>
-<th>Sintassi</th>
-<th>Spiegazione</th>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>tangent-circle</code></td>
-<td><code>tangent-circle B A east 0.3</code></td>
-<td>Crea B tangente esternamente al circle A. Direzioni north,south,east,west,ne,nw,se,sw. Il raggio di B è positivo.</td>
+<td><code>dx</code></td>
+<td>Stringa della derivata dx/dt in x,y,t.</td>
+<td><code>&quot;y&quot;</code></td>
 </tr>
 <tr>
-<td><code>parallel</code></td>
-<td><code>parallel N P riferimento lunghezza</code></td>
-<td>Segmento centrato in P, parallelo a una line/arrow rettilinea non degenere.</td>
+<td><code>dy</code></td>
+<td>Stringa della derivata dy/dt in x,y,t.</td>
+<td><code>&quot;-x&quot;</code></td>
 </tr>
 <tr>
-<td><code>perpendicular</code></td>
-<td><code>perpendicular N P riferimento lunghezza</code></td>
-<td>Come parallel, direzione ruotata di 90°.</td>
+<td><code>start</code></td>
+<td>Lista delle coordinate iniziali dello stato.</td>
+<td><code>[1, 0]</code></td>
 </tr>
 <tr>
-<td><code>parallel-arrow</code></td>
-<td><code>parallel-arrow N P riferimento lunghezza</code></td>
-<td>Variante con punta finale.</td>
+<td><code>duration</code></td>
+<td>Tempo totale di integrazione, non larghezza grafica. Reale nell’intervallo [1e-6, 1e4].</td>
+<td><code>6.283185307179586</code></td>
 </tr>
 <tr>
-<td><code>perpendicular-arrow</code></td>
-<td><code>perpendicular-arrow N P riferimento lunghezza</code></td>
-<td>Variante con punta finale.</td>
+<td><code>steps</code></td>
+<td>Passi fissi con rk4; con adaptive imposta il max-step predefinito duration/steps. Intero nell’intervallo [4, 9999].</td>
+<td><code>400</code></td>
+</tr>
+<tr>
+<td><code>integrator</code></td>
+<td>rk4 (fisso) / adaptive (step doubling).</td>
+<td><code>rk4</code></td>
+</tr>
+<tr>
+<td><code>abs-tol</code></td>
+<td>Tolleranza assoluta locale; nelle ODE richiede adaptive. Reale nell’intervallo [1e-14, 1].</td>
+<td><code>1e-8</code></td>
+</tr>
+<tr>
+<td><code>rel-tol</code></td>
+<td>Tolleranza relativa locale; nelle ODE richiede adaptive. Reale nell’intervallo [0, 1].</td>
+<td><code>1e-6</code></td>
+</tr>
+<tr>
+<td><code>max-step</code></td>
+<td>Passo massimo; nelle ODE richiede adaptive, in geodesic è in radianti. Reale nell’intervallo [1e-12, 1e4].</td>
+<td><code>duration/steps</code></td>
+</tr>
+<tr>
+<td><code>max-steps</code></td>
+<td>Limite di passi accettati; nelle ODE richiede adaptive. Intero nell’intervallo [1, 9999].</td>
+<td><code>9999</code></td>
 </tr>
 </tbody></table></div>
-<p>Lunghezze positive. Il riferimento può essere dichiarato dopo. Non assegnare
-offset al cerchio tangente: romperebbe la relazione. Spostando il cerchio di
-riferimento, il dipendente si aggiorna. Non è un solver di vincoli generali.</p>
-</section><section class="manual-section"><h2 id="geometria-3d">Geometria 3D</h2>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-62">Esempio completo</h3>
+<pre><code class="language-pyxis">use statmech
+grid off
+phase-flow libration {
+    dx: &quot;y&quot;
+    dy: &quot;-sin(x)&quot;
+    start: [1.5, 0]
+    duration: 15
+    integrator: adaptive
+    abs-tol: 1e-9
+    rel-tol: 1e-9
+    max-step: 0.08
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/adaptive-flow.pyxis</code>.</p>
+</section><section class="manual-section command-entry" data-command="statmech.lorenz" data-category="pacchetto statmech"><h2 id="statmech-lorenz">statmech.lorenz</h2>
+<p><strong>Categoria:</strong> pacchetto statmech.</p>
+<p>Traiettoria del sistema di Lorenz.</p>
+<h3 id="sintassi-63">Sintassi</h3>
+<pre><code class="language-text">use statmech
+lorenz N {
+    proprietà: valore
+}
+</code></pre>
+<p>Dopo l’import è ammesso il nome breve <code>lorenz</code>; il nome qualificato <code>statmech.lorenz</code> è sempre esplicito, ma richiede comunque l’import.</p>
+<h3 id="proprieta-11">Proprietà</h3>
 <div class="table-scroll"><table>
 <thead>
 <tr>
-<th>Comando</th>
-<th>Sintassi</th>
-<th>Spiegazione</th>
+<th>Proprietà</th>
+<th>Valori / significato</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>sphere</code></td>
-<td><code>sphere N [r]</code> oppure <code>sphere N x y z r</code></td>
-<td>Sfera; default origine e r=1.</td>
+<td><code>sigma</code></td>
+<td>Parametro σ del modello Lorenz. Reale nell’intervallo [0.001, 100].</td>
+<td><code>10</code></td>
 </tr>
 <tr>
-<td><code>surface</code></td>
-<td><code>surface N xmin xmax ymin ymax mesh &quot;f(x,y)&quot;</code></td>
-<td>Superficie z=f(x,y), intervalli crescenti; mesh intera 2…60, campioni (mesh+1)². Esempio: <code>surface S -2 2 -2 2 16 &quot;x^2+y^2&quot;</code>.</td>
+<td><code>rho</code></td>
+<td>Parametro ρ del modello Lorenz. Reale nell’intervallo [0.001, 100].</td>
+<td><code>28</code></td>
 </tr>
 <tr>
-<td><code>path3</code></td>
-<td><code>path3 N &quot;x y z;x y z;…&quot;</code></td>
-<td>Polilinea 3D, 2…10000 vertici.</td>
+<td><code>beta</code></td>
+<td>Parametro β del modello Lorenz. Reale nell’intervallo [0.001, 100].</td>
+<td><code>2.6666666666666665</code></td>
 </tr>
 <tr>
-<td><code>arrow3</code></td>
-<td><code>arrow3 N &quot;x y z;x y z;…&quot;</code></td>
-<td>Percorso 3D con punta finale.</td>
+<td><code>start</code></td>
+<td>Lista delle coordinate iniziali dello stato.</td>
+<td><code>[1, 1, 1]</code></td>
 </tr>
 <tr>
-<td><code>mesh3</code></td>
-<td><code>mesh3 N righe colonne &quot;x y z;…&quot;</code></td>
-<td>Griglia rettangolare ordinata per righe; righe/colonne intere 2…61, esattamente righe×colonne vertici.</td>
+<td><code>duration</code></td>
+<td>Tempo totale di integrazione, non larghezza grafica. Reale nell’intervallo [1e-4, 100].</td>
+<td><code>30</code></td>
 </tr>
 <tr>
-<td><code>label3</code></td>
-<td><code>label3 N [x y z] &quot;LaTeX&quot;</code></td>
-<td>Etichetta LaTeX 3D; default origine.</td>
+<td><code>steps</code></td>
+<td>Passi fissi con rk4; con adaptive imposta il max-step predefinito duration/steps. Intero nell’intervallo [10, 9999].</td>
+<td><code>6000</code></td>
 </tr>
 <tr>
-<td><code>text3</code></td>
-<td><code>text3 N [x y z] &quot;testo&quot;</code></td>
-<td>Testo letterale 3D.</td>
+<td><code>integrator</code></td>
+<td>rk4 (fisso) / adaptive (step doubling).</td>
+<td><code>rk4</code></td>
 </tr>
 <tr>
-<td><code>move3</code></td>
-<td><code>move3 N dx dy dz</code></td>
-<td>Traslazione di un oggetto 3D.</td>
+<td><code>abs-tol</code></td>
+<td>Tolleranza assoluta locale; nelle ODE richiede adaptive. Reale nell’intervallo [1e-14, 1].</td>
+<td><code>1e-8</code></td>
 </tr>
 <tr>
-<td><code>detail</code></td>
-<td><code>detail N minimal</code></td>
-<td>Solo sphere: minimal, outline, mesh; default minimal.</td>
+<td><code>rel-tol</code></td>
+<td>Tolleranza relativa locale; nelle ODE richiede adaptive. Reale nell’intervallo [0, 1].</td>
+<td><code>1e-6</code></td>
 </tr>
 <tr>
-<td><code>shading</code></td>
-<td><code>shading N 0.14</code></td>
-<td>Solo sphere, 0…0.8. Ombreggiatura vettoriale, non simulazione ottica.</td>
+<td><code>max-step</code></td>
+<td>Passo massimo; nelle ODE richiede adaptive, in geodesic è in radianti. Reale nell’intervallo [1e-12, 1e4]. Ulteriore limite 0.02.</td>
+<td><code>duration/steps</code></td>
+</tr>
+<tr>
+<td><code>max-steps</code></td>
+<td>Limite di passi accettati; nelle ODE richiede adaptive. Intero nell’intervallo [1, 9999].</td>
+<td><code>9999</code></td>
 </tr>
 </tbody></table></div>
-<p>Le scene 2D e 3D sono distinte: usa figure/ambienti separati. Il PDF/SVG è una
-proiezione vettoriale, non un modello 3D interattivo. Per RGB, fill, linewidth
-e direzione della vista usa color, fill, linewidth, camera.</p>
-</section><section class="manual-section"><h2 id="forma-a-blocchi-delle-primitive">Forma a blocchi delle primitive</h2>
+<p><strong>Contratto del modello:</strong> <a href="PACCHETTI.html">convenzioni e limiti fisici</a>.</p>
+<h3 id="esempio-completo-63">Esempio completo</h3>
+<pre><code class="language-pyxis">use statmech
+grid off
+statmech.lorenz attractor {
+    sigma: 10
+    rho: 28
+    beta: 2.6666666666666665
+    duration: 30
+    steps: 6000
+}
+</code></pre>
+<p><strong>Esempio distribuito:</strong> <code>examples/lorenz.pyxis</code>.</p>
+</section><section class="manual-section"><h2 id="sintassi-a-blocchi">Sintassi a blocchi</h2>
 <p><code>tipo nome {</code> apre un blocco, <code>}</code> lo chiude su una propria riga. La tabella
 elenca tutte le proprietà ammesse. Numeri e coordinate fra parentesi/comma
 sono accettati nelle proprietà che normalizzano coordinate; le liste di punti
@@ -471,85 +2708,9 @@ arrow connection {
     stroke-width: 0.7
 }
 </code></pre>
-</section><section class="manual-section"><h2 id="tutti-i-comandi-dei-pacchetti-fisici">Tutti i comandi dei pacchetti fisici</h2>
-<p>La sintassi è <code>tipo nome {</code> con una proprietà per riga. Prima importa il pacchetto.
-Il prefisso qualificato è facoltativo soltanto dopo l&#39;import e senza ambiguità.
-Per ogni proprietà, valori ammessi, default, convenzioni fisiche ed esempi completi
-sono nel <a href="PACCHETTI.html">manuale dei pacchetti</a>.</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>Comando</th>
-<th>Descrizione</th>
-<th>Tutte le proprietà</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>qft.feynman</td>
-<td>Albero 2→2 s/t/u e bolla sul mediatore</td>
-<td>channel, incoming, outgoing, mediator, labels, loop, loop-position, loop-radius, label-placement</td>
-</tr>
-<tr>
-<td>quantum.circuit</td>
-<td>Righe di qubit in ordine, colonne separate da virgole</td>
-<td>Nomi dei qubit come proprietà; H,X,Y,Z,S,T,M, <code>_</code>, control(id), target(id), gate(&quot;U&quot;), oracle(id,&quot;$U_f$&quot;)</td>
-</tr>
-<tr>
-<td>quantum.tensor-network</td>
-<td>Catena MPS o reticolo PEPS aperto</td>
-<td>sites, labels, layout, rows, columns</td>
-</tr>
-<tr>
-<td>quantum.bloch</td>
-<td>Sfera di Bloch e vettore di uno stato puro</td>
-<td>theta, phi (deg/rad obbligatori)</td>
-</tr>
-<tr>
-<td>relativity.penrose</td>
-<td>Minkowski, Schwarzschild o schema Kerr sull&#39;asse</td>
-<td>metric, spin, bands</td>
-</tr>
-<tr>
-<td>relativity.embedding</td>
-<td>Paraboloide di Flamm</td>
-<td>metric, radius, extent, mesh, branch</td>
-</tr>
-<tr>
-<td>relativity.light-cones</td>
-<td>Coni nulli radiali locali Schwarzschild</td>
-<td>metric, chart, radii, rows, height</td>
-</tr>
-<tr>
-<td>relativity.geodesic</td>
-<td>Raggio nullo equatoriale Schwarzschild</td>
-<td>metric, kind, impact, extent, max-angle, max-step, abs-tol, rel-tol, max-steps, photon-sphere, view, mesh</td>
-</tr>
-<tr>
-<td>statmech.ising</td>
-<td>Reticolo/spin 2D o 3D</td>
-<td>rows, columns, state, spins, dimension, layers</td>
-</tr>
-<tr>
-<td>statmech.phase-diagram</td>
-<td>Diagramma P-T schematico</td>
-<td>model, melting, labels, point-labels, opacity</td>
-</tr>
-<tr>
-<td>statmech.phase-flow</td>
-<td>Traiettoria di ODE 2D</td>
-<td>dx, dy, start, duration, steps, integrator, abs-tol, rel-tol, max-step, max-steps</td>
-</tr>
-<tr>
-<td>statmech.lorenz</td>
-<td>Traiettoria del sistema di Lorenz</td>
-<td>sigma, rho, beta, start, duration, steps, integrator, abs-tol, rel-tol, max-step, max-steps</td>
-</tr>
-</tbody></table></div>
-<p>I comandi semantici generano componenti nominati, che puoi rifinire con i comandi
-geometrici. Disegnare un circuito non simula lo stato; disegnare un diagramma QFT
-non verifica le interazioni e non calcola l&#39;ampiezza. Kerr non è una carta generale
-fuori dall&#39;asse; phase-diagram non ricava l&#39;equazione di stato di un materiale.</p>
-</section><section class="manual-section"><h2 id="comandi-dell-39-editor-vs-code">Comandi dell&#39;editor VS Code</h2>
+</section><section class="manual-section"><h2 id="espressioni-matematiche">Espressioni matematiche</h2>
+<p>Operatori <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code>, parentesi e segni unari. Moltiplicazione esplicita. Potenza associativa a destra: <code>2^3^2 = 2^(3^2)</code>; <code>-x^2 = -(x^2)</code>. Costante pi; sin, cos, tan, exp, log (naturale), sqrt, abs, e funzioni utente di un argomento. Angoli delle funzioni trigonometriche in radianti. Le espressioni devono avere risultati reali e finiti. plot espone x, surface x/y, phase-flow x/y/t. Confronti, if, cicli, lettura CSV e derivate simboliche non sono implementati.</p>
+</section><section class="manual-section"><h2 id="comandi-dell-editor-vs-code">Comandi dell&#39;editor VS Code</h2>
 <div class="table-scroll"><table>
 <thead>
 <tr>

@@ -1,4 +1,4 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Imparare a sviluppare Pyxis — documentazione Pyxis 1.0, Luca Melani"><title>Imparare a sviluppare Pyxis · Pyxis</title><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css"><script defer src="../pyxis.js"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Imparare a sviluppare Pyxis</h1><div class="docs-tools"><a href="GUIDA-SVILUPPO.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Per esempio: curve, gap, integrator…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#1-che-cosa-stiamo-costruendo">1. Che cosa stiamo costruendo</a><a href="#2-il-primo-esperimento-dal-file-alla-figura">2. Il primo esperimento: dal file alla figura</a><a href="#3-le-due-compilazioni-che-non-vanno-confuse">3. Le due compilazioni che non vanno confuse</a><a href="#4-come-leggere-i-file-c-senza-perdersi">4. Come leggere i file C++ senza perdersi</a><a href="#5-seguire-una-singola-istruzione-passo-per-passo">5. Seguire una singola istruzione, passo per passo</a><a href="#6-ancoraggi-e-vincoli-la-differenza-pratica">6. Ancoraggi e vincoli: la differenza pratica</a><a href="#7-clipping-conservare-la-connessione-cambiare-il-tratto-visibile">7. Clipping: conservare la connessione, cambiare il tratto visibile</a><a href="#8-come-nasce-un-pacchetto-scientifico">8. Come nasce un pacchetto scientifico</a><a href="#9-test-cosa-stiamo-davvero-verificando">9. Test: cosa stiamo davvero verificando</a><a href="#10-la-parte-javascript-e-la-cache-anche-se-parti-dal-c">10. La parte JavaScript e la cache, anche se parti dal C++</a><a href="#11-provare-l-39-integrazione-latex">11. Provare l&amp;#39;integrazione LaTeX</a><a href="#12-un-metodo-pratico-per-lavorare-insieme">12. Un metodo pratico per lavorare insieme</a><a href="#13-capire-e-modificare-l-39-integratore-adattivo">13. Capire e modificare l&amp;#39;integratore adattivo</a><a href="#14-regioni-profili-e-composizione-dei-pacchetti">14. Regioni, profili e composizione dei pacchetti</a><a href="#15-perche-39-il-clipping-del-testo-avviene-alla-fine">15. Perche&amp;#39; il clipping del testo avviene alla fine</a><a href="#16-dal-modello-relativistico-al-percorso-numerico">16. Dal modello relativistico al percorso numerico</a><a href="#17-compilare-gli-ambienti-direttamente-dagli-appunti">17. Compilare gli ambienti direttamente dagli appunti</a><a href="#18-una-tesi-e-39-un-grafo-di-file">18. Una tesi e&amp;#39; un grafo di file</a><a href="#19-dalla-cartella-sorgente-all-39-estensione-installabile">19. Dalla cartella sorgente all&amp;#39;estensione installabile</a></nav></details></aside><article><section class="manual-section">
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Imparare a sviluppare Pyxis — documentazione Pyxis 1.0, Luca Melani"><title>Imparare a sviluppare Pyxis · Pyxis</title><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet"><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css?v=20261013-reference"><script defer src="../pyxis.js?v=20261013-reference"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Imparare a sviluppare Pyxis</h1><div class="docs-tools"><a href="GUIDA-SVILUPPO.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Funzione, file o argomento…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#1-che-cosa-stiamo-costruendo">1. Che cosa stiamo costruendo</a><a href="#2-il-primo-esperimento-dal-file-alla-figura">2. Il primo esperimento: dal file alla figura</a><a href="#3-le-due-compilazioni-che-non-vanno-confuse">3. Le due compilazioni che non vanno confuse</a><a href="#4-come-leggere-i-file-c-senza-perdersi">4. Come leggere i file C++ senza perdersi</a><a href="#5-seguire-una-singola-istruzione-passo-per-passo">5. Seguire una singola istruzione, passo per passo</a><a href="#6-ancoraggi-e-vincoli-la-differenza-pratica">6. Ancoraggi e vincoli: la differenza pratica</a><a href="#7-clipping-conservare-la-connessione-cambiare-il-tratto-visibile">7. Clipping: conservare la connessione, cambiare il tratto visibile</a><a href="#8-come-nasce-un-pacchetto-scientifico">8. Come nasce un pacchetto scientifico</a><a href="#9-test-cosa-stiamo-davvero-verificando">9. Test: cosa stiamo davvero verificando</a><a href="#10-la-parte-javascript-e-la-cache-anche-se-parti-dal-c">10. La parte JavaScript e la cache, anche se parti dal C++</a><a href="#11-provare-l-integrazione-latex">11. Provare l&#39;integrazione LaTeX</a><a href="#12-un-metodo-pratico-per-lavorare-insieme">12. Un metodo pratico per lavorare insieme</a><a href="#13-capire-e-modificare-l-integratore-adattivo">13. Capire e modificare l&#39;integratore adattivo</a><a href="#14-regioni-profili-e-composizione-dei-pacchetti">14. Regioni, profili e composizione dei pacchetti</a><a href="#15-perche-il-clipping-del-testo-avviene-alla-fine">15. Perche&#39; il clipping del testo avviene alla fine</a><a href="#16-dal-modello-relativistico-al-percorso-numerico">16. Dal modello relativistico al percorso numerico</a><a href="#17-compilare-gli-ambienti-direttamente-dagli-appunti">17. Compilare gli ambienti direttamente dagli appunti</a><a href="#18-una-tesi-e-un-grafo-di-file">18. Una tesi e&#39; un grafo di file</a><a href="#19-dalla-cartella-sorgente-all-estensione-installabile">19. Dalla cartella sorgente all&#39;estensione installabile</a></nav></details></aside><article><section class="manual-section">
 <p>Questa guida e&#39; per chi conosce il C++ e ha una preparazione universitaria in
 fisica, ma non ha ancora costruito un linguaggio, un compilatore o un editor.
 Non devi conoscere queste cose prima di cominciare: le incontriamo attraverso
@@ -187,7 +187,7 @@ non creano un caso di divisione per zero.</p>
 <p>Il test controlla d·n=0, entro una tolleranza. Per una parallela controlla
 che il determinante d_x p_y - d_y p_x sia zero. La forma vettoriale e&#39;
 piu&#39; robusta della rappresentazione y=mx+q.</p>
-<h3 id="perche-39-usiamo-tre-stati-per-le-dipendenze">Perche&#39; usiamo tre stati per le dipendenze</h3>
+<h3 id="perche-usiamo-tre-stati-per-le-dipendenze">Perche&#39; usiamo tre stati per le dipendenze</h3>
 <p>Durante la risoluzione ogni oggetto e&#39; in uno di tre stati:</p>
 <ul>
 <li>0: non ancora visitato;</li>
@@ -222,7 +222,7 @@ segmenti, curve Bezier, onde e polilinee. C&#39;e&#39; una sottigliezza utile da
 Asymptote approssima il cerchio con Bezier cubiche. Verifichiamo prima il bordo
 effettivamente disegnato, poi la vicinanza al cerchio analitico entro l&#39;errore
 di quell&#39;approssimazione. Non chiediamo una precisione che il modello non ha.</p>
-<h3 id="etichette-automatiche-perche-39-interviene-il-backend">Etichette automatiche: perche&#39; interviene il backend</h3>
+<h3 id="etichette-automatiche-perche-interviene-il-backend">Etichette automatiche: perche&#39; interviene il backend</h3>
 <p>Una formula non ha una larghezza prevedibile contando i caratteri: frazioni,
 indici e integrali hanno ingombri diversi. Inoltre il testo mantiene dimensioni
 tipografiche fisiche mentre le coordinate della figura vengono scalate.
@@ -365,7 +365,7 @@ aggiuntive vanno dichiarate o la cache va invalidata dopo aggiornamenti esterni.
 Le nuove voci conservano anche l&#39;identita&#39; del compilatore/renderer: una build
 nuova consente di ripulire le voci obsolete. Un PDF ancora referenziato da un
 documento derivato conservato viene invece protetto, per non rompere il documento.</p>
-</section><section class="manual-section"><h2 id="11-provare-l-39-integrazione-latex">11. Provare l&#39;integrazione LaTeX</h2>
+</section><section class="manual-section"><h2 id="11-provare-l-integrazione-latex">11. Provare l&#39;integrazione LaTeX</h2>
 <pre><code class="language-powershell">node scripts/latex.js examples/semantic-notes.tex --compile
 </code></pre>
 <p>Il preprocessore trova gli ambienti pyxis, renderizza le figure e sostituisce
@@ -402,7 +402,7 @@ Non correggere simultaneamente tutti i livelli: altrimenti non saprai quale
 modifica ha risolto il problema.</p>
 <p>Gli esempi e i test riutilizzabili fanno parte del progetto. Script di migrazione,
 log, profili di prova e intermedi di compilazione vengono invece rimossi.</p>
-</section><section class="manual-section"><h2 id="13-capire-e-modificare-l-39-integratore-adattivo">13. Capire e modificare l&#39;integratore adattivo</h2>
+</section><section class="manual-section"><h2 id="13-capire-e-modificare-l-integratore-adattivo">13. Capire e modificare l&#39;integratore adattivo</h2>
 <p>Apri <code>src/numerics.hpp</code>: qui la numerica e&#39; separata dai nomi degli oggetti,
 dai pacchetti e dal rendering. <code>std::array&lt;double,N&gt;</code> rappresenta uno stato
 di dimensione N fissata in compilazione; <code>integrate&lt;2&gt;</code> e <code>integrate&lt;3&gt;</code>
@@ -491,7 +491,7 @@ collegano soltanto i vicini esistenti. <code>checkerboard</code> dipende dalla p
 di riga+colonna+strato. Prova examples/ising3d.pyxis; nel test del cubo 2x2x2
 trovi otto spin e dodici legami. Questo controlla la topologia, non soltanto
 che il renderer produca un file.</p>
-</section><section class="manual-section"><h2 id="15-perche-39-il-clipping-del-testo-avviene-alla-fine">15. Perche&#39; il clipping del testo avviene alla fine</h2>
+</section><section class="manual-section"><h2 id="15-perche-il-clipping-del-testo-avviene-alla-fine">15. Perche&#39; il clipping del testo avviene alla fine</h2>
 <p>La larghezza della formula e&#39; in bp, la geometria degli oggetti e&#39; in unita&#39;
 del disegno. Prima del fitting non conosci il rapporto tra le due. Il caso
 e&#39; in examples/text-clipping.pyxis: frecce tra ket e operatore, tagliate
@@ -553,7 +553,7 @@ accorpa i salvataggi mentre una build e&#39; gia&#39; in corso. Il test controll
 che un errore conservi il PDF precedente. Ora la build segue anche i capitoli
 input/include: il paragrafo seguente spiega il passaggio aggiuntivo.
 L&#39;orchestrazione BibTeX/Biber rimane distinta dalla preparazione delle figure.</p>
-</section><section class="manual-section"><h2 id="18-una-tesi-e-39-un-grafo-di-file">18. Una tesi e&#39; un grafo di file</h2>
+</section><section class="manual-section"><h2 id="18-una-tesi-e-un-grafo-di-file">18. Una tesi e&#39; un grafo di file</h2>
 <p><code>tools/pyxis/project.js</code> tratta ogni file .tex come un nodo e ogni input/include
 come un arco. <code>references</code> trova i comandi ignorando commenti, verbatim e
 stringhe degli ambienti Pyxis. Non basta cercare tutte le occorrenze di input
@@ -586,7 +586,7 @@ node tests/native-latex.js
 includeonly, cicli, PDF precedente conservato su errore e originali immutati.
 Se aggiungi import/subfiles in futuro, devi specificare le nuove regole dei
 percorsi prima di modificarne il parser.</p>
-</section><section class="manual-section"><h2 id="19-dalla-cartella-sorgente-all-39-estensione-installabile">19. Dalla cartella sorgente all&#39;estensione installabile</h2>
+</section><section class="manual-section"><h2 id="19-dalla-cartella-sorgente-all-estensione-installabile">19. Dalla cartella sorgente all&#39;estensione installabile</h2>
 <p>Durante lo sviluppo VS Code carica direttamente vscode/extension.js. Nella
 release legge il medesimo codice dal VSIX e usa bin/pyxis.exe. La funzione
 compilerPath in vscode/environment.js distingue questi due percorsi.
