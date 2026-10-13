@@ -14,3 +14,5 @@
 4. Dopo pochi minuti visita `https://tuo-username.github.io`.
 
 Il sito è statico: i PDF e le modifiche restano sotto il tuo controllo nel repository.
+
+Pyxis documentation is prebuilt HTML. Keep the .nojekyll file: C++ listings and downloadable Markdown must be served literally, without Liquid/Jekyll template processing.
