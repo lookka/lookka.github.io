@@ -1,19 +1,13 @@
-# Imparare a sviluppare Pyxis
+# Pyxis: note di sviluppo e integrazione
 
-Questa guida e' per chi conosce il C++ e ha una preparazione universitaria in
-fisica, ma non ha ancora costruito un linguaggio, un compilatore o un editor.
-Non devi conoscere queste cose prima di cominciare: le incontriamo attraverso
-il progetto che stiamo sviluppando insieme.
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
 
-Gli esempi indicati come eseguibili funzionano nel progetto attuale. Gli
-esercizi di estensione richiedono invece di modificare il codice: non sono
-comandi gia' presenti. Per l'elenco delle funzionalita' effettive leggi anche
-[PACCHETTI.md](PACCHETTI.md).
+Ho raccolto qui le scelte che collegano il nucleo C++, il rendering e l’editor LaTeX. I casi concreti documentano il comportamento della release 1.0; le ipotesi di estensione sono indicate come tali. Il dettaglio delle funzioni e i listati integrali sono in [CODICE-CPP.md](CODICE-CPP.md); la sintassi disponibile è descritta in [COMANDI.md](COMANDI.md) e [PACCHETTI.md](PACCHETTI.md).
 
-## 1. Che cosa stiamo costruendo
+## 1. Obiettivo e confini del progetto
 
 Pyxis e' un linguaggio per descrivere figure scientifiche attraverso il loro
-significato. Per esempio, diciamo che una linea e' un propagatore fotonico,
+significato. Per esempio, una linea e' un propagatore fotonico,
 che due gate sono connessi o che una retta e' perpendicolare a un'altra.
 Il programma traduce queste istruzioni in geometria e poi in un disegno.
 
@@ -23,13 +17,11 @@ sua ampiezza, assegnare tutte le regole di Feynman o verificarne i numeri quanti
 Le equazioni numeriche presenti nei pacchetti hanno invece modelli espliciti,
 con parametri e ipotesi documentati.
 
-L'analogia con LaTeX riguarda il livello di descrizione: scrivi la struttura
-che vuoi ottenere e il sistema si occupa di molti dettagli della rappresentazione.
+Ho preso da LaTeX l’idea di conservare la struttura nel sorgente: la descrizione resta esplicita, mentre molti dettagli della rappresentazione sono affidati al programma.
 
-## 2. Il primo esperimento: dal file alla figura
+## 2. Compilazione del nucleo e rendering
 
-Apri PowerShell nella cartella del progetto. Nelle seguenti istruzioni `./`
-significa "a partire dalla cartella in cui si trova il terminale".
+I comandi seguenti si eseguono da PowerShell nella radice del repository. Il prefisso `./` indica un percorso relativo alla directory corrente.
 
 ```powershell
 ./scripts/build.ps1
@@ -38,10 +30,9 @@ node scripts/render.js examples/constraints.pyxis svg
 
 Il primo comando compila i sorgenti C++ e avvia i test del nucleo. Il secondo
 legge un esempio e salva la figura in `output/constraints.svg`.
-Se cambi soltanto un file `.pyxis`, non devi ricompilare il C++: basta il
-secondo comando. Se cambi un file `.cpp` o `.hpp`, devi eseguire anche il primo.
+Una modifica al sorgente `.pyxis` richiede soltanto il rendering. Una modifica a `.cpp` o `.hpp` richiede prima una nuova compilazione del nucleo.
 
-Prova poi questi esempi, gia' disponibili:
+Altri casi di rendering presenti nel repository:
 
 ```powershell
 node scripts/render.js examples/qft.pyxis svg
@@ -51,11 +42,10 @@ node scripts/render.js examples/lorenz.pyxis svg
 ```
 
 SVG e' un formato vettoriale: il disegno e' descritto mediante tracciati, non
-mediante una matrice di pixel. Puoi ingrandirlo mantenendo nitidi i contorni.
-PDF e' l'altra esportazione usata per gli appunti; sostituisci `svg` con `pdf`.
-Le immagini PNG mostrate in chat sono anteprime dei risultati vettoriali.
+mediante una matrice di pixel. I contorni restano nitidi al variare della scala.
+PDF è l’altra esportazione usata per gli appunti: lo stesso comando accetta `pdf` al posto di `svg`. I PNG sono anteprime delle figure vettoriali.
 
-## 3. Le due compilazioni che non vanno confuse
+## 3. Pipeline di compilazione
 
 Ci sono due trasformazioni diverse:
 
@@ -64,8 +54,7 @@ Ci sono due trasformazioni diverse:
    Asymptote compila quest'ultimo e produce la figura.
 
 Asymptote e' un linguaggio e un motore per disegni scientifici, gia' disponibile
-su questo PC. Lo usiamo per tracciati, frecce, testo LaTeX e scene 3D. Non stiamo
-riscrivendo da zero un renderer vettoriale.
+nel sistema di sviluppo. Ho affidato ad Asymptote tracciati, frecce, testo LaTeX e scene 3D: Pyxis conserva la descrizione fisica e genera il programma grafico.
 
 Il flusso completo per una figura e':
 
@@ -90,22 +79,22 @@ costrutto. Il frontend attuale riconosce blocchi e comandi, conserva le righe
 del sorgente e abbassa le macro al linguaggio geometrico. "Abbassare" significa
 tradurre una descrizione piu' astratta in una piu' concreta.
 
-## 4. Come leggere i file C++ senza perdersi
+## 4. Mappa del nucleo C++
 
-Leggi questi file nell'ordine indicato. Non serve leggerli tutti in una volta.
+La tabella associa i moduli alle rispettive responsabilità.
 
-| File | Domanda a cui risponde |
+| File | Responsabilità |
 | --- | --- |
-| `src/pyxis.hpp` | Quali dati conserviamo per una figura? |
-| `src/main.cpp` | Come apriamo l'input, generiamo l'output e segnaliamo gli errori? |
-| `src/semantic.cpp` | Come riconosciamo un pacchetto e scegliamo il suo generatore? |
-| `src/packages/common.hpp` | Come descriviamo un blocco e produciamo primitive? |
-| `src/packages/quantum.cpp` | Come un circuito diventa linee, nodi e gate? |
-| `src/syntax.cpp` | Come un blocco di proprieta' diventa comandi? |
-| `src/pyxis.cpp` | Come i comandi diventano oggetti, e gli oggetti diventano Asymptote? |
-| `src/constraints.cpp` | Come calcoliamo le relazioni geometriche? |
-| `src/layout.cpp` | Come disponiamo gruppi e risolviamo le dipendenze? |
-| `tests/core.cpp` | Quali proprieta' del comportamento vengono verificate? |
+| `src/pyxis.hpp` | Dati della figura e della scena |
+| `src/main.cpp` | Input, output e diagnostica |
+| `src/semantic.cpp` | Riconoscimento dei pacchetti e selezione del generatore |
+| `src/packages/common.hpp` | Rappresentazione dei blocchi e costruzione delle primitive |
+| `src/packages/quantum.cpp` | Traduzione dei circuiti in geometria |
+| `src/syntax.cpp` | Normalizzazione dei blocchi in comandi |
+| `src/pyxis.cpp` | Parsing della scena e generazione Asymptote |
+| `src/constraints.cpp` | Risoluzione delle relazioni geometriche |
+| `src/layout.cpp` | Layout dei gruppi e dipendenze |
+| `tests/core.cpp` | Verifica dei contratti del nucleo |
 
 ### Scene e Object: i dati prima del disegno
 
@@ -123,7 +112,7 @@ estremo e `a,b` il secondo. E' una scelta compatta del prototipo, non una
 notazione universale di geometria. Una futura struttura con tipi geometrici
 separati potra' rendere queste associazioni piu' esplicite.
 
-## 5. Seguire una singola istruzione, passo per passo
+## 5. Traccia di una dichiarazione: tangenza fra cerchi
 
 Questa sintassi e' eseguibile:
 
@@ -149,8 +138,7 @@ tangent-circle B A east 0.3
 Il blocco e' una forma comoda per l'utente; il comando e' una forma semplice
 per il nucleo. Entrambi rappresentano la stessa richiesta.
 
-Per provare i due blocchi iniziali, salvali come `examples/mia-prova.pyxis`
-con un editor di testo, poi esegui:
+Per un file `examples/mia-prova.pyxis` contenente i due blocchi, il comando di rendering è:
 
 ```powershell
 node scripts/render.js examples/mia-prova.pyxis svg
@@ -171,8 +159,7 @@ La direzione east corrisponde al versore (1,0), quindi il centro di B e'
 (0.8,0). Per ne il versore e' (1,1)/sqrt(2). Il calcolo viene eseguito
 in `resolve_constraint()`, non richiesto all'utente.
 
-**Esperimento:** aggiungi `move A 1 0` dopo i due blocchi. Il centro di B
-deve seguire A e la tangenza deve rimanere valida. Esegui di nuovo il rendering.
+**Caso di controllo.** Con `move A 1 0` dopo i due blocchi, il centro di B segue A e la tangenza rimane valida. È questa relazione, oltre alle coordinate iniziali, che il risolutore deve conservare.
 
 ## 6. Ancoraggi e vincoli: la differenza pratica
 
@@ -220,8 +207,7 @@ generale per sistemi simultanei di vincoli.
 
 ## 7. Clipping: conservare la connessione, cambiare il tratto visibile
 
-Se connetti i centri di due cerchi, la linea passa nei loro interni. Di solito
-vuoi che il disegno si fermi sui bordi:
+Una connessione fra i centri di due cerchi attraversa i loro interni. Il clipping permette di conservarne gli estremi logici e limitare il tratto visibile ai bordi:
 
 ```text
 arrow connection {
@@ -243,7 +229,7 @@ La freccia viene disegnata sul percorso gia' tagliato.
 
 La piccola libreria Asymptote generata e' in `src/asymptote_geometry.hpp`.
 Il test `tests/clipping.js` verifica i punti prodotti dal vero Asymptote per
-segmenti, curve Bezier, onde e polilinee. C'e' una sottigliezza utile da imparare:
+segmenti, curve Bezier, onde e polilinee. Un dettaglio rilevante per la verifica:
 Asymptote approssima il cerchio con Bezier cubiche. Verifichiamo prima il bordo
 effettivamente disegnato, poi la vicinanza al cerchio analitico entro l'errore
 di quell'approssimazione. Non chiediamo una precisione che il modello non ha.
@@ -268,10 +254,9 @@ label momentum {
 
 L'esempio completo e' `examples/auto-labels.pyxis`. Il punto di attacco rimane
 un dato geometrico; la posizione effettiva del testo viene decisa in seguito.
-Non usare momentum.center come riferimento di un'altra costruzione quando
-momentum e' automatico: scegli il nodo o il punto geometrico sottostante.
+Quando momentum è automatico, momentum.center non è un riferimento geometrico disponibile: le costruzioni successive devono riferirsi al nodo o al punto sottostante.
 
-In `src/asymptote_labels.hpp` trovi codice Asymptote dentro una stringa C++.
+`src/asymptote_labels.hpp` contiene codice Asymptote dentro una stringa C++.
 Non e' C++ da eseguire durante il parsing: il generatore lo scrive nel .asy.
 `label(frame,...)` fa misurare il testo a LaTeX. La callback
 `new void(frame f, transform t)` viene eseguita quando la picture e' adattata
@@ -297,7 +282,7 @@ non implica che tutte le operazioni abbiano le stesse regole.
 
 ## 8. Come nasce un pacchetto scientifico
 
-Apri `src/packages/quantum.cpp` e cerca `circuit()`.
+`circuit()` è definita in `src/packages/quantum.cpp`.
 Un `Block` contiene il tipo, il nome, le proprieta' e il loro ordine nel sorgente.
 Il `Builder` offre operazioni come line(), label(), path() e object().
 Il pacchetto traduce una descrizione del dominio in queste primitive.
@@ -312,7 +297,7 @@ Per un circuito:
 
 Il codice di questo pacchetto non deve gestire file, processi Asymptote o cache.
 Questo e' il motivo della separazione dei moduli: una nuova convenzione grafica
-non deve costringerti a riscrivere la pipeline.
+non deve richiedere una riscrittura della pipeline.
 
 `src/semantic.cpp` contiene il registro che associa un nome, per esempio
 `quantum.circuit`, alla funzione C++ che lo genera. Le funzioni dei pacchetti
@@ -335,28 +320,25 @@ tensor-network net {
 move net.r2c2 0.25 0.15
 ```
 
-Salva l'esempio come un file .pyxis e renderizzalo. Dovresti riconoscere il nodo
-centrale spostato e i quattro legami che lo seguono. La topologia non cambia.
-Puoi confrontarlo con `examples/tensor-networks.pyxis`.
+Il risultato atteso è il nodo centrale spostato con i quattro legami che lo seguono, a topologia invariata. Il caso di confronto è `examples/tensor-networks.pyxis`.
 
 Una sottigliezza del layout: quando spostiamo l'intero gruppo, non dobbiamo
 traslare sia il nodo sia l'offset di una linea che segue quel nodo. Altrimenti
 la traslazione verrebbe applicata due volte. In layout.cpp distinguiamo le
 coordinate autonome dagli ancoraggi interni al gruppo.
 
-### Esercizio guidato: aggiungere una configurazione di spin
+### Nota di estensione: una configurazione di spin a strisce
 
-Questo esercizio aggiunge una funzionalita' nuova; `state: stripes` non e'
-presente nella versione descritta qui.
+`state: stripes` è un’ipotesi di estensione, assente dalla release 1.0. La modifica coinvolgerebbe questi punti:
 
-1. In `src/packages/statmech.cpp`, trova `ising()`.
-2. Leggi il controllo dei valori ammessi di state e il calcolo di sign.
-3. Aggiungi stripes ai valori ammessi, aggiornando anche il messaggio d'errore.
-4. Assegna +1 alle righe pari e -1 alle righe dispari. Nel ciclo C++ r inizia da 0.
-5. Aggiungi un test con rows=2 e columns=2: tutti gli spin della prima riga
+1. Generatore `ising()` in `src/packages/statmech.cpp`.
+2. Validazione dei valori di state e calcolo di sign.
+3. Ammissione di stripes nella validazione e nella diagnostica.
+4. Segno +1 sulle righe pari e −1 sulle dispari; l’indice C++ r parte da 0.
+5. Test con rows=2 e columns=2: tutti gli spin della prima riga
    devono puntare in alto, tutti quelli della seconda in basso.
-6. Verifica che una lista spins esplicita continui ad avere precedenza su state.
-7. Compila, prova un esempio e aggiornane il manuale.
+6. Precedenza invariata della lista spins esplicita rispetto a state.
+7. Compilazione, rendering di controllo e aggiornamento del riferimento.
 
 Il nuovo ramo del calcolo puo' essere scritto cosi':
 
@@ -369,7 +351,7 @@ if (state == "stripes") {
 Non basta aggiungere questo ramo: senza aggiornare la validazione il parser
 rifiuterebbe il valore prima di arrivare al calcolo.
 
-## 9. Test: cosa stiamo davvero verificando
+## 9. Contratti verificati dai test
 
 Un test utile controlla un risultato o un'invariante, non riscrive il codice
 con altre parole. Per esempio, per una perpendicolare controlliamo il prodotto
@@ -386,8 +368,7 @@ node tests/labels.js
 
 I primi test C++ sono eseguiti dallo script di build. source.js controlla i
 ritocchi dell'editor; cache-latex.js controlla cache ed estrazione; backend.js,
-clipping.js e labels.js richiedono il vero backend installato. Esegui backend.js senza
-altri rendering contemporanei: il suo controllo dei temporanei fotografa
+clipping.js e labels.js richiedono il vero backend installato. backend.js richiede l’assenza di altri rendering contemporanei: il suo controllo dei temporanei fotografa
 anche le cartelle delle altre richieste.
 
 Per verificare la vera estensione VS Code:
@@ -405,7 +386,7 @@ Con double usiamo una tolleranza ragionevole. Per un integratore confrontiamo
 anche risultati con passi diversi: un grafico plausibile non basta a garantire
 la correttezza della numerica.
 
-## 10. La parte JavaScript e la cache, anche se parti dal C++
+## 10. Processi JavaScript, cache e temporanei
 
 Il C++ calcola e genera il programma grafico. Node.js gestisce i processi,
 i file temporanei e l'editor. In JavaScript `await` aspetta il risultato di
@@ -430,7 +411,7 @@ Le nuove voci conservano anche l'identita' del compilatore/renderer: una build
 nuova consente di ripulire le voci obsolete. Un PDF ancora referenziato da un
 documento derivato conservato viene invece protetto, per non rompere il documento.
 
-## 11. Provare l'integrazione LaTeX
+## 11. Preparazione degli ambienti LaTeX
 
 ```powershell
 node scripts/latex.js examples/semantic-notes.tex --compile
@@ -440,48 +421,28 @@ Il preprocessore trova gli ambienti pyxis, renderizza le figure e sostituisce
 gli ambienti con includegraphics in un documento derivato. Il file originale
 non viene riscritto. Il comando compila il documento e conserva il PDF finale;
 ausiliari e documento derivato predefinito vengono rimossi automaticamente.
-Se vuoi conservare il derivato per leggerlo, fornisci un percorso esplicito:
+Un percorso di destinazione esplicito conserva il documento derivato per l’ispezione:
 
 ```powershell
 node scripts/latex.js examples/semantic-notes.tex output/notes-inspect.tex
 ```
 
-Il secondo comando non avvia pdflatex: ti lascia vedere la trasformazione.
-Quel file e' un risultato chiesto da te, non un intermedio da cancellare in
-modo automatico. La compilazione automatica aggiunge al percorso di ricerca
+Il secondo comando produce il derivato senza avviare pdflatex. La destinazione esplicita rende il file un risultato da conservare, quindi la pulizia automatica non lo elimina. La compilazione automatica aggiunge al percorso di ricerca
 LaTeX la cartella `latex`, che contiene `pyxis.sty`.
 
-## 12. Un metodo pratico per lavorare insieme
+## 12. Metodo di sviluppo e gestione dei casi di errore
 
-Per ogni funzionalita' prendiamo una figura concreta e scriviamo prima il
-sorgente che vorremmo poter usare. Poi fissiamo nomi, convenzioni, modello
-matematico e limiti. Implementiamo una modifica piccola e verificabile,
-aggiungiamo i test necessari e guardiamo il rendering reale.
+Ho preso come punto di partenza figure concrete e sorgenti che ne esprimessero la struttura. Per ogni oggetto ho fissato nomi, convenzioni, modello matematico e limiti; l’implementazione è accompagnata da controlli del comportamento e rendering con il backend reale.
 
-Una buona prima divisione del lavoro e' questa:
+L’assistenza dell’IA ha riguardato anche implementazione, revisione e preparazione delle verifiche. Mantengo nel repository i sorgenti e i casi riproducibili, così che una decisione possa essere ricontrollata senza dipendere dalla conversazione in cui è nata.
 
-- tu scegli le convenzioni fisiche del corso e aggiungi configurazioni o
-  oggetti a un pacchetto esistente, con un esempio e un test;
-- io curo inizialmente le parti comuni del linguaggio, la gestione delle
-  dipendenze e la pipeline, e revisiono con te le modifiche;
-- quando padroneggi quel percorso, puoi implementare un nuovo generatore,
-  poi un vincolo o un algoritmo numerico.
+Un errore viene isolato nel più piccolo sorgente che lo riproduce e attribuito al livello interessato: sintassi, geometria, numerica o backend. Una modifica a un solo contratto per volta rende riconoscibile la causa della correzione.
 
-Questa e' una proposta di progressione, non una separazione rigida dei compiti.
-Il primo risultato da raggiungere e' saper spiegare dove passa una tua
-istruzione e modificare un comportamento senza rompere gli altri pacchetti.
+Esempi e test riutilizzabili appartengono al progetto; script occasionali di migrazione, log, profili di prova e intermedi vengono rimossi.
 
-Quando una prova fallisce, conserva il piu' piccolo sorgente che la riproduce.
-Controlla prima se l'errore e' di sintassi, di geometria, di numerica o di backend.
-Non correggere simultaneamente tutti i livelli: altrimenti non saprai quale
-modifica ha risolto il problema.
+## 13. Integratore adattivo: algoritmo e controlli
 
-Gli esempi e i test riutilizzabili fanno parte del progetto. Script di migrazione,
-log, profili di prova e intermedi di compilazione vengono invece rimossi.
-
-## 13. Capire e modificare l'integratore adattivo
-
-Apri `src/numerics.hpp`: qui la numerica e' separata dai nomi degli oggetti,
+In `src/numerics.hpp` la numerica è separata dai nomi degli oggetti,
 dai pacchetti e dal rendering. `std::array<double,N>` rappresenta uno stato
 di dimensione N fissata in compilazione; `integrate<2>` e `integrate<3>`
 riusano lo stesso algoritmo. Il parametro Derivative e' una funzione/lambda
@@ -510,11 +471,11 @@ precedente. Non spostiamo il tempo e non salviamo il tentativo respinto.
 Altrimenti accettiamo fine. Il nuovo passo usa una potenza -1/5 del
 rapporto, un fattore prudenziale 0.9 e limiti alla variazione. Il passo
 non supera max-step; l'ultimo viene tagliato per arrivare alla durata.
-Non stiamo usando un integratore embedded RK45: questo e' RK4 con step doubling.
-Puoi confrontare la descrizione con il
+Il metodo implementato è RK4 con step doubling; non usa una coppia embedded RK45.
+Il riferimento per il confronto fra metodi è il
 [manuale ufficiale GSL](https://www.gnu.org/software/gsl/doc/html/ode-initval.html).
 
-Esegui il caso concreto:
+Comandi del caso di controllo:
 
 ```powershell
 ./scripts/build.ps1
@@ -529,13 +490,7 @@ Questo offre un controllo fisico oltre al confronto visivo delle orbite.
 Il test C++ verifica la conservazione entro una soglia, senza pretendere
 che RK4 sia un metodo simplettico o conservi l'energia esattamente.
 
-Per un esperimento cambia abs-tol/rel-tol da 1e-9 a 1e-7, ricompila
-la figura e confronta il risultato. Cambiare questi valori nel sorgente
-non richiede ricompilare l'eseguibile. Riduci max-step se i segmenti
-appaiono troppo distanti: la precisione del calcolo e il campionamento
-grafico sono problemi collegati, ma diversi. Se usi componenti con unita'
-e scale molto diverse, considera prima una nondimensionalizzazione;
-attualmente la tolleranza assoluta e' comune a tutte le componenti.
+Il confronto fra tolleranze 1e-9 e 1e-7 riguarda il rendering del medesimo modello e non richiede ricompilare l’eseguibile. max-step controlla anche la distanza fra i punti della rappresentazione: precisione numerica e campionamento grafico hanno ruoli distinti. Con componenti di scale o unità molto diverse, la nondimensionalizzazione è rilevante perché la tolleranza assoluta attuale è comune a tutte le componenti.
 
 I test confrontano anche il decadimento esponenziale con exp(-t), una
 componente non autonoma con t^2 e Lorenz a breve termine con un RK4
@@ -547,8 +502,7 @@ osservabili caotiche a lungo termine servono strumenti e verifiche ulteriori.
 ## 14. Regioni, profili e composizione dei pacchetti
 
 Un `profile` importa i pacchetti del corso; un successivo use ne aggiunge altri.
-Non blocca la tua tesi in un dominio. In `src/semantic.cpp` trovi la tabella
-dei profili e il registry degli oggetti. Il profilo research abilita tutti.
+La selezione rimane additiva. `src/semantic.cpp` contiene la tabella dei profili e il registro degli oggetti. Il profilo research li abilita tutti.
 
 ```text
 profile statmech
@@ -564,7 +518,7 @@ Le zone colorate oltre il critico non sono nuove transizioni. La forma delle
 curve e le scale sono schematiche. Per un materiale reale servono i suoi dati
 o un'equazione di stato, che questo comando non calcola.
 
-Leggi phase_diagram in `src/packages/statmech.cpp`: costruisce quattro regioni,
+phase_diagram in `src/packages/statmech.cpp` costruisce quattro regioni,
 poi curve, assi e annotazioni. `region` riusa la geometria dei percorsi ma
 chiude il bordo con `--cycle` e usa un riempimento. Gli incroci tra bordi
 non adiacenti e l'area nulla vengono rifiutati. I vertici possono anche
@@ -587,8 +541,7 @@ Per sperimentare: cambia il segno di melting e confronta i due schemi.
 Ising 3D aggiunge un ciclo sugli strati al ciclo riga/colonna. Il punto
 spaziale e' (colonna,-riga,strato), lo spin punta lungo +/-z e i legami
 collegano soltanto i vicini esistenti. `checkerboard` dipende dalla parita'
-di riga+colonna+strato. Prova examples/ising3d.pyxis; nel test del cubo 2x2x2
-trovi otto spin e dodici legami. Questo controlla la topologia, non soltanto
+di riga+colonna+strato. Il caso è examples/ising3d.pyxis; il test del cubo 2x2x2 contiene otto spin e dodici legami. Questo controlla la topologia, non soltanto
 che il renderer produca un file.
 
 ## 15. Perche' il clipping del testo avviene alla fine
@@ -677,7 +630,7 @@ L'orchestrazione BibTeX/Biber rimane distinta dalla preparazione delle figure.
 `tools/pyxis/project.js` tratta ogni file .tex come un nodo e ogni input/include
 come un arco. `references` trova i comandi ignorando commenti, verbatim e
 stringhe degli ambienti Pyxis. Non basta cercare tutte le occorrenze di input
-con una regex: potresti interpretare un esempio stampato negli appunti come
+con una regex: un esempio stampato negli appunti potrebbe essere interpretato come
 un vero capitolo da compilare.
 
 La funzione visit legge il file, prepara le figure, visita i figli e scrive
@@ -711,8 +664,7 @@ node tests/native-latex.js
 
 Questo test controlla file inclusi su piu' livelli, macro del principale,
 includeonly, cicli, PDF precedente conservato su errore e originali immutati.
-Se aggiungi import/subfiles in futuro, devi specificare le nuove regole dei
-percorsi prima di modificarne il parser.
+Un eventuale supporto per import/subfiles richiederebbe prima un contratto esplicito sulla risoluzione dei percorsi, poi la modifica del parser.
 
 ## 19. Dalla cartella sorgente all'estensione installabile
 
@@ -730,7 +682,7 @@ leggere e modificare; i programmi esterni rimangono installazioni separate.
 ```
 
 Release abilita -O2 e rimuove i simboli di debug: l'eseguibile e' piu' piccolo,
-ma non e' la scelta adatta quando vuoi ispezionarlo passo per passo in un debugger.
+ma limita l’ispezione nel debugger.
 La build senza Release conserva -g. I test C++ vengono compilati ed eseguiti
 in entrambi i casi.
 

@@ -1,5 +1,7 @@
 # Pacchetti semantici — versione 1.0
 
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
+
 Questo manuale descrive funzionalita' implementate e verificate, non la lista
 completa degli obiettivi. La proposta integrale rimane in PYXIS-SEMANTICO.md.
 

@@ -1,5 +1,7 @@
 # Stato di Pyxis — 12 ottobre 2026
 
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
+
 Release 1.0 Windows x64: catalogo semantico, strumenti LaTeX ed estensione installabile.
 I modelli fisici supportati e i loro limiti sono specificati in PACCHETTI.md.
 
@@ -52,7 +54,7 @@ Il layout dei gruppi supporta ora gli ancoraggi interni senza doppia traslazione
 Test C++ matematici, test delle intersezioni con il vero Asymptote e regressioni
 di rendering. Nuove voci cache obsolete vengono eliminate automaticamente,
 proteggendo gli asset referenziati da documenti LaTeX derivati conservati.
-La guida GUIDA-SVILUPPO.md accompagna il codice con esperimenti e letture guidate.
+GUIDA-SVILUPPO.md registra le scelte di integrazione e i casi di controllo.
 
 ## Incremento semantico 0.2
 
@@ -109,4 +111,4 @@ Servono altre prove manuali e una sintassi consolidata insieme al proprietario.
 
 Codice, test riutilizzabili, documentazione, esempi, SVG/PDF dimostrativi, eseguibili e runtime necessari.
 Installer, estrattori, proxy sperimentale, profilo VS Code di prova e intermedi diagnostici rimossi.
-La sessione didattica e la divisione dei compiti C++ si faranno successivamente.
+L’architettura e i sorgenti C++ sono documentati in CODICE-CPP.md.

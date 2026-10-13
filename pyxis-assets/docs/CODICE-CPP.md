@@ -1,13 +1,10 @@
-# Il codice C++ di Pyxis: struttura, motivazioni e modifiche
+# Pyxis: architettura e sorgenti C++
 
-Questa guida legge **l'implementazione reale di Pyxis 1.0**. Non introduce un
-programma alternativo. In fondo trovi tutti i 21 file C++/header di `src` e
-il file dei test C++, con spiegazioni e sorgente completo consultabile.
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
 
-L'obiettivo è capire quali responsabilità servono per ricostruire il progetto,
-come sono collegate e dove intervenire. Le scelte attuali sono scelte di
-implementazione: alcune sono compatte e pratiche, altre meritano una revisione
-prima di ampliare molto il linguaggio.
+Queste note descrivono l’implementazione della release 1.0: responsabilità dei moduli, contratti delle funzioni, rappresentazione dei dati e motivazioni delle scelte. L’appendice contiene tutti i 21 file C++/header di `src` e il file dei test C++, nella loro forma reale.
+
+Ho conservato anche i compromessi della struttura corrente e le dipendenze coinvolte da una modifica. I listati permettono di seguire ogni passaggio dal testo della figura al programma Asymptote.
 
 ## 1. Le responsabilità prima dei file
 
@@ -217,7 +214,7 @@ gruppo non vengono traslati due volte: seguiranno il loro proprietario.
 La map conserva puntatori agli elementi del vettore degli oggetti.
 Nel passaggio corrente non si aggiungono nuovi Object: un push_back che
 riallocasse il vettore invaliderebbe quei puntatori. Se modifichi layout
-per creare oggetti, devi cambiare questo contratto o usare indici stabili.
+per creare oggetti, occorre cambiare questo contratto o usare indici stabili.
 
 ## 10. resolve_anchors e constraints.cpp
 
@@ -362,8 +359,7 @@ con soluzioni note e quantità fisiche: una figura gradevole non è una prova.
 I test JavaScript verificano altri confini, compresi processi esterni e VS Code;
 non sono parte del nucleo C++.
 
-Per modificare una funzione identifica prima il suo contratto. Poi segui il
-dato interessato: testo → Object → trasformazioni → Asymptote. Una proprietà
+La modifica di una funzione coinvolge il suo contratto e il percorso del dato interessato: testo → Object → trasformazioni → Asymptote. Una proprietà
 nuova richiede spesso parser, normalizzazione dei blocchi, renderer, editor,
 manuale e un test del comportamento. Un nuovo modello fatto di primitive può
 invece richiedere soltanto generatore, registro, dichiarazione e documentazione.
@@ -373,7 +369,7 @@ validazione state e il calcolo del segno nei rami 2D e 3D, con test di entrambi.
 Una nuova funzione matematica cambia Expression e i contratti dei nomi riservati.
 Un nuovo Kind cambia molti visitatori: parser, ancoraggi, layout, stili e backend.
 
-## 17. Ordine per ricostruire il progetto dalle sue responsabilità
+## 17. Dipendenze per una ricostruzione del nucleo
 
 1. Definire quali dati minimi rappresentano gli oggetti e la scena.
 2. Stabilire firme pubbliche, gestione dell'input e contratti degli errori.
@@ -385,8 +381,7 @@ Un nuovo Kind cambia molti visitatori: parser, ancoraggi, layout, stili e backen
 8. Aggiungere espressioni e numerica con test indipendenti dal disegno.
 9. Collegare il processo agli strumenti esterni e all'editor.
 
-Questo è un ordine di ricostruzione ragionato, non una richiesta di creare
-un secondo progetto. Ogni punto si può studiare nel codice reale riportato sotto.
+L’ordine segue le dipendenze fra le responsabilità, non la successione cronologica dei file. Ogni passaggio corrisponde a moduli presenti nei listati della release.
 
 ## 18. Confine con JavaScript e LaTeX
 
@@ -394,15 +389,13 @@ Il C++ produce il file .asy. `vscode/backend.js` avvia il compilatore e Asymptot
 gestisce SVG/PDF, cache e temporanei. `vscode/extension.js` usa l'API dell'editor.
 `tools/pyxis/latex.js` e project.js preparano gli ambienti nei documenti.
 La separazione evita di introdurre API VS Code dentro il compilatore C++.
-La [guida di sviluppo](GUIDA-SVILUPPO.md) descrive quei componenti e la pipeline
+Le [note di sviluppo](GUIDA-SVILUPPO.md) descrivono quei componenti e la pipeline
 LaTeX. Il codice completo qui sotto riguarda il nucleo C++ e i suoi test.
 
 ## Indice del sorgente completo
 
 Le sezioni seguenti contengono i file reali della release, senza versioni
-semplificate. Le note precedono il listato; espandi il codice quando vuoi
-seguire la spiegazione. I listati sono una fotografia dei sorgenti al momento
-di generare questa guida: il progetto rimane l'autorità per modifiche successive.
+semplificate. Le note precedono il listato, consultabile nelle sezioni espandibili. I listati sono una fotografia dei sorgenti della release: il progetto rimane l'autorità per modifiche successive.
 
 
 - [src/main.cpp](#src-main-cpp)
@@ -831,7 +824,7 @@ std::vector<SourceLine> normalize(std::istream& input) {
 
 ## src/pyxis.cpp
 
-Prima parte: helper di estrazione, escape, penne, punti, lookup e testo letterale. resolve_anchors contiene una visita ricorsiva e il calcolo degli ancoraggi. parse è il dispatcher dei 50 comandi diretti del nucleo; use/profile vengono risolti prima. Alla fine esegue layout, ancoraggi, clipping e controlli sui poligoni. Seconda parte: helper per percorsi, nodi, marcatori e griglia; asymptote emette scene 3D oppure 2D, prepara gli ostacoli e inserisce le librerie geometriche. Per studiare un ramo del dispatcher, confrontalo con la scheda del comando e segui i campi dell’Object che quel ramo modifica.
+Prima parte: helper di estrazione, escape, penne, punti, lookup e testo letterale. resolve_anchors contiene una visita ricorsiva e il calcolo degli ancoraggi. parse è il dispatcher dei 50 comandi diretti del nucleo; use/profile vengono risolti prima. Alla fine esegue layout, ancoraggi, clipping e controlli sui poligoni. Seconda parte: helper per percorsi, nodi, marcatori e griglia; asymptote emette scene 3D oppure 2D, prepara gli ostacoli e inserisce le librerie geometriche. Ogni ramo del dispatcher corrisponde alla scheda di un comando e ai campi dell’Object modificati da quel comando.
 
 <details>
 <summary>Codice reale completo: src/pyxis.cpp</summary>
@@ -3013,7 +3006,7 @@ void pyxis_auto_labels(string[] texts, pair[] anchors, path[] owners,
 
 ## tests/core.cpp
 
-Questo file non è una funzione dell’applicazione: è il programma di verifica C++. I test richiamano il nucleo senza VS Code. Comprendono input validi/invalidi, geometria, espansione dei modelli e numerica. Leggi ogni condizione come proprietà del comportamento atteso; quando cambi una regola, verifica prima se quel cambiamento è intenzionale.
+Questo file non è una funzione dell’applicazione: è il programma di verifica C++. I test richiamano il nucleo senza VS Code. Comprendono input validi/invalidi, geometria, espansione dei modelli e numerica. Ogni condizione esprime una proprietà del comportamento atteso: una modifica della regola richiede una revisione esplicita del relativo contratto.
 
 <details>
 <summary>Codice reale completo: tests/core.cpp</summary>

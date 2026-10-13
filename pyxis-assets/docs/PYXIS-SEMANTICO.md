@@ -1,5 +1,7 @@
 # Pyxis: direzione semantica per tutti i pacchetti
 
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
+
 Proposta di architettura, 12 ottobre 2026. Gli esempi seguenti descrivono il
 linguaggio futuro: non sono ancora eseguibili nel prototipo.
 

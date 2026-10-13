@@ -1,7 +1,8 @@
-# Iniziare con Pyxis
+# Pyxis: installazione e uso
 
-Pyxis trasforma descrizioni fisiche in figure vettoriali. Puoi descrivere un
-processo, un circuito o un reticolo, senza calcolare le coordinate sul foglio.
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
+
+Pyxis trasforma descrizioni fisiche in figure vettoriali. Il sorgente descrive un processo, un circuito o un reticolo; i pacchetti ne costruiscono la geometria.
 Il sorgente conserva le scelte; PDF e SVG sono i risultati esportati.
 
 ## Installazione su Windows x64
@@ -44,7 +45,7 @@ l'estensione normale di VS Code e collega Asymptote/Ghostscript gia' presenti.
 Ricarica la finestra di VS Code dopo l'installazione. Non serve avviare una
 finestra di sviluppo. Conserva `.tools`: contiene il motore grafico necessario.
 
-Da PowerShell puoi usare anche:
+Comando equivalente da PowerShell:
 
 ```powershell
 ./scripts/install.ps1 -SkipBuild
@@ -53,14 +54,14 @@ Da PowerShell puoi usare anche:
 Per un altro PC servono VS Code, Asymptote, una distribuzione TeX con dvisvgm
 e Ghostscript. Installa il VSIX da `release` tramite Extensions: Install from
 VSIX; imposta pyxis.asymptote e pyxis.ghostscript se i programmi non sono nel
-PATH. Il VSIX include il nucleo Windows x64, i sorgenti, gli esempi e la guida;
+PATH. Il VSIX include il nucleo Windows x64, i sorgenti, gli esempi e la documentazione;
 non redistribuisce questi programmi esterni.
 
-## Una figura mentre prendi appunti
+## Inserimento di una figura nel documento
 
-Apri il tuo documento LaTeX, posiziona il cursore e premi Ctrl+Alt+F.
+In un documento LaTeX, Ctrl+Alt+F apre Pyxis nella posizione del cursore.
 Scrivi o modifica il sorgente nella finestra Pyxis. L'anteprima si aggiorna
-dopo una breve pausa. Salva figura ti chiede un nome, crea .pyxis/.svg/.pdf
+dopo una breve pausa. Salva figura richiede un nome, crea .pyxis/.svg/.pdf
 nella cartella figures e inserisce includegraphics negli appunti.
 Nel preambolo serve `\usepackage{graphicx}`.
 
@@ -146,12 +147,9 @@ Kerr e' un diagramma sull'asse subestremale; le geodetiche sono raggi nulli
 equatoriali di Schwarzschild. Le ipotesi e i limiti sono in PACCHETTI.md.
 Pyxis non verifica conservazione di cariche o validita' dei vertici QFT.
 
-## Imparare a svilupparlo
+## Architettura e sviluppo
 
-Leggi [GUIDA-SVILUPPO.md](GUIDA-SVILUPPO.md): e' pensata per chi conosce il C++
-e ha una formazione di fisica, senza dare per nota la costruzione di un compilatore.
-Contiene comandi, lettura del codice, esempi ed esperimenti numerici.
-Il riferimento della sintassi e' [PACCHETTI.md](PACCHETTI.md).
+Le [note di sviluppo](GUIDA-SVILUPPO.md) documentano pipeline, integrazione e casi di controllo. [Architettura e sorgenti C++](CODICE-CPP.md) contiene i contratti delle funzioni, le motivazioni e i listati completi.
 
 Per cercare una sintassi specifica usa [il riferimento dei comandi](COMANDI.md).
 Se l'anteprima fallisce, controlla i percorsi degli eseguibili e il pannello
@@ -159,5 +157,5 @@ Output Pyxis. Nel progetto completo `node scripts/doctor.js` verifica gli
 strumenti. Il compilatore incluso non richiede GCC; GCC serve per ricompilarlo.
 
 Le cartelle temporanee, i profili di prova e gli ausiliari vengono eliminati.
-Codice, test sorgente, guida, esempi, figure esportate e dipendenze rimangono:
-sono gli elementi che ti servono per usare e sviluppare il progetto.
+Codice, test sorgente, documentazione, esempi, figure esportate e dipendenze rimangono:
+costituiscono i materiali di uso, verifica e sviluppo del progetto.

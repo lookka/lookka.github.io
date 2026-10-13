@@ -1,5 +1,7 @@
 # Feynman: modelli implementati e proposta per grafi generali
 
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
+
 Aggiornamento 0.2: i modelli 2→2 s/t/u e le bolle sul mediatore sono ora
 implementati con sintassi descritta in PACCHETTI.md ed examples/qft.pyxis.
 Le forme generali proposte nel resto di questo documento restano obiettivi.

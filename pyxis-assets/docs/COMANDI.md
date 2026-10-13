@@ -1,9 +1,11 @@
 # Manuale di riferimento — Pyxis 1.0
 
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
+
 Questo manuale documenta l’API pubblica del linguaggio Pyxis 1.0.
 Ogni comando ha una scheda autonoma: sintassi, parametri, default, esempio
-completo e vincoli. Per iniziare a usare l’applicazione: [guida di installazione](INIZIA-QUI.md).
-Per studiare l’implementazione C++: [lettura del codice reale](CODICE-CPP.md).
+completo e vincoli. Per iniziare a usare l’applicazione: [installazione e uso](INIZIA-QUI.md).
+Per l’implementazione C++: [architettura e sorgenti](CODICE-CPP.md).
 
 ## Indice dei comandi
 

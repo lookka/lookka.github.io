@@ -1,6 +1,6 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Iniziare con Pyxis — documentazione Pyxis 1.0, Luca Melani"><title>Iniziare con Pyxis · Pyxis</title><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet"><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css?v=20261013-reference"><script defer src="../pyxis.js?v=20261013-reference"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Iniziare con Pyxis</h1><div class="docs-tools"><a href="INIZIA-QUI.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Funzione, file o argomento…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#installazione-su-windows-x64">Installazione su Windows x64</a><a href="#collegamento-rapido-sul-pc-di-sviluppo">Collegamento rapido sul PC di sviluppo</a><a href="#una-figura-mentre-prendi-appunti">Una figura mentre prendi appunti</a><a href="#scrivere-la-figura-direttamente-nel-documento">Scrivere la figura direttamente nel documento</a><a href="#capitoli-della-tesi">Capitoli della tesi</a><a href="#combinare-corsi-e-rifinire">Combinare corsi e rifinire</a><a href="#imparare-a-svilupparlo">Imparare a svilupparlo</a></nav></details></aside><article><section class="manual-section">
-<p>Pyxis trasforma descrizioni fisiche in figure vettoriali. Puoi descrivere un
-processo, un circuito o un reticolo, senza calcolare le coordinate sul foglio.
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Pyxis: installazione e uso — documentazione Pyxis 1.0, Luca Melani"><title>Pyxis: installazione e uso · Pyxis</title><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet"><link rel="icon" href="../pyxis-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../pyxis.css?v=20261013-reference"><script defer src="../pyxis.js?v=20261013-reference"></script></head><body><header class="site-header"><a class="wordmark" href="../../index.html">Luca Melani</a><nav aria-label="Navigazione"><a href="../../pyxis.html">Pyxis</a><a href="index.html">Manuali</a><a href="../../pyxis.html#download">Download</a></nav></header><main class="docs-shell"><p class="eyebrow">PYXIS / DOCUMENTAZIONE / RELEASE 1.0</p><h1>Pyxis: installazione e uso</h1><div class="docs-tools"><a href="INIZIA-QUI.md" download>Scarica Markdown ↓</a><a href="../downloads/pyxis-1.0.0-documentation.zip" download>Tutti i manuali ↓</a></div><label for="search">Cerca in questo manuale</label><input class="docs-search" id="search" type="search" placeholder="Funzione, file o argomento…"><p class="search-status" role="status" aria-live="polite"></p><div class="docs-layout"><aside class="docs-toc"><details open><summary>Indice</summary><nav aria-label="Indice del manuale"><a href="#installazione-su-windows-x64">Installazione su Windows x64</a><a href="#collegamento-rapido-sul-pc-di-sviluppo">Collegamento rapido sul PC di sviluppo</a><a href="#inserimento-di-una-figura-nel-documento">Inserimento di una figura nel documento</a><a href="#scrivere-la-figura-direttamente-nel-documento">Scrivere la figura direttamente nel documento</a><a href="#capitoli-della-tesi">Capitoli della tesi</a><a href="#combinare-corsi-e-rifinire">Combinare corsi e rifinire</a><a href="#architettura-e-sviluppo">Architettura e sviluppo</a></nav></details></aside><article><section class="manual-section">
+<p><strong>Nota sullo sviluppo.</strong> Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.</p>
+<p>Pyxis trasforma descrizioni fisiche in figure vettoriali. Il sorgente descrive un processo, un circuito o un reticolo; i pacchetti ne costruiscono la geometria.
 Il sorgente conserva le scelte; PDF e SVG sono i risultati esportati.</p>
 </section><section class="manual-section"><h2 id="installazione-su-windows-x64">Installazione su Windows x64</h2>
 <p>Ho distribuito Pyxis come estensione VS Code in formato VSIX. Il pacchetto
@@ -35,18 +35,18 @@ ma la sola build binaria verificata di questa release è Windows x64.</p>
 l&#39;estensione normale di VS Code e collega Asymptote/Ghostscript gia&#39; presenti.
 Ricarica la finestra di VS Code dopo l&#39;installazione. Non serve avviare una
 finestra di sviluppo. Conserva <code>.tools</code>: contiene il motore grafico necessario.</p>
-<p>Da PowerShell puoi usare anche:</p>
+<p>Comando equivalente da PowerShell:</p>
 <pre><code class="language-powershell">./scripts/install.ps1 -SkipBuild
 </code></pre>
 <p>Per un altro PC servono VS Code, Asymptote, una distribuzione TeX con dvisvgm
 e Ghostscript. Installa il VSIX da <code>release</code> tramite Extensions: Install from
 VSIX; imposta pyxis.asymptote e pyxis.ghostscript se i programmi non sono nel
-PATH. Il VSIX include il nucleo Windows x64, i sorgenti, gli esempi e la guida;
+PATH. Il VSIX include il nucleo Windows x64, i sorgenti, gli esempi e la documentazione;
 non redistribuisce questi programmi esterni.</p>
-</section><section class="manual-section"><h2 id="una-figura-mentre-prendi-appunti">Una figura mentre prendi appunti</h2>
-<p>Apri il tuo documento LaTeX, posiziona il cursore e premi Ctrl+Alt+F.
+</section><section class="manual-section"><h2 id="inserimento-di-una-figura-nel-documento">Inserimento di una figura nel documento</h2>
+<p>In un documento LaTeX, Ctrl+Alt+F apre Pyxis nella posizione del cursore.
 Scrivi o modifica il sorgente nella finestra Pyxis. L&#39;anteprima si aggiorna
-dopo una breve pausa. Salva figura ti chiede un nome, crea .pyxis/.svg/.pdf
+dopo una breve pausa. Salva figura richiede un nome, crea .pyxis/.svg/.pdf
 nella cartella figures e inserisce includegraphics negli appunti.
 Nel preambolo serve <code>\usepackage{graphicx}</code>.</p>
 <p>Per partire da una figura del corso, cerca <strong>Pyxis: Figura da esempio del corso</strong>
@@ -111,16 +111,13 @@ Nei ritocchi rapidi dell&#39;editor puoi scrivere <code>set F mediator gluon</co
 Kerr e&#39; un diagramma sull&#39;asse subestremale; le geodetiche sono raggi nulli
 equatoriali di Schwarzschild. Le ipotesi e i limiti sono in PACCHETTI.md.
 Pyxis non verifica conservazione di cariche o validita&#39; dei vertici QFT.</p>
-</section><section class="manual-section"><h2 id="imparare-a-svilupparlo">Imparare a svilupparlo</h2>
-<p>Leggi <a href="GUIDA-SVILUPPO.html">GUIDA-SVILUPPO.md</a>: e&#39; pensata per chi conosce il C++
-e ha una formazione di fisica, senza dare per nota la costruzione di un compilatore.
-Contiene comandi, lettura del codice, esempi ed esperimenti numerici.
-Il riferimento della sintassi e&#39; <a href="PACCHETTI.html">PACCHETTI.md</a>.</p>
+</section><section class="manual-section"><h2 id="architettura-e-sviluppo">Architettura e sviluppo</h2>
+<p>Le <a href="GUIDA-SVILUPPO.html">note di sviluppo</a> documentano pipeline, integrazione e casi di controllo. <a href="CODICE-CPP.html">Architettura e sorgenti C++</a> contiene i contratti delle funzioni, le motivazioni e i listati completi.</p>
 <p>Per cercare una sintassi specifica usa <a href="COMANDI.html">il riferimento dei comandi</a>.
 Se l&#39;anteprima fallisce, controlla i percorsi degli eseguibili e il pannello
 Output Pyxis. Nel progetto completo <code>node scripts/doctor.js</code> verifica gli
 strumenti. Il compilatore incluso non richiede GCC; GCC serve per ricompilarlo.</p>
 <p>Le cartelle temporanee, i profili di prova e gli ausiliari vengono eliminati.
-Codice, test sorgente, guida, esempi, figure esportate e dipendenze rimangono:
-sono gli elementi che ti servono per usare e sviluppare il progetto.</p>
+Codice, test sorgente, documentazione, esempi, figure esportate e dipendenze rimangono:
+costituiscono i materiali di uso, verifica e sviluppo del progetto.</p>
 </section></article></div></main><footer><p>© <span id="year"></span> Luca Melani · Pyxis 1.0 · MIT</p><p><a href="../../pyxis.html">Torna al progetto</a></p></footer></body></html>

@@ -1,5 +1,7 @@
 # Verifiche della release 1.0
 
+**Nota sullo sviluppo.** Ho sviluppato Pyxis con l’assistenza di un’IA, anche nella scrittura e revisione del codice e della documentazione, nella preparazione dei test, nei controlli e nella gestione degli strumenti. Queste note registrano scelte, verifiche e limiti del progetto; l’assistenza dell’IA non costituisce una validazione indipendente dei modelli fisici.
+
 Le verifiche usano il compilatore C++17 Release, Asymptote/MiKTeX/Ghostscript
 del PC e VS Code. I risultati riguardano questa configurazione Windows x64.
 
